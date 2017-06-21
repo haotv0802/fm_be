@@ -1,6 +1,6 @@
-package fm.api.rest.htBK.users;
+package fm.api.rest.users;
 
-import fm.api.rest.htBK.users.intefaces.IUserDao;
+import fm.api.rest.users.intefaces.IUserDao;
 import fm.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by haho on 3/22/2017.
  */
-@Repository("adminUserDao")
+@Repository("userDao")
 public class UserDao implements IUserDao {
   private static final Logger LOGGER = LogManager.getLogger(UserDao.class);
 

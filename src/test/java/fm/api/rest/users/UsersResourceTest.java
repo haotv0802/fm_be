@@ -1,4 +1,4 @@
-package fm.api.rest.htBK.users;
+package fm.api.rest.users;
 
 import com.fasterxml.jackson.databind.type.TypeFactory;
 import fm.api.rest.htBK.BaseAdminDocumentation;
@@ -20,7 +20,7 @@ public class UsersResourceTest extends BaseAdminDocumentation {
   @Test
   public void testGetUsers() throws Exception {
     mockMvc
-        .perform(get("/svc/admin/users")
+        .perform(get("/svc/users")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
@@ -31,7 +31,7 @@ public class UsersResourceTest extends BaseAdminDocumentation {
   @Test
   public void testUpdateUsersRoles() throws Exception {
     MvcResult result = mockMvc
-        .perform(get("/svc/admin/users")
+        .perform(get("/svc/users")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
@@ -48,7 +48,7 @@ public class UsersResourceTest extends BaseAdminDocumentation {
     users.get(3).setRoleId("4");
 
     mockMvc
-        .perform(patch("/svc/admin/users/usersRolesUpdate")
+        .perform(patch("/svc/users/usersRolesUpdate")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
             .contentType(MediaType.APPLICATION_JSON_UTF8)

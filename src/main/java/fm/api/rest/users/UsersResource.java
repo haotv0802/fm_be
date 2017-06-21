@@ -1,7 +1,7 @@
-package fm.api.rest.htBK.users;
+package fm.api.rest.users;
 
-import fm.api.rest.htBK.BaseAdminResource;
-import fm.api.rest.htBK.users.intefaces.IUserService;
+import fm.api.rest.BaseResource;
+import fm.api.rest.users.intefaces.IUserService;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +20,12 @@ import java.util.List;
  * Created by haho on 3/22/2017.
  */
 @RestController
-public class UsersResource extends BaseAdminResource {
+public class UsersResource extends BaseResource {
 
   private final IUserService userService;
 
   @Autowired
-  public UsersResource(@Qualifier("adminUserService") IUserService userService) {
+  public UsersResource(@Qualifier("userService") IUserService userService) {
     Assert.notNull(userService);
     this.userService = userService;
   }

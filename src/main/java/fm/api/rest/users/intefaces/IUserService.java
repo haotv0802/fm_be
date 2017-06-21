@@ -1,6 +1,6 @@
-package fm.api.rest.htBK.users.intefaces;
+package fm.api.rest.users.intefaces;
 
-import fm.api.rest.htBK.users.UserBean;
+import fm.api.rest.users.UserBean;
 
 import java.util.List;
 
