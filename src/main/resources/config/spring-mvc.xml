@@ -31,7 +31,7 @@
         of an operation defined by the FooService interface -->
     <aop:config>
         <aop:pointcut
-                id="fooServiceOperation" expression="execution(* ht..*.*(..))"/>
+                id="fooServiceOperation" expression="execution(* fm..*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceOperation"/>
     </aop:config>
 

@@ -8,18 +8,18 @@ import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.mysql.cj.jdbc.MysqlDataSource;
-import ht.auth.LoggingEnhancingFilter;
-import ht.auth.PasswordEncoderImpl;
-import ht.auth.TokenAuthenticationService;
-import ht.auth.encoders.DefaultPasswordEncoder;
-import ht.auth.encoders.MD5HalfPasswordEncoder;
-import ht.auth.encoders.MD5PasswordEncoder;
-import ht.auth.encoders.SHA1PasswordEncoder;
-import ht.auth.filters.*;
-import ht.common.HeaderLangHandlerMethodArgumentResolver;
-import ht.transaction.ConnectionsWatchdog;
-import ht.transaction.TransactionFilter;
-import ht.transaction.TransactionsList;
+import fm.auth.LoggingEnhancingFilter;
+import fm.auth.PasswordEncoderImpl;
+import fm.auth.TokenAuthenticationService;
+import fm.auth.encoders.DefaultPasswordEncoder;
+import fm.auth.encoders.MD5HalfPasswordEncoder;
+import fm.auth.encoders.MD5PasswordEncoder;
+import fm.auth.encoders.SHA1PasswordEncoder;
+import fm.auth.filters.*;
+import fm.common.HeaderLangHandlerMethodArgumentResolver;
+import fm.transaction.ConnectionsWatchdog;
+import fm.transaction.TransactionFilter;
+import fm.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 //Enable API documentation
 // Specifies which package to scan
-@ComponentScan({"ht"}) // xml config: <context:component-scan base-package="ht"/>
+@ComponentScan({"fm"}) // xml config: <context:component-scan base-package="ht"/>
 // Enables Spring's annotations
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)
