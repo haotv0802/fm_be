@@ -29,14 +29,14 @@ public class UserDao implements IUserDao {
 
   @Override
   public List<UserBean> getUsers() {
-    final String sql = "SELECT                                               "
-                     + "	u.id, u.user_name, r.role_name, r.id role_id       "
-                     + "FROM                                                 "
-                     + "	(user_role r                                       "
-                     + "	INNER JOIN user_role_details d ON r.id = d.role_id)"
-                     + "		INNER JOIN                                       "
-                     + "	user_table u ON u.id = d.user_id                   "
-                     + "ORDER BY u.id                                        "
+    final String sql = "SELECT                                                  "
+                     + "	u.id, u.user_name, r.role_name, r.id role_id          "
+                     + "FROM                                                    "
+                     + "	(fm_user_roles r                                      "
+                     + "	INNER JOIN fm_user_role_details d ON r.id = d.role_id)"
+                     + "		INNER JOIN                                          "
+                     + "	fm_users u ON u.id = d.user_id                        "
+                     + "ORDER BY u.id                                           "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -57,11 +57,11 @@ public class UserDao implements IUserDao {
 
   @Override
   public void updateUserRole(UserBean user) {
-    final String sql = "UPDATE user_role_details  "
-                     + "SET                       "
-                     + "	role_id = :roleId       "
-                     + "WHERE                     "
-                     + "	user_id = :userId       "
+    final String sql = "UPDATE user_role_details "
+                     + "SET                      "
+                     + "	role_id = :roleId      "
+                     + "WHERE                    "
+                     + "	user_id = :userId      "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("userId", user.getId());

@@ -76,7 +76,7 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 //Enable API documentation
 // Specifies which package to scan
-@ComponentScan({"fm"}) // xml config: <context:component-scan base-package="ht"/>
+@ComponentScan({"fm"}) // xml config: <context:component-scan base-package="fm"/>
 // Enables Spring's annotations
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)
@@ -113,7 +113,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //    final String usr = "imxdb";
 //    final String pass = "manager";
 
-    final String databaseUrl = "jdbc:mysql://localhost:3306/ht_db";
+    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management";
     final String usr = "haho";
     final String pass = "hoanhhao";
 

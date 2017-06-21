@@ -1,7 +1,5 @@
-TRUNCATE TABLE `fm_user_roles`;
 INSERT INTO `fm_user_roles` VALUES (1, 'ADMIN'), (2, 'STAFF'), (3, 'CUSTOMER'), (4, 'USER');
 
-TRUNCATE TABLE `fm_users`;
 INSERT INTO `fm_users`
 VALUES
   (1, 'admin', 'admin'), (2, 'haho', 'hoanhhao'), (3, 'hao', 'hiep'), (4, 'hiep', 'hiep'),
@@ -26,7 +24,6 @@ VALUES
   (61, 'haho61', 'hoanhhao'), (62, 'haho62', 'hoanhhao'), (63, 'haho63', 'hoanhhao')
 ;
 
-TRUNCATE TABLE `fm_user_role_details`;
 INSERT INTO `fm_user_role_details` VALUES
   (1, 1, 1), (2, 2, 1), (3, 3, 1), (4, 4, 1),
   (5, 39, 3), (6, 40, 2), (7, 5, 2), (8, 6, 2)

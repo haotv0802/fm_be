@@ -3,6 +3,21 @@ CREATE DATABASE IF NOT EXISTS `finance_management`;
 USE `finance_management`;
 
 --
+-- Table structure for table `auth_token`
+--
+DROP TABLE IF EXISTS `fm_auth_token`;
+CREATE TABLE `fm_auth_token` (
+  `id`          BIGINT AUTO_INCREMENT,
+  `token_type`  VARCHAR(45) NOT NULL,
+  `auth_object` BLOB        NOT NULL,
+  `exp_date`    DATETIME    NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `auth_token_id_unique` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
 -- Table structure for table `user_role`
 --
 DROP TABLE IF EXISTS `fm_user_roles`;
