@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="warn">
+  <Appenders>
+    <RandomAccessFile name="File"
+                      fileName="D://zLogHT-${date:yyyy-MM-dd}.log"
+                      immediateFlush="false"
+                      append="true">
+      <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" />
+    </RandomAccessFile>
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" />
+    </Console>
+  </Appenders>
+  <Loggers>
+    <AsyncRoot level="debug" includeLocation="true">
+      <AppenderRef ref="File" />
+      <AppenderRef ref="Console" />
+    </AsyncRoot>
+    <!--<Logger name="ht.api" level="debug" additivity="false">-->
+      <!--<AppenderRef ref="Console"/>-->
+      <!--<AppenderRef ref="File" />-->
+    <!--</Logger>-->
+  </Loggers>
+</Configuration>

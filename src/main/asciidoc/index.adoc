@@ -1,0 +1,124 @@
+
+= iMX RESTful API User Guide
+Codix's iMX RESTful API user manual;
+:doctype: book
+:icons: font
+:iconfont-remote!:
+:iconfont-name: fontawesome-4.4.0
+:stylesdir: css
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 4
+:sectlinks:
+:docinfo1:
+:imxClient:
+:imxFE:
+
+[[overview]]
+= Overview
+{imxClient}
+[[overview-http-verbs]]
+== HTTP verbs
+
+This RESTful API tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP verbs.
+
+|===
+| Verb | Usage
+
+| `GET`
+| Used to retrieve a resource
+
+| `POST`
+| Used to create a new resource
+
+| `PUT`
+| Used to update an existing resource, including partial updates
+
+| `DELETE`
+| Used to delete an existing resource
+|===
+
+[[overview-http-status-codes]]
+== HTTP status codes
+
+This RESTful API tries to adhere as closely as possible to standard HTTP and REST conventions in its
+use of HTTP status codes.
+
+|===
+| Status code | Usage
+
+| `200 OK`
+| The request completed successfully
+
+| `201 Created`
+| A new resource has been created successfully. The resource's URI is available from the response's
+`Location` header
+
+| `204 No Content`
+| An update to an existing resource has been applied successfully
+
+| `400 Bad Request`
+| The request was malformed. The response body will include an error providing further information
+
+| `401 Unauthorized`
+| Authorization has been refused for those credentials
+
+| `400 Forbidden`
+| The server understood the request, but is refusing to fulfill it.
+
+| `404 Not Found`
+| The requested resource did not exist
+|===
+
+== Third parties messaging
+This API provides messaging services (over http) in order to facilitate integration with third party (from this API perspective) software.
+
+The basic flow follows:
+[NOTE]
+====
+[arabic]
+. Obtain data for opening and working with external software. Usually speicific service(s) for the context of a particular resource
+. Show to end user link for opening of the external software.
+. Once the end-user opens the link, prevent further input while starting a backgraund loop which queries the status service.
+. Once the status object is recieved and it is in a desired state, store this object, break the loop and restore end-user input.
+. Continue with rest of the service(s) and provide the required data as present in the stored object.
+====
+
+WARNING: Make sure to break the loop if the user navigates away prior of receiving editor state object.
+
+=== Description of services for working with JavaEd(C)
+
+. Optional service for registering a status object. Usually provided as a specific, dedicated service for a particular resource.
+. Contextual service for openning the editor
+. Contextual service for pushing status updated. Used by the third party software such as JavaEd(C).
+. Contextual service for reciving status updates. Used by the clients of this API such as iMX(C).
+. Otional, contextual service for removal of the state object. Usualy not present as this step is performed automaticaly as a final step by this API.
+
+=== Description of services for working with Imagerie(C)
+TBD:
+
+[[resources]]
+= iMX Resources
+'''
+== Menu resources
+TIP: Resource for building the navigation menus in iMX
+
+[[resources-get-menu]]
+=== Menu items resource
+NOTE: A `GET` request will list all of the menu items.
+
+//Request headers
+include::{snippets}/menu-resource-test/test-get-all/request-headers.adoc[]
+
+//Response fields
+include::{snippets}/menu-resource-test/test-get-all/response-fields.adoc[]
+
+//Example Curl request
+include::{snippets}/menu-resource-test/test-get-all/curl-request.adoc[]
+
+//Example HTTP request
+include::{snippets}/menu-resource-test/test-get-all/http-request.adoc[]
+
+//Example HTTP response
+include::{snippets}/menu-resource-test/test-get-all/http-response.adoc[]
