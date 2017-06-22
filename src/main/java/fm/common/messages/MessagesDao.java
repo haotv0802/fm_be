@@ -2,13 +2,13 @@ package fm.common.messages;
 
 import fm.common.dao.DaoUtils;
 import fm.common.messages.interfaces.IMessagesDao;
-import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Map;
@@ -27,24 +27,21 @@ public class MessagesDao implements IMessagesDao {
   @Autowired
   public MessagesDao(NamedParameterJdbcTemplate namedTemplate) {
     Assert.notNull(namedTemplate);
+
     this.namedTemplate = namedTemplate;
   }
 
   @Override
   public Map<String, Map<String, String>> getMessages(String language) {
-    final String sql = "SELECT                            "
-//                     + "	m.id,                           "
-//                     + "	m.role_id,                      "
-//                     + "	r.role_name,                    "
-//                     + "	m.component_name,               "
-                     + "	m.message_key,                  "
-                     + "	m.message_en,                   "
-                     + "	m.message_fr                    "
-                     + "FROM                              "
-                     + "	ht_db.messages m                "
-                     + "WHERE                             "
-                     + "	m.role_id is null               "
-                     + "AND m.component_name = :name      "
+    final String sql = "SELECT                      "
+                     + "	m.message_key,            "
+                     + "	m.message_en,             "
+                     + "	m.message_fr              "
+                     + "FROM                        "
+                     + "	fm_messages m             "
+                     + "WHERE                       "
+                     + "	m.role_id is null         "
+                     + "AND m.component_name = :name"
         ;
     List<String> componentsList = this.getComponentsList();
 
@@ -76,12 +73,12 @@ public class MessagesDao implements IMessagesDao {
   }
 
   private List<String> getComponentsList() {
-    final String sql = "SELECT DISTINCT     "
-                     + "	m.component_name  "
-                     + "FROM                "
-                     + "	ht_db.messages m  "
-                     + "WHERE               "
-                     + "	m.role_id IS NULL "
+    final String sql = "SELECT DISTINCT    "
+                     + "	m.component_name "
+                     + "FROM               "
+                     + "	fm_messages m    "
+                     + "WHERE              "
+                     + "	m.role_id IS NULL"
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

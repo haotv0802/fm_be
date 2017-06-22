@@ -65,6 +65,26 @@ CREATE TABLE `fm_user_role_details` (
   AUTO_INCREMENT = 11
   DEFAULT CHARSET = utf8;
 
+--
+-- Table structure for table `messages`
+--
+DROP TABLE IF EXISTS `fm_messages`;
+CREATE TABLE `fm_messages` (
+  `id`             BIGINT AUTO_INCREMENT,
+  `role_id`        BIGINT       NULL, # NULL is for anyone
+  `component_name` VARCHAR(45)  NOT NULL,
+  `message_key`    VARCHAR(45)  NOT NULL,
+  `message_en`     VARCHAR(100) NOT NULL,
+  `message_fr`     VARCHAR(100) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fm_messages_id_unique` (`id`),
+  UNIQUE KEY `fm_messages_role_id_component_name_key_unique` (`role_id`, `component_name`, `message_key`),
+  CONSTRAINT `fm_messages_role_id` FOREIGN KEY (`role_id`) REFERENCES `fm_user_roles` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
 DROP TABLE IF EXISTS `fm_earnings`;
 CREATE TABLE `fm_earnings` (
   `id`          BIGINT       NOT NULL AUTO_INCREMENT,

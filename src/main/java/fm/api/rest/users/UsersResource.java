@@ -31,7 +31,7 @@ public class UsersResource extends BaseResource {
   }
 
   @GetMapping("/users")
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAuthority('USER')")
   public List<UserBean> getUsers(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
@@ -39,7 +39,7 @@ public class UsersResource extends BaseResource {
   }
 
   @PatchMapping("/users/usersRolesUpdate")
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAuthority('USER')")
   public void updateUsersRoles(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,

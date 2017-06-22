@@ -1,4 +1,4 @@
-package fm.api.rest.htBK.messages;
+package fm.api.rest.messages;
 
 import fm.api.rest.htBK.BaseAdminDocumentation;
 import org.testng.annotations.Test;
@@ -14,7 +14,7 @@ public class MessagesResourceTest extends BaseAdminDocumentation {
   @Test
   public void testGetMessages() throws Exception {
     mockMvc
-        .perform(get("/svc/admin/messages")
+        .perform(get("/svc/messages")
             .header("Accept-Language", "")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )

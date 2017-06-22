@@ -57,11 +57,11 @@ public class UserDao implements IUserDao {
 
   @Override
   public void updateUserRole(UserBean user) {
-    final String sql = "UPDATE user_role_details "
-                     + "SET                      "
-                     + "	role_id = :roleId      "
-                     + "WHERE                    "
-                     + "	user_id = :userId      "
+    final String sql = "UPDATE fm_user_role_details "
+                     + "SET                         "
+                     + "	role_id = :roleId         "
+                     + "WHERE                       "
+                     + "	user_id = :userId         "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("userId", user.getId());

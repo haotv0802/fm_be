@@ -8,5 +8,5 @@ import java.util.Map;
 public interface IMessagesService {
 //  Map<String, String> getCustomerMessages(String lang);
 
-  Map<String, Map<String, String>> getAdminMessages(String lang);
+  Map<String, Map<String, String>> getMessages(String lang);
 }

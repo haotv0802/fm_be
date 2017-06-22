@@ -28,6 +28,24 @@ INSERT INTO `fm_user_role_details` VALUES
   (1, 1, 1), (2, 2, 2)
 ;
 
+INSERT INTO `fm_messages` (`role_id`, `component_name`, `message_key`, `message_en`, `message_fr`)
+VALUES
+  (1, 'roomsList', 'name', 'Name', 'NOM'),
+  (1, 'roomsList', 'numOfPeople', 'Num of people', 'Nombre de personnes'),
+  (1, 'roomsList', 'numOfBeds', 'Num of beds', 'Nombre de lits'),
+  (1, 'roomsList', 'typeOfBed', 'Type of bed', 'Type de lit'),
+  (1, 'roomUpdate', 'name', 'Name', 'NOM'),
+  (1, 'roomUpdate', 'numOfPeople', 'Num of people', 'Nombre de personnes'),
+  (1, 'roomUpdate', 'numOfBeds', 'Num of beds', 'Nombre de lits'),
+  (1, 'roomUpdate', 'typeOfBed', 'Type of bed', 'Type de lit'),
+  (null, 'login', 'userName', 'User name', 'Nom d''utilisateur'),
+  (null, 'login', 'password', 'Password', 'Mot de passe'),
+  (null, 'login', 'loginButton', 'Login', 'Soumettre'),
+  (null, 'login', 'registerButton', 'Register', 'Registre'),
+  (null, 'login', 'loginTitle', 'Login', 'S''identifier'),
+  (null, 'login', 'language', 'Language', 'Langue')
+;
+
 INSERT INTO `fm_earnings` (`user_id`, `amount`, `description`) VALUES (2, 20000000, 'monthly salary');
 
 INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `for_person`, `is_an_event`, `card_id`, `pay_in_cash`)

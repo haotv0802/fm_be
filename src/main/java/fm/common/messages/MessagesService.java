@@ -2,9 +2,9 @@ package fm.common.messages;
 
 import fm.common.messages.interfaces.IMessagesDao;
 import fm.common.messages.interfaces.IMessagesService;
-import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -23,7 +23,7 @@ public class MessagesService implements IMessagesService {
   }
 
   @Override
-  public Map<String, Map<String, String>> getAdminMessages(String lang) {
+  public Map<String, Map<String, String>> getMessages(String lang) {
     return this.messagesDao.getMessages(lang);
   }
 }
