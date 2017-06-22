@@ -1,4 +1,4 @@
-INSERT INTO `fm_user_roles` VALUES (1, 'ADMIN'), (2, 'STAFF'), (3, 'CUSTOMER'), (4, 'USER');
+INSERT INTO `fm_user_roles` VALUES (1, 'ADMIN'), (2, 'USER');
 
 INSERT INTO `fm_users`
 VALUES
@@ -25,8 +25,7 @@ VALUES
 ;
 
 INSERT INTO `fm_user_role_details` VALUES
-  (1, 1, 1), (2, 2, 1), (3, 3, 1), (4, 4, 1),
-  (5, 39, 3), (6, 40, 2), (7, 5, 2), (8, 6, 2)
+  (1, 1, 1), (2, 2, 2)
 ;
 
 INSERT INTO `fm_earnings` (`user_id`, `amount`, `description`) VALUES (2, 20000000, 'monthly salary');
