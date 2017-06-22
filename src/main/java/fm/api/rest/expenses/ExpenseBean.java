@@ -15,7 +15,9 @@ public class ExpenseBean {
   private String forPerson;
   private Boolean isAnEvent;
   private int cardId;
-  private Boolean payInCash;
+  private String paymentMethod;
+  private String cardNumber;
+  private String cardInfo;
 
   public int getId() {
     return id;
@@ -81,11 +83,27 @@ public class ExpenseBean {
     this.cardId = cardId;
   }
 
-  public Boolean getPayInCash() {
-    return payInCash;
+  public String getPaymentMethod() {
+    return paymentMethod;
   }
 
-  public void setPayInCash(Boolean payInCash) {
-    this.payInCash = payInCash;
+  public void setPaymentMethod(String paymentMethod) {
+    this.paymentMethod = paymentMethod;
+  }
+
+  public String getCardNumber() {
+    return cardNumber;
+  }
+
+  public void setCardNumber(String cardNumber) {
+    this.cardNumber = cardNumber;
+  }
+
+  public String getCardInfo() {
+    return cardInfo;
+  }
+
+  public void setCardInfo(String cardInfo) {
+    this.cardInfo = cardInfo;
   }
 }

@@ -111,17 +111,19 @@ CREATE TABLE `fm_payment_methods` (
 
 DROP TABLE IF EXISTS `fm_cards_information`;
 CREATE TABLE `fm_cards_information` (
-  `id`            BIGINT      NOT NULL,
+  `id`            BIGINT      NOT NULL AUTO_INCREMENT,
   `name`          VARCHAR(45) NULL, # HSBC, ANZ 123
   `start_date`    DATE        NULL,
   `expiry_date`   DATE        NULL,
   `card_number`   VARCHAR(45) NULL, # last 6 digits
   `amount`        DOUBLE      NOT NULL,
   `card_type_id`  BIGINT      NULL,
+  `user_id`       BIGINT      NULL,
   `is_terminated` BOOLEAN DEFAULT FALSE,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `fm_cards_information_id_unique` (`id`),
-  CONSTRAINT `fm_cards_information_user_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`)
+  UNIQUE KEY `fm_cards_information_id_unique` (`id`, `card_number`, `user_id`),
+  CONSTRAINT `fm_cards_information_card_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
+  CONSTRAINT `fm_cards_information_card_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

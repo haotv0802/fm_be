@@ -46,6 +46,11 @@ VALUES
   (null, 'login', 'language', 'Language', 'Langue')
 ;
 
+INSERT INTO fm_payment_methods(`id`, `name`) VALUES (1, 'CASH'), (2, 'VISA CREDIT'), (3, 'VISA DEBIT'), (4, 'American Express');
+
+INSERT INTO fm_cards_information (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`)
+VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2);
+
 INSERT INTO `fm_earnings` (`user_id`, `amount`, `description`) VALUES (2, 20000000, 'monthly salary');
 
 INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `for_person`, `is_an_event`, `card_id`, `pay_in_cash`)
@@ -54,4 +59,10 @@ VALUES
   (2, 45000, 'Gongcha', NULL, FALSE, NULL, TRUE),
   (2, 55000, 'KOI', NULL, FALSE, NULL, TRUE),
   (2, 50000, 'Watcha', NULL, FALSE, NULL, TRUE),
-  (2, 20000, 'Nha Khoa Minh Khai', NULL, FALSE, NULL, TRUE)
+  (2, 20000, 'Nha Khoa Minh Khai', NULL, FALSE, NULL, TRUE),
+  (2, 15000, 'CGV', NULL, FALSE, 1, FALSE),
+  (2, 45000, 'AEON Mall', NULL, FALSE, 1, FALSE),
+  (2, 55000, 'Tokio Deli', NULL, FALSE, 1, FALSE),
+  (2, 50000, 'Traveloka', NULL, FALSE, 1, FALSE),
+  (2, 20000, 'Uber', NULL, FALSE, 1, FALSE)
+;
