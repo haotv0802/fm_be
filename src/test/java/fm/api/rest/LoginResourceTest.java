@@ -51,15 +51,4 @@ public class LoginResourceTest extends BaseDocumentation {
         ;
     logger.info("X-AUTH: " + auth);
   }
-
-  @Test
-  public void testHello() throws Exception {
-    mockMvc
-        .perform(post("/svc/hello")
-            .header("Accept-Language", "fr")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-        )
-        .andExpect(status().is(200))
-    ;
-  }
 }

@@ -1,6 +1,6 @@
 package fm.common.messages;
 
-import fm.api.rest.htBK.common.BaseResource;
+import fm.api.rest.BaseResource;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
 import org.apache.logging.log4j.LogManager;

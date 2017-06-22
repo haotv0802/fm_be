@@ -1,4 +1,4 @@
-package fm.api.rest.htBK;
+package fm.api.rest;
 
 import fm.auth.*;
 import fm.common.beans.HeaderLang;
@@ -49,13 +49,5 @@ public class LoginResource {
     tokenAuthenticationService.addAuthentication(response, authentication);
 //    return new ResponseEntity(HttpStatus.OK);
     return new ResponseEntity(userDetails.getAuthorities(), HttpStatus.OK);
-  }
-
-  @PostMapping("/hello")
-  @PreAuthorize("hasAuthority('ADMIN')")
-  public void hello(
-       @AuthenticationPrincipal UserDetailsImpl userDetails
-      ,@HeaderLang String lang) {
-    logger.info("In Hello");
   }
 }
