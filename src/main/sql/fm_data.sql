@@ -28,3 +28,13 @@ INSERT INTO `fm_user_role_details` VALUES
   (1, 1, 1), (2, 2, 1), (3, 3, 1), (4, 4, 1),
   (5, 39, 3), (6, 40, 2), (7, 5, 2), (8, 6, 2)
 ;
+
+INSERT INTO `fm_earnings` (`user_id`, `amount`, `description`) VALUES (2, 20000000, 'monthly salary');
+
+INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `for_person`, `is_an_event`, `card_id`, `pay_in_cash`)
+VALUES
+  (2, 15000, 'The Coffee House', NULL, FALSE, NULL, TRUE),
+  (2, 45000, 'Gongcha', NULL, FALSE, NULL, TRUE),
+  (2, 55000, 'KOI', NULL, FALSE, NULL, TRUE),
+  (2, 50000, 'Watcha', NULL, FALSE, NULL, TRUE),
+  (2, 20000, 'Nha Khoa Minh Khai', NULL, FALSE, NULL, TRUE)

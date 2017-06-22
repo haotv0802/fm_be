@@ -67,10 +67,11 @@ CREATE TABLE `fm_user_role_details` (
 
 DROP TABLE IF EXISTS `fm_earnings`;
 CREATE TABLE `fm_earnings` (
-  `id`      BIGINT NOT NULL,
-  `user_id` BIGINT NOT NULL,
-  `amount`  DOUBLE NOT NULL,
-  `date`    DATETIME DEFAULT now(),
+  `id`          BIGINT       NOT NULL AUTO_INCREMENT,
+  `user_id`     BIGINT       NOT NULL,
+  `amount`      DOUBLE       NOT NULL,
+  `date`        DATETIME              DEFAULT now(),
+  `description` VARCHAR(100) NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_earnings_id_unique` (`id`),
   CONSTRAINT `fm_earnings_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
@@ -78,10 +79,9 @@ CREATE TABLE `fm_earnings` (
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
 DROP TABLE IF EXISTS `fm_payment_methods`;
 CREATE TABLE `fm_payment_methods` (
-  `id`   BIGINT      NOT NULL,
+  `id`   BIGINT      NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_event_types_id_unique` (`id`)
@@ -137,17 +137,17 @@ CREATE TABLE `fm_cards_invoices` (
 
 DROP TABLE IF EXISTS `fm_expenses`;
 CREATE TABLE `fm_expenses` (
-  `id`          BIGINT      NOT NULL,
+  `id`          BIGINT      NOT NULL AUTO_INCREMENT,
   `user_id`     BIGINT      NOT NULL,
   `amount`      DOUBLE      NULL, # if `is_an_event is TRUE, amount can be updated later when event is over
-  `date`        DATETIME DEFAULT now(),
+  `date`        DATETIME             DEFAULT now(),
   `place`       VARCHAR(45) NOT NULL,
   `for_person`  VARCHAR(45) NULL, # for_person means you spend for them, not for you, so this will not be listed in monthly report.
   # borrow someone money, if this is not important, you can let it hear,
   # otherwise, you want to put it in reminder, should place an event for it.
-  `is_an_event` BOOLEAN  DEFAULT FALSE,
+  `is_an_event` BOOLEAN              DEFAULT FALSE,
   `card_id`     BIGINT      NULL, # if `is_an_event is TRUE, card_id is NULL, or card_id is NULL means CASH payment
-  `pay_in_cash` BOOLEAN  DEFAULT FALSE,
+  `pay_in_cash` BOOLEAN              DEFAULT FALSE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_expenses_id_unique` (`id`),
   CONSTRAINT `fm_expenses_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
