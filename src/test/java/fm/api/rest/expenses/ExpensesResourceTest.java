@@ -1,6 +1,6 @@
 package fm.api.rest.expenses;
 
-import fm.api.rest.htBK.BaseAdminDocumentation;
+import fm.api.rest.BaseDocumentation;
 import org.testng.annotations.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 3/22/2017.
  */
-public class ExpensesResourceTest extends BaseAdminDocumentation {
+public class ExpensesResourceTest extends BaseDocumentation {
 
   @Test
   public void testGetExpenses() throws Exception {

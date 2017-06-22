@@ -1,5 +1,7 @@
-package fm.api.rest.htBK;
+package fm.api.rest;
 
+import fm.api.rest.htBK.IAuthTokenService;
+import fm.api.rest.htBK.TestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.io.IoBuilder;
@@ -17,14 +19,14 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 @Service("authTokenService")
-public class AdminAuthTokenService implements IAuthTokenService {
+public class AuthTokenService implements IAuthTokenService {
 
-  private static final Logger logger = LogManager.getLogger(AdminAuthTokenService.class);
+  private static final Logger logger = LogManager.getLogger(AuthTokenService.class);
 
   private String authToken;
 
   @Autowired
-  public AdminAuthTokenService(
+  public AuthTokenService(
       WebApplicationContext wac,
       @Qualifier("springSessionRepositoryFilter") Filter sessionRepositoryFilter,
       @Qualifier("txFilter") Filter txFilter
