@@ -1,7 +1,7 @@
 package fm.api.rest.users;
 
 import com.fasterxml.jackson.databind.type.TypeFactory;
-import fm.api.rest.htBK.BaseAdminDocumentation;
+import fm.api.rest.BaseDocumentation;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testng.annotations.Test;
@@ -15,7 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 3/22/2017.
  */
-public class UsersResourceTest extends BaseAdminDocumentation {
+public class UsersResourceTest extends BaseDocumentation {
 
   @Test
   public void testGetUsers() throws Exception {

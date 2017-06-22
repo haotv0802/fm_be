@@ -1,4 +1,4 @@
-package fm.api.rest.htBK;
+package fm.api.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fm.auth.AuthConstants;

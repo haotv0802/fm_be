@@ -1,7 +1,7 @@
 /**
  *
  */
-package fm.api.rest.htBK;
+package fm.api.rest;
 
 /**
  * @author haho

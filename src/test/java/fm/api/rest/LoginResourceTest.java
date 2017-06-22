@@ -1,4 +1,4 @@
-package fm.api.rest.htBK;
+package fm.api.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fm.auth.Credentials;
@@ -22,7 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
          "/config/spring-mvc.xml"
         ,"/config/spring-mvc-test.xml"
     })
-public class LoginResourceTest extends BaseAdminDocumentation {
+public class LoginResourceTest extends BaseDocumentation {
 
   @Autowired
   @Qualifier("authTokenService")

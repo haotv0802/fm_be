@@ -1,4 +1,4 @@
-package fm.api.rest.htBK;
+package fm.api.rest;
 
 /**
  * Property of CODIX Bulgaria EAD
