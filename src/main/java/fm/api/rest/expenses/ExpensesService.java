@@ -27,6 +27,11 @@ public class ExpensesService implements IExpensesService {
   }
 
   @Override
+  public ExpensesDetails getExpensesDetails(int userId) {
+    return this.expensesDao.getExpenesDetails(userId);
+  }
+
+  @Override
   public List<Expense> getExpenses(int userId) {
     return this.expensesDao.getExpenses(userId);
   }

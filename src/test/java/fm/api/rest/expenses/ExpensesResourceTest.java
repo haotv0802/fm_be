@@ -22,4 +22,14 @@ public class ExpensesResourceTest extends BaseDocumentation {
     ;
   }
 
+  @Test
+  public void testGetExpensesDetails() throws Exception {
+    mockMvc
+        .perform(get("/svc/expenses2")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }

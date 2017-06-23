@@ -30,11 +30,18 @@ public class ExpensesResource extends BaseResource {
   }
 
   @GetMapping("/expenses")
-  @PreAuthorize("hasAuthority('USER')")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<Expense> getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getExpenses(userDetails.getUserId());
   }
 
+  @GetMapping("/expenses2")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ExpensesDetails getExpenses2(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang) {
+    return this.expensesService.getExpensesDetails(userDetails.getUserId());
+  }
 }

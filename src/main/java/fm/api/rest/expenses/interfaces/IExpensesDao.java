@@ -1,6 +1,7 @@
 package fm.api.rest.expenses.interfaces;
 
 import fm.api.rest.expenses.Expense;
+import fm.api.rest.expenses.ExpensesDetails;
 
 import java.util.List;
 
@@ -9,4 +10,6 @@ import java.util.List;
  */
 public interface IExpensesDao {
   List<Expense> getExpenses(int userId);
+
+  ExpensesDetails getExpenesDetails(int userId);
 }

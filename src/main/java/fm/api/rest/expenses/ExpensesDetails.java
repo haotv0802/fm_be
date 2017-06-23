@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by haho on 6/23/2017.
  */
-public class Expenses {
+public class ExpensesDetails {
   private List<Expense> expenses;
   private BigDecimal total;
 
