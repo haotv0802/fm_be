@@ -56,7 +56,7 @@ public class LoginDao {
 
   public UserDetailsImpl findOneByUsername(String username) {
 
-    final String sql = "SELECT user_name, password FROM fm_users where user_name = :username";
+    final String sql = "SELECT id, user_name, password FROM fm_users where user_name = :username";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("username", username);
@@ -70,9 +70,9 @@ public class LoginDao {
       userDetails = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
 
         //TODO geting lang from authentication object is plain stupid. So, AN by default
-        UserDetailsImpl iud = new UserDetailsImpl(rs.getString("user_name"), rs.getString("password"), authorities);
+        UserDetailsImpl ud = new UserDetailsImpl(rs.getInt("id"), rs.getString("user_name"), rs.getString("password"), authorities);
 
-        return iud;
+        return ud;
       });
     } catch (EmptyResultDataAccessException e) {
       log.warn("Credentials not found: ");

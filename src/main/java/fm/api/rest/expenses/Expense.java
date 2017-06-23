@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Created by haho on 6/22/2017.
  */
-public class ExpenseBean {
+public class Expense {
   private int id;
   private int userId;
   private BigDecimal amount;

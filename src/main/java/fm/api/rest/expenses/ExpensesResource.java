@@ -31,10 +31,10 @@ public class ExpensesResource extends BaseResource {
 
   @GetMapping("/expenses")
   @PreAuthorize("hasAuthority('USER')")
-  public List<ExpenseBean> getExpenses(
+  public List<Expense> getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
-    return this.expensesService.getExpenses();
+    return this.expensesService.getExpenses(userDetails.getUserId());
   }
 
 }

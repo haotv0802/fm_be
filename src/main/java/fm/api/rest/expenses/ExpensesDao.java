@@ -28,7 +28,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public List<ExpenseBean> getExpenses() {
+  public List<Expense> getExpenses(int userId) {
     final String sql = "SELECT                                                 "
                      + "	e.id,                                                "
                      + "	e.user_id,                                           "
@@ -48,16 +48,17 @@ public class ExpensesDao implements IExpensesDao {
                      + "		LEFT JOIN                                          "
                      + "	fm_payment_methods p ON c.card_type_id = p.id        "
                      + "WHERE                                                  "
-                     + "	e.user_id = 2                                        "
+                     + "	e.user_id = :userId                                  "
                      + "ORDER BY id ASC                                        "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("userId", userId);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    List<ExpenseBean> expenses = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      ExpenseBean expense = new ExpenseBean();
+    List<Expense> expenses = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+      Expense expense = new Expense();
       expense.setId(rs.getInt("id"));
       expense.setUserId(rs.getInt("user_id"));
       expense.setAmount(rs.getBigDecimal("amount"));

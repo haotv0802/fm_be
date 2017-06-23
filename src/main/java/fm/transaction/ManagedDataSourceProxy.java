@@ -102,19 +102,19 @@ public class ManagedDataSourceProxy implements DataSource {
       cs = conn.prepareCall(sql);
 
       final String currentUserLogin = null != p ? p.getUsername() : null;
-      final Integer currentUserRefperso = null != p ? p.getRefPerson() : null;
+//      final Integer currentUserRefperso = null != p ? p.getRefPerson() : null;
       final String currentLanguage = null != p ? p.getLang() : null;
 
       cs.setString(1, currentUserLogin);
 
-      if (currentUserRefperso != null)
-        cs.setInt(2, currentUserRefperso);
-      else
-        cs.setObject(2, null);
+//      if (currentUserRefperso != null)
+//        cs.setInt(2, currentUserRefperso);
+//      else
+//        cs.setObject(2, null);
 
       cs.setString(3, currentLanguage);
 
-      log.debug(sql + "; bv{" + currentUserLogin + ", " + currentUserRefperso + ", " + currentLanguage + ", }");
+//      log.debug(sql + "; bv{" + currentUserLogin + ", " + currentUserRefperso + ", " + currentLanguage + ", }");
       cs.execute();
     } catch (Exception e) {
       log.warn("Can't set imx_session_params.setSessionDetails(): ", e);
@@ -211,15 +211,15 @@ public class ManagedDataSourceProxy implements DataSource {
       String sql = "{ call imx_session_params.setCurrentUserRefperso(?)}";
       pstm = conn.prepareCall(sql);
 
-      final Integer refperson = null != p ? p.getRefPerson() : null;
+//      final Integer refperson = null != p ? p.getRefPerson() : null;
 
-      if (null != refperson) {
-        pstm.setInt(1, refperson);
-      } else {
-        pstm.setNull(1, Types.NUMERIC);
-      }
-
-      log.debug(sql + "; bv{" + refperson + "}");
+//      if (null != refperson) {
+//        pstm.setInt(1, refperson);
+//      } else {
+//        pstm.setNull(1, Types.NUMERIC);
+//      }
+//
+//      log.debug(sql + "; bv{" + refperson + "}");
       pstm.execute();
 
     } catch (Exception e) {

@@ -13,9 +13,7 @@ public class UserDetailsImpl implements UserDetails {
 
   private String password;
 
-  int refPerson;
-
-  String refIndividual;
+  int userId;
 
   String fullName;
 
@@ -117,23 +115,9 @@ public class UserDetailsImpl implements UserDetails {
    * @param password
    * @param authorities
    */
-  public UserDetailsImpl(String username, String password, Collection<? extends GrantedAuthority> authorities) {
-//    this(username
-//        , password
-//        , "_N/A_"
-//        , "AN"
-//        , true
-//        , true
-//        , true
-//        , true
-//        , null
-//        , 0
-//        , true
-//        , true
-//        , ""
-//        , null
-//        , null
-//        , authorities);
+  public UserDetailsImpl(int userId, String username, String password, Collection<? extends GrantedAuthority> authorities) {
+
+    this.userId = userId;
     this.username = username;
     this.password = password;
     this.authorities = Collections.unmodifiableSet(sortAuthorities(authorities));
@@ -266,12 +250,8 @@ public class UserDetailsImpl implements UserDetails {
     return enabled;
   }
 
-  public int getRefPerson() {
-    return refPerson;
-  }
-
-  public String getRefIndividual() {
-    return refIndividual;
+  public int getUserId() {
+    return userId;
   }
 
   public String getFullName() {
