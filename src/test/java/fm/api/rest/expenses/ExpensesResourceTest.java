@@ -25,7 +25,18 @@ public class ExpensesResourceTest extends BaseDocumentation {
   @Test
   public void testGetExpensesDetails() throws Exception {
     mockMvc
-        .perform(get("/svc/expenses2")
+        .perform(get("/svc/expensesDetails")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void getPreviousExpenesDetails() throws Exception {
+    mockMvc
+        .perform(get("/svc/previousExpensesDetails")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )

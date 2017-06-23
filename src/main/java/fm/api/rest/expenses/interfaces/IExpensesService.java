@@ -12,4 +12,6 @@ public interface IExpensesService {
   List<Expense> getExpenses(int userId);
 
   ExpensesDetails getExpensesDetails(int userId);
+
+  List<ExpensesDetails> getPreviousExpenesDetails(int userId);
 }

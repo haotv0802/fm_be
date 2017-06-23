@@ -37,11 +37,19 @@ public class ExpensesResource extends BaseResource {
     return this.expensesService.getExpenses(userDetails.getUserId());
   }
 
-  @GetMapping("/expenses2")
+  @GetMapping("/expensesDetails")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ExpensesDetails getExpenses2(
+  public ExpensesDetails getExpensesDetails(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getExpensesDetails(userDetails.getUserId());
+  }
+
+  @GetMapping("/previousExpensesDetails")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public List<ExpensesDetails> getPreviousExpenesDetails(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang) {
+    return this.expensesService.getPreviousExpenesDetails(userDetails.getUserId());
   }
 }

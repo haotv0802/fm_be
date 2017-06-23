@@ -12,4 +12,6 @@ public interface IExpensesDao {
   List<Expense> getExpenses(int userId);
 
   ExpensesDetails getExpenesDetails(int userId);
+
+  List<ExpensesDetails> getPreviousExpenesDetails(int userId);
 }
