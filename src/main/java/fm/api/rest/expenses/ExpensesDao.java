@@ -7,6 +7,7 @@ import fm.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -26,6 +27,7 @@ public class ExpensesDao implements IExpensesDao {
 
   private final NamedParameterJdbcTemplate namedTemplate;
 
+  @Autowired
   public ExpensesDao(NamedParameterJdbcTemplate namedTemplate) {
     Assert.notNull(namedTemplate);
     this.namedTemplate = namedTemplate;
