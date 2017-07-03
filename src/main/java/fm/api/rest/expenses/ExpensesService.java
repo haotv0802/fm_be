@@ -40,4 +40,9 @@ public class ExpensesService implements IExpensesService {
   public List<Expense> getExpenses(int userId) {
     return this.expensesDao.getExpenses(userId);
   }
+
+  @Override
+  public void addExpense(ExpenseCreation expenseCreation) {
+//    return this.expensesDao.getExpenses(userId);
+  }
 }

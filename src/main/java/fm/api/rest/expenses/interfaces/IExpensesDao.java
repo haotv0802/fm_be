@@ -1,6 +1,7 @@
 package fm.api.rest.expenses.interfaces;
 
 import fm.api.rest.expenses.Expense;
+import fm.api.rest.expenses.ExpenseCreation;
 import fm.api.rest.expenses.ExpensesDetails;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface IExpensesDao {
   ExpensesDetails getExpenesDetails(int userId);
 
   List<ExpensesDetails> getPreviousExpenesDetails(int userId);
+
+  void addExpense(ExpenseCreation expenseCreation);
 }

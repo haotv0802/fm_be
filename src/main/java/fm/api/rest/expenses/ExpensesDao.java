@@ -14,6 +14,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,28 +66,9 @@ public class ExpensesDao implements IExpensesDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    List<Expense> expenses = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      Expense expense = new Expense();
-      expense.setId(rs.getInt("id"));
-      expense.setUserId(rs.getInt("user_id"));
-      expense.setAmount(rs.getBigDecimal("amount"));
-      expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
-      expense.setPlace(rs.getString("place"));
-      expense.setForPerson(rs.getString("for_person"));
-      expense.setAnEvent(rs.getBoolean("is_an_event"));
-      expense.setCardId(rs.getInt("card_id"));
-      boolean payInCash = rs.getBoolean("pay_in_cash");
-      if (payInCash) {
-        expense.setPaymentMethod("CASH");
-      } else {
-        expense.setPaymentMethod(rs.getString("payment_method"));
-        expense.setCardInfo(rs.getString("card_info"));
-        expense.setCardNumber(rs.getString("card_number"));
-      }
-      return expense;
-    });
+    List<Expense> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
-    return expenses;
+    return expensesList;
   }
 
   private List<String> getMonths(int userId) {
@@ -104,6 +87,27 @@ public class ExpensesDao implements IExpensesDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     return namedTemplate.queryForList(sql, paramsMap, String.class);
+  }
+
+  private Expense buildExpense(ResultSet rs) throws SQLException {
+      Expense expense = new Expense();
+      expense.setId(rs.getInt("id"));
+      expense.setUserId(rs.getInt("user_id"));
+      expense.setAmount(rs.getBigDecimal("amount"));
+      expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
+      expense.setPlace(rs.getString("place"));
+      expense.setForPerson(rs.getString("for_person"));
+      expense.setAnEvent(rs.getBoolean("is_an_event"));
+      expense.setCardId(rs.getInt("card_id"));
+      boolean payInCash = rs.getBoolean("pay_in_cash");
+      if (payInCash) {
+        expense.setPaymentMethod("CASH");
+      } else {
+        expense.setPaymentMethod(rs.getString("payment_method"));
+        expense.setCardInfo(rs.getString("card_info"));
+        expense.setCardNumber(rs.getString("card_number"));
+      }
+      return expense;
   }
 
   @Override
@@ -150,26 +154,7 @@ public class ExpensesDao implements IExpensesDao {
 
     ExpensesDetails expensesDetails = new ExpensesDetails();
 
-    List<Expense> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      Expense expense = new Expense();
-      expense.setId(rs.getInt("id"));
-      expense.setUserId(rs.getInt("user_id"));
-      expense.setAmount(rs.getBigDecimal("amount"));
-      expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
-      expense.setPlace(rs.getString("place"));
-      expense.setForPerson(rs.getString("for_person"));
-      expense.setAnEvent(rs.getBoolean("is_an_event"));
-      expense.setCardId(rs.getInt("card_id"));
-      boolean payInCash = rs.getBoolean("pay_in_cash");
-      if (payInCash) {
-        expense.setPaymentMethod("CASH");
-      } else {
-        expense.setPaymentMethod(rs.getString("payment_method"));
-        expense.setCardInfo(rs.getString("card_info"));
-        expense.setCardNumber(rs.getString("card_number"));
-      }
-      return expense;
-    });
+    List<Expense> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
     BigDecimal totalSpendings = BigDecimal.ZERO;
     for (int i = 0; i < expensesList.size(); i++) {
@@ -195,5 +180,24 @@ public class ExpensesDao implements IExpensesDao {
     }
 
     return expensesDetailsList;
+  }
+
+  @Override
+  public void addExpense(ExpenseCreation expenseCreation) {
+//    final String sql = "SELECT DISTINCT                    "
+//        + "	DATE_FORMAT(date, '%Y-%m') month "
+//        + "FROM                               "
+//        + "	fm_expenses                      "
+//        + "WHERE                              "
+//        + "	user_id = :userId                "
+//        + "ORDER BY date DESC                 "
+//        ;
+//
+//    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+//    paramsMap.addValue("userId", userId);
+//
+//    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+//
+//    return namedTemplate.queryForList(sql, paramsMap, String.class);
   }
 }
