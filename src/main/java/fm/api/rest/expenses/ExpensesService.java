@@ -50,4 +50,9 @@ public class ExpensesService implements IExpensesService {
   public void updateExpense(Expense expense) {
     this.expensesDao.updateExpense(expense);
   }
+
+  @Override
+  public void deleteExpense(int expenseId) {
+    this.expensesDao.deleteExpense(expenseId);
+  }
 }

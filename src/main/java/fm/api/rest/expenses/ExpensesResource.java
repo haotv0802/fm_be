@@ -62,6 +62,17 @@ public class ExpensesResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
+  @DeleteMapping("/expenses/{expenseId}/delete")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ResponseEntity deleteExpense(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("expenseId") int expenseId
+  ) {
+    this.expensesService.deleteExpense(expenseId);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+
   @GetMapping("/expensesDetails")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ExpensesDetails getExpensesDetails(

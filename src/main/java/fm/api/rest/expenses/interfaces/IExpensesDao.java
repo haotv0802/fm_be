@@ -20,5 +20,5 @@ public interface IExpensesDao {
 
   void updateExpense(Expense expense);
 
-  void deleteExpense(Expense expense);
+  void deleteExpense(int expenseId);
 }

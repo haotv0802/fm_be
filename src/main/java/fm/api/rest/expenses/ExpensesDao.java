@@ -59,6 +59,7 @@ public class ExpensesDao implements IExpensesDao {
                      + "	fm_payment_methods p ON c.card_type_id = p.id        "
                      + "WHERE                                                  "
                      + "	e.user_id = :userId                                  "
+                     + "        AND is_deleted = FALSE                         "
                      + "ORDER BY id ASC                                        "
         ;
 
@@ -79,6 +80,7 @@ public class ExpensesDao implements IExpensesDao {
                      + "	fm_expenses                      "
                      + "WHERE                              "
                      + "	user_id = :userId                "
+                     + "	AND is_deleted = FALSE           "
                      + "ORDER BY date DESC                 "
         ;
 
@@ -152,6 +154,7 @@ public class ExpensesDao implements IExpensesDao {
         + "WHERE                                                 "
         + "	e.user_id = :userId                                  "
         + "        AND DATE_FORMAT(date, '%Y-%m') = :month       "
+        + "        AND is_deleted = FALSE                        "
         + "ORDER BY e.date DESC                                  "
         ;
 
@@ -245,7 +248,20 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public void deleteExpense(Expense expense) {
+  public void deleteExpense(int expenseId) {
+    final String sql =
+        "UPDATE fm_expenses        "
+      + "SET                       "
+      + "	is_deleted = TRUE        "
+      + "WHERE                     "
+      + "	id = :id                 "
+        ;
 
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", expenseId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
   }
 }

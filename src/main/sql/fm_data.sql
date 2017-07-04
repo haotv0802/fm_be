@@ -46,7 +46,7 @@ VALUES
   (null, 'login', 'language', 'Language', 'Langue')
 ;
 
-INSERT INTO fm_payment_methods(`id`, `name`) VALUES (1, 'CASH'), (2, 'VISA CREDIT'), (3, 'VISA DEBIT'), (4, 'American Express');
+INSERT INTO fm_payment_methods(`id`, `name`) VALUES (1, 'VISA CREDIT'), (2, 'VISA DEBIT'), (3, 'American Express');
 
 INSERT INTO fm_cards_information (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`)
 VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2);

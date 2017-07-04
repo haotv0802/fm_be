@@ -19,4 +19,6 @@ public interface IExpensesService {
   Long addExpense(Expense expense, int userId);
 
   void updateExpense(Expense expense);
+
+  void deleteExpense(int expenseId);
 }

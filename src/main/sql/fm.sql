@@ -119,7 +119,7 @@ CREATE TABLE `fm_cards_information` (
   `amount`        DOUBLE      NOT NULL,
   `card_type_id`  BIGINT      NULL,
   `user_id`       BIGINT      NULL,
-  `is_terminated` BOOLEAN DEFAULT FALSE,
+  `is_terminated` BOOLEAN              DEFAULT FALSE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_cards_information_id_unique` (`id`, `card_number`, `user_id`),
   CONSTRAINT `fm_cards_information_card_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
@@ -169,6 +169,7 @@ CREATE TABLE `fm_expenses` (
   # otherwise, you want to put it in reminder, should place an event for it.
   `is_an_event` BOOLEAN              DEFAULT FALSE,
   `card_id`     BIGINT      NULL, # if `is_an_event is TRUE, card_id is NULL, or card_id is NULL means CASH payment
+  `is_deleted`  BOOLEAN              DEFAULT FALSE,
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_expenses_id_unique` (`id`),
   CONSTRAINT `fm_expenses_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
@@ -202,6 +203,7 @@ CREATE TABLE `fm_event_expenses` (
   #   `payment_method` VARCHAR(45) NOT NULL,
   `card_id`       BIGINT      NULL, # pay_in_cash column is not necessary. card_id NULL means you pay in cash.
   `expense_id`    BIGINT      NOT NULL, # group sharing, traveling, group party, borrow money, pay back money
+  `is_deleted`    BOOLEAN  DEFAULT FALSE,
 
   PRIMARY KEY (`id`),
   UNIQUE KEY `fm_event_expenses_id_unique` (`id`),

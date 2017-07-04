@@ -10,9 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import static com.fasterxml.jackson.databind.type.TypeFactory.defaultInstance;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -94,6 +92,41 @@ public class ExpensesResourceTest extends BaseDocumentation {
         )
         .andExpect(status().is(200))
         ;
+  }
+
+
+  @Test
+  public void testDeleteExpense() throws Exception {
+    MvcResult result = mockMvc
+        .perform(get("/svc/expenses")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+        .andReturn()
+        ;
+
+    List<ExpensePresenter> expenses = objectMapper.readValue(
+        result.getResponse().getContentAsString(),
+        defaultInstance().constructCollectionType(List.class, ExpensePresenter.class)
+    );
+    ExpensePresenter expensePresenter = expenses.get(0);
+    mockMvc
+        .perform(delete("/svc/expenses/{expenseId}/delete", expensePresenter.getId())
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().is(204))
+    ;
+
+    mockMvc
+        .perform(get("/svc/expenses")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
   }
 
   @Test
