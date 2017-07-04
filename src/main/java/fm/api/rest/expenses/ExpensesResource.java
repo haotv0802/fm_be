@@ -48,8 +48,10 @@ public class ExpensesResource extends BaseResource {
       @HeaderLang String lang,
       @RequestBody ExpenseCreation expenseCreation
   ) {
-    this.expensesService.addExpense(expenseCreation, userDetails.getUserId());
-    return new ResponseEntity(HttpStatus.CREATED);
+    Long id = this.expensesService.addExpense(expenseCreation, userDetails.getUserId());
+    return new ResponseEntity<>(new Object() {
+      public final Long expenseId = id;
+    }, HttpStatus.CREATED);
   }
 
   @GetMapping("/expensesDetails")

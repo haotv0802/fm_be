@@ -10,6 +10,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -183,7 +185,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public void addExpense(ExpenseCreation expenseCreation, int userId) {
+  public Long addExpense(ExpenseCreation expenseCreation, int userId) {
     final String sql =
           "INSERT INTO fm_expenses (user_id, amount, date, place, for_person, is_an_event, card_id, pay_in_cash) "
         + "VALUES (:userId, :amount, :date, :place, :forPerson, :isAnEvent, :cardId, :payInCash)                                              "
@@ -201,6 +203,9 @@ public class ExpensesDao implements IExpensesDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    namedTemplate.update(sql, paramsMap);
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder, new String[]{"user_id"});
+    final Long id = keyHolder.getKey().longValue();
+    return id;
   }
 }
