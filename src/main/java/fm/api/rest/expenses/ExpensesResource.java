@@ -35,7 +35,7 @@ public class ExpensesResource extends BaseResource {
 
   @GetMapping("/expenses")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<Expense> getExpenses(
+  public List<ExpensePresenter> getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getExpenses(userDetails.getUserId());
@@ -46,7 +46,7 @@ public class ExpensesResource extends BaseResource {
   public ResponseEntity addExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
-      @RequestBody ExpenseCreation expenseCreation
+      @RequestBody Expense expenseCreation
   ) {
     Long id = this.expensesService.addExpense(expenseCreation, userDetails.getUserId());
     return new ResponseEntity<>(new Object() {
@@ -64,9 +64,9 @@ public class ExpensesResource extends BaseResource {
 
   @GetMapping("/previousExpensesDetails")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<ExpensesDetails> getPreviousExpenesDetails(
+  public List<ExpensesDetails> getPreviousExpensesDetails(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
-    return this.expensesService.getPreviousExpenesDetails(userDetails.getUserId());
+    return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId());
   }
 }

@@ -7,33 +7,12 @@ import java.util.Date;
  * Created by haho on 6/22/2017.
  */
 public class Expense {
-  private int id;
-  private int userId;
   private BigDecimal amount;
   private Date date;
   private String place;
   private String forPerson;
-  private Boolean isAnEvent;
   private int cardId;
-  private String paymentMethod;
-  private String cardNumber;
-  private String cardInfo;
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getUserId() {
-    return userId;
-  }
-
-  public void setUserId(int userId) {
-    this.userId = userId;
-  }
+  private boolean isAnEvent;
 
   public BigDecimal getAmount() {
     return amount;
@@ -67,14 +46,6 @@ public class Expense {
     this.forPerson = forPerson;
   }
 
-  public Boolean getAnEvent() {
-    return isAnEvent;
-  }
-
-  public void setAnEvent(Boolean anEvent) {
-    isAnEvent = anEvent;
-  }
-
   public int getCardId() {
     return cardId;
   }
@@ -83,27 +54,11 @@ public class Expense {
     this.cardId = cardId;
   }
 
-  public String getPaymentMethod() {
-    return paymentMethod;
+  public boolean isAnEvent() {
+    return isAnEvent;
   }
 
-  public void setPaymentMethod(String paymentMethod) {
-    this.paymentMethod = paymentMethod;
-  }
-
-  public String getCardNumber() {
-    return cardNumber;
-  }
-
-  public void setCardNumber(String cardNumber) {
-    this.cardNumber = cardNumber;
-  }
-
-  public String getCardInfo() {
-    return cardInfo;
-  }
-
-  public void setCardInfo(String cardInfo) {
-    this.cardInfo = cardInfo;
+  public void setAnEvent(boolean anEvent) {
+    isAnEvent = anEvent;
   }
 }

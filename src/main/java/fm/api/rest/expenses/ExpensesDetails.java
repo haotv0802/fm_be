@@ -7,14 +7,14 @@ import java.util.List;
  * Created by haho on 6/23/2017.
  */
 public class ExpensesDetails {
-  private List<Expense> expenses;
+  private List<ExpensePresenter> expenses;
   private BigDecimal total;
 
-  public List<Expense> getExpenses() {
+  public List<ExpensePresenter> getExpenses() {
     return expenses;
   }
 
-  public void setExpenses(List<Expense> expenses) {
+  public void setExpenses(List<ExpensePresenter> expenses) {
     this.expenses = expenses;
   }
 

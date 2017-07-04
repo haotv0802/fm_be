@@ -39,7 +39,7 @@ public class ExpensesDao implements IExpensesDao {
 
   @Override
   @Deprecated
-  public List<Expense> getExpenses(int userId) {
+  public List<ExpensePresenter> getExpenses(int userId) {
     final String sql = "SELECT                                                 "
                      + "	e.id,                                                "
                      + "	e.user_id,                                           "
@@ -68,7 +68,7 @@ public class ExpensesDao implements IExpensesDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    List<Expense> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
+    List<ExpensePresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
     return expensesList;
   }
@@ -91,8 +91,8 @@ public class ExpensesDao implements IExpensesDao {
     return namedTemplate.queryForList(sql, paramsMap, String.class);
   }
 
-  private Expense buildExpense(ResultSet rs) throws SQLException {
-      Expense expense = new Expense();
+  private ExpensePresenter buildExpense(ResultSet rs) throws SQLException {
+      ExpensePresenter expense = new ExpensePresenter();
       expense.setId(rs.getInt("id"));
       expense.setUserId(rs.getInt("user_id"));
       expense.setAmount(rs.getBigDecimal("amount"));
@@ -156,7 +156,7 @@ public class ExpensesDao implements IExpensesDao {
 
     ExpensesDetails expensesDetails = new ExpensesDetails();
 
-    List<Expense> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
+    List<ExpensePresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
     BigDecimal totalSpendings = BigDecimal.ZERO;
     for (int i = 0; i < expensesList.size(); i++) {
@@ -169,7 +169,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public List<ExpensesDetails> getPreviousExpenesDetails(int userId) {
+  public List<ExpensesDetails> getPreviousExpensesDetails(int userId) {
     List<String> months = this.getMonths(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
@@ -185,7 +185,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public Long addExpense(ExpenseCreation expenseCreation, int userId) {
+  public Long addExpense(Expense expenseCreation, int userId) {
     final String sql =
           "INSERT INTO fm_expenses (user_id, amount, date, place, for_person, is_an_event, card_id, pay_in_cash) "
         + "VALUES (:userId, :amount, :date, :place, :forPerson, :isAnEvent, :cardId, :payInCash)                                              "

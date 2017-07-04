@@ -29,7 +29,7 @@ public class ExpensesResourceTest extends BaseDocumentation {
 
   @Test
   public void testAddExpense() throws Exception {
-    ExpenseCreation creation = new ExpenseCreation();
+    Expense creation = new Expense();
     creation.setAmount(new BigDecimal(1234));
     creation.setAnEvent(false);
     creation.setCardId(2);
@@ -60,7 +60,7 @@ public class ExpensesResourceTest extends BaseDocumentation {
   }
 
   @Test
-  public void getPreviousExpenesDetails() throws Exception {
+  public void getPreviousExpensesDetails() throws Exception {
     mockMvc
         .perform(get("/svc/previousExpensesDetails")
             .header("Accept-Language", "en")
