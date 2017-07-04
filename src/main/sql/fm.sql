@@ -213,3 +213,19 @@ CREATE TABLE `fm_event_expenses` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `error_tracking`
+--
+DROP TABLE IF EXISTS `fm_error_tracking`;
+CREATE TABLE `fm_error_tracking` (
+  `id`            BIGINT       NOT NULL AUTO_INCREMENT,
+  `error_message` VARCHAR(100) NOT NULL,
+  `stack_trace`   TEXT         NOT NULL,
+  `user`          VARCHAR(50),
+  `error_date`    DATETIME     NOT NULL DEFAULT now(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `error_tracking_id_unique` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;

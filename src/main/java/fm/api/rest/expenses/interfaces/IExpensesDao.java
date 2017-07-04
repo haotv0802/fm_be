@@ -21,4 +21,6 @@ public interface IExpensesDao {
   void updateExpense(Expense expense);
 
   void deleteExpense(int expenseId);
+
+  boolean checkIfLoginUserOwner(int expenseId, int userId);
 }

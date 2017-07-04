@@ -62,6 +62,10 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
   @Qualifier("authTokenService")
   protected IAuthTokenService authTokenService;
 
+  @Autowired
+  @Qualifier("authTokenServiceForAdmin")
+  protected IAuthTokenService authTokenServiceForAdmin;
+
   protected final String APP_BUILD_NAME = "/v9";
 
   protected final String SNIPPET_NAME_PATTERN = "{class-name}/{method-name}";

@@ -2,14 +2,17 @@ package fm.api.rest.expenses;
 
 import fm.api.rest.BaseResource;
 import fm.api.rest.expenses.interfaces.IExpensesService;
+import fm.api.rest.expenses.validators.ExpenseEditValidation;
 import fm.auth.UserDetailsImpl;
+import fm.common.Validator;
 import fm.common.beans.HeaderLang;
-import io.jsonwebtoken.lang.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,13 +24,18 @@ import java.util.List;
 public class ExpensesResource extends BaseResource {
 
   private final IExpensesService expensesService;
+  private final Validator<ExpenseEditValidation> expenseEditValidator;
 
+  @Autowired
   public ExpensesResource(
-      @Qualifier("expensesService") IExpensesService expensesService
+      @Qualifier("expensesService") IExpensesService expensesService,
+      @Qualifier("expenseEditValidator") Validator<ExpenseEditValidation> expenseEditValidator
   ) {
+    Assert.notNull(expenseEditValidator);
     Assert.notNull(expensesService);
 
     this.expensesService = expensesService;
+    this.expenseEditValidator = expenseEditValidator;
   }
 
   @GetMapping("/expenses")
@@ -56,9 +64,14 @@ public class ExpensesResource extends BaseResource {
   public ResponseEntity updateExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
-      @RequestBody Expense expenseCreation
+      @RequestBody Expense expense
   ) {
-    this.expensesService.updateExpense(expenseCreation);
+    ExpenseEditValidation validation = new ExpenseEditValidation();
+    validation.setUserId(userDetails.getUserId());
+    validation.setExpenseId(expense.getId());
+    expenseEditValidator.validate(validation);
+
+    this.expensesService.updateExpense(expense);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
@@ -69,6 +82,11 @@ public class ExpensesResource extends BaseResource {
       @HeaderLang String lang,
       @PathVariable("expenseId") int expenseId
   ) {
+    ExpenseEditValidation validation = new ExpenseEditValidation();
+    validation.setUserId(userDetails.getUserId());
+    validation.setExpenseId(expenseId);
+    expenseEditValidator.validate(validation);
+
     this.expensesService.deleteExpense(expenseId);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }

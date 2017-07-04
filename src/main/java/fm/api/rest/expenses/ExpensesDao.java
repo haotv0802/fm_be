@@ -264,4 +264,18 @@ public class ExpensesDao implements IExpensesDao {
 
     namedTemplate.update(sql, paramsMap);
   }
+
+  @Override
+  public boolean checkIfLoginUserOwner(int expenseId, int userId) {
+    final String sql = "SELECT COUNT(*) FROM fm_expenses WHERE id = :id AND user_id = :userId"
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", expenseId);
+    paramsMap.addValue("userId", userId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
 }

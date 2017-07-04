@@ -146,8 +146,9 @@ public class ErrorDao implements IErrorDao {
    * @return
    */
   private String insertError(String errMsg, String dump, String process, String stack) {
-    final String sql = "INSERT INTO error_tracking (error_message, stack_trace, user)"
-        + "  VALUES (:errorMessage, :stackTrace, :user)                 ";
+    final String sql =
+          "INSERT INTO fm_error_tracking (error_message, stack_trace, user)"
+        + "  VALUES (:errorMessage, :stackTrace, :user)                    ";
 
     MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("errorMessage", errMsg)
