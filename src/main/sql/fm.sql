@@ -229,3 +229,52 @@ CREATE TABLE `fm_error_tracking` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `fm_individuals`
+--
+DROP TABLE IF EXISTS `fm_individuals`;
+CREATE TABLE `fm_individuals` (
+  `id`              BIGINT AUTO_INCREMENT,
+  `first_name`      VARCHAR(45) NOT NULL,
+  `last_name`       VARCHAR(45) NOT NULL,
+  `middle_name`     VARCHAR(45),
+  `birthday`        DATE,
+  `gender`          VARCHAR(10) NOT NULL,
+  `email`           VARCHAR(50) NOT NULL,
+  `phone_number`    VARCHAR(50),
+  `official_income` DOUBLE,
+  `payment_date`    DATE,
+  `user_id`         BIGINT      NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fm_individuals_id_unique` (`id`),
+  UNIQUE KEY `fm_individuals_user_id_unique` (`user_id`), #  An individual has ONLY 1 user account.
+  UNIQUE KEY `fm_individuals_email_unique` (`email`), #  One email is belong to only 1 individual.
+  CONSTRAINT `fm_individuals_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `fm_person_picker`
+--
+DROP TABLE IF EXISTS `fm_person_picker`;
+CREATE TABLE `fm_person_picker` (
+  `id`              BIGINT AUTO_INCREMENT,
+  `first_name`      VARCHAR(45) NOT NULL,
+  `last_name`       VARCHAR(45) NOT NULL,
+  `middle_name`     VARCHAR(45),
+  `birthday`        DATE,
+  `gender`          VARCHAR(10) NOT NULL,
+  `email`           VARCHAR(50) NOT NULL,
+  `phone_number`    VARCHAR(50),
+  `official_income` DOUBLE,
+  `payment_date`    DATE,
+  `user_id`         BIGINT      NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `fm_person_picker_id_unique` (`id`),
+  UNIQUE KEY `fm_person_picker_user_id_email_unique` (`user_id`, `email`), #  An individual has ONLY 1 unique combination of user_id and email.
+  CONSTRAINT `fm_person_picker_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
+)
+  ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
