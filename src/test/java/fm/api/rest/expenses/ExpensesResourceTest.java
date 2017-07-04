@@ -1,9 +1,14 @@
 package fm.api.rest.expenses;
 
 import fm.api.rest.BaseDocumentation;
+import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -19,6 +24,27 @@ public class ExpensesResourceTest extends BaseDocumentation {
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void testAddExpense() throws Exception {
+    ExpenseCreation creation = new ExpenseCreation();
+    creation.setAmount(new BigDecimal(1234));
+    creation.setAnEvent(false);
+    creation.setCardId(2);
+    creation.setDate(new Date());
+    creation.setForPerson(null);
+    creation.setPlace("ILA");
+
+    mockMvc
+        .perform(post("/svc/expenses")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(creation))
+        )
+        .andExpect(status().is(201))
     ;
   }
 

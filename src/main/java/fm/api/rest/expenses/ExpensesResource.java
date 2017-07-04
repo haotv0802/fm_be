@@ -48,7 +48,7 @@ public class ExpensesResource extends BaseResource {
       @HeaderLang String lang,
       @RequestBody ExpenseCreation expenseCreation
   ) {
-    this.expensesService.addExpense(expenseCreation);
+    this.expensesService.addExpense(expenseCreation, userDetails.getUserId());
     return new ResponseEntity(HttpStatus.CREATED);
   }
 

@@ -42,7 +42,7 @@ public class ExpensesService implements IExpensesService {
   }
 
   @Override
-  public void addExpense(ExpenseCreation expenseCreation) {
-//    return this.expensesDao.getExpenses(userId);
+  public void addExpense(ExpenseCreation expenseCreation, int userId) {
+    this.expensesDao.addExpense(expenseCreation, userId);
   }
 }

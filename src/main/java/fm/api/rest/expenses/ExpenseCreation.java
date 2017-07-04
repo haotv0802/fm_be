@@ -12,6 +12,7 @@ public class ExpenseCreation {
   private String place;
   private String forPerson;
   private int cardId;
+  private boolean isAnEvent;
 
   public BigDecimal getAmount() {
     return amount;
@@ -51,5 +52,13 @@ public class ExpenseCreation {
 
   public void setCardId(int cardId) {
     this.cardId = cardId;
+  }
+
+  public boolean isAnEvent() {
+    return isAnEvent;
+  }
+
+  public void setAnEvent(boolean anEvent) {
+    isAnEvent = anEvent;
   }
 }

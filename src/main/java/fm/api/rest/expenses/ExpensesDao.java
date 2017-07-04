@@ -183,21 +183,24 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public void addExpense(ExpenseCreation expenseCreation) {
-//    final String sql = "SELECT DISTINCT                    "
-//        + "	DATE_FORMAT(date, '%Y-%m') month "
-//        + "FROM                               "
-//        + "	fm_expenses                      "
-//        + "WHERE                              "
-//        + "	user_id = :userId                "
-//        + "ORDER BY date DESC                 "
-//        ;
-//
-//    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-//    paramsMap.addValue("userId", userId);
-//
-//    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-//
-//    return namedTemplate.queryForList(sql, paramsMap, String.class);
+  public void addExpense(ExpenseCreation expenseCreation, int userId) {
+    final String sql =
+          "INSERT INTO fm_expenses (user_id, amount, date, place, for_person, is_an_event, card_id, pay_in_cash) "
+        + "VALUES (:userId, :amount, :date, :place, :forPerson, :isAnEvent, :cardId, :payInCash)                                              "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("userId", userId);
+    paramsMap.addValue("amount", expenseCreation.getAmount());
+    paramsMap.addValue("date", expenseCreation.getDate());
+    paramsMap.addValue("place", expenseCreation.getPlace());
+    paramsMap.addValue("forPerson", expenseCreation.getForPerson());
+    paramsMap.addValue("isAnEvent", expenseCreation.isAnEvent());
+    paramsMap.addValue("cardId", expenseCreation.getCardId());
+    paramsMap.addValue("payInCash", null);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
   }
 }
