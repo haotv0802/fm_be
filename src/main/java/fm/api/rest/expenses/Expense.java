@@ -5,8 +5,10 @@ import java.util.Date;
 
 /**
  * Created by haho on 6/22/2017.
+ * The java object is for create/update actions of Expense.
  */
 public class Expense {
+  private int id;
   private BigDecimal amount;
   private Date date;
   private String place;
@@ -60,5 +62,13 @@ public class Expense {
 
   public void setAnEvent(boolean anEvent) {
     isAnEvent = anEvent;
+  }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
   }
 }

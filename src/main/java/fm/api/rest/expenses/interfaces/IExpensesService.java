@@ -16,5 +16,7 @@ public interface IExpensesService {
 
   List<ExpensesDetails> getPreviousExpensesDetails(int userId);
 
-  Long addExpense(Expense expenseCreation, int userId);
+  Long addExpense(Expense expense, int userId);
+
+  void updateExpense(Expense expense);
 }

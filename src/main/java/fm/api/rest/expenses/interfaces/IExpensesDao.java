@@ -18,4 +18,5 @@ public interface IExpensesDao {
 
   Long addExpense(Expense expenseCreation, int userId);
 
+  void updateExpense(Expense expenseCreation);
 }

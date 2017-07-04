@@ -204,8 +204,39 @@ public class ExpensesDao implements IExpensesDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
-    namedTemplate.update(sql, paramsMap, keyHolder, new String[]{"user_id"});
+    namedTemplate.update(sql, paramsMap, keyHolder);
     final Long id = keyHolder.getKey().longValue();
     return id;
+  }
+
+  @Override
+  public void updateExpense(Expense expenseCreation) {
+    final String sql =
+        "UPDATE fm_expenses        "
+      + "SET                       "
+      + "	amount = :amount,        "
+      + "	date = :date,            "
+      + "	place = :place,          "
+      + "	for_person = :forPerson, "
+      + "	is_an_event = :isAnEvent,"
+      + "	card_id = :cardId,       "
+      + "	pay_in_cash = :payInCash "
+      + "WHERE                     "
+      + "	id = :id                 "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", expenseCreation.getId());
+    paramsMap.addValue("amount", expenseCreation.getAmount());
+    paramsMap.addValue("date", expenseCreation.getDate());
+    paramsMap.addValue("place", expenseCreation.getPlace());
+    paramsMap.addValue("forPerson", expenseCreation.getForPerson());
+    paramsMap.addValue("isAnEvent", expenseCreation.isAnEvent());
+    paramsMap.addValue("cardId", expenseCreation.getCardId());
+    paramsMap.addValue("payInCash", null);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
   }
 }

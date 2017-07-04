@@ -42,7 +42,12 @@ public class ExpensesService implements IExpensesService {
   }
 
   @Override
-  public Long addExpense(Expense expenseCreation, int userId) {
-    return this.expensesDao.addExpense(expenseCreation, userId);
+  public Long addExpense(Expense expense, int userId) {
+    return this.expensesDao.addExpense(expense, userId);
+  }
+
+  @Override
+  public void updateExpense(Expense expense) {
+    this.expensesDao.updateExpense(expense);
   }
 }
