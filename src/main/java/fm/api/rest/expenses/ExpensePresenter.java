@@ -8,31 +8,31 @@ import java.util.Date;
  * The java object is for values presentation.
  */
 public class ExpensePresenter {
-  private int id;
-  private int userId;
+  private Integer id;
+  private Integer userId;
   private BigDecimal amount;
   private Date date;
   private String place;
   private String forPerson;
   private Boolean isAnEvent;
-  private int cardId;
+  private Integer cardId;
   private String paymentMethod;
   private String cardNumber;
   private String cardInfo;
 
-  public int getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(int id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 
-  public int getUserId() {
+  public Integer getUserId() {
     return userId;
   }
 
-  public void setUserId(int userId) {
+  public void setUserId(Integer userId) {
     this.userId = userId;
   }
 
@@ -76,11 +76,11 @@ public class ExpensePresenter {
     isAnEvent = anEvent;
   }
 
-  public int getCardId() {
+  public Integer getCardId() {
     return cardId;
   }
 
-  public void setCardId(int cardId) {
+  public void setCardId(Integer cardId) {
     this.cardId = cardId;
   }
 

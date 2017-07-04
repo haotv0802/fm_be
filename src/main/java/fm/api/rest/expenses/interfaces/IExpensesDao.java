@@ -16,7 +16,9 @@ public interface IExpensesDao {
 
   List<ExpensesDetails> getPreviousExpensesDetails(int userId);
 
-  Long addExpense(Expense expenseCreation, int userId);
+  Long addExpense(Expense expense, int userId);
 
-  void updateExpense(Expense expenseCreation);
+  void updateExpense(Expense expense);
+
+  void deleteExpense(Expense expense);
 }

@@ -8,13 +8,21 @@ import java.util.Date;
  * The java object is for create/update actions of Expense.
  */
 public class Expense {
-  private int id;
+  private Integer id;
   private BigDecimal amount;
   private Date date;
   private String place;
   private String forPerson;
-  private int cardId;
-  private boolean isAnEvent;
+  private Integer cardId;
+  private Boolean isAnEvent;
+
+  public Integer getId() {
+    return id;
+  }
+
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
   public BigDecimal getAmount() {
     return amount;
@@ -48,27 +56,19 @@ public class Expense {
     this.forPerson = forPerson;
   }
 
-  public int getCardId() {
+  public Integer getCardId() {
     return cardId;
   }
 
-  public void setCardId(int cardId) {
+  public void setCardId(Integer cardId) {
     this.cardId = cardId;
   }
 
-  public boolean isAnEvent() {
+  public Boolean getAnEvent() {
     return isAnEvent;
   }
 
-  public void setAnEvent(boolean anEvent) {
+  public void setAnEvent(Boolean anEvent) {
     isAnEvent = anEvent;
-  }
-
-  public int getId() {
-    return id;
-  }
-
-  public void setId(int id) {
-    this.id = id;
   }
 }

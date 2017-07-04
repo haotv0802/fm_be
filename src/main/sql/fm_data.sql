@@ -53,27 +53,27 @@ VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2)
 
 INSERT INTO `fm_earnings` (`user_id`, `amount`, `description`) VALUES (2, 20000000, 'monthly salary');
 
-INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `date`, `for_person`, `is_an_event`, `card_id`, `pay_in_cash`)
+INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `date`, `for_person`, `is_an_event`, `card_id`)
 VALUES
-  (2, 37600, 'Grab', '2017-05-01',NULL, FALSE, NULL, TRUE),
-  (2, 56000, 'Vinasun', '2017-05-02', NULL, FALSE, NULL, TRUE),
-  (2, 78000, 'New Sun Hotel', '2017-05-03', NULL, FALSE, NULL, TRUE),
-  (2, 90000, 'Bun Bo Ganh', '2017-05-04', NULL, FALSE, NULL, TRUE),
-  (2, 120000, 'That\'s cafe', '2017-05-05', NULL, FALSE, NULL, TRUE),
-  (2, 14000, 'Citibank annual fee', '2017-05-06', NULL, FALSE, 1, FALSE),
-  (2, 45000, 'Maximax', '2017-05-07', NULL, FALSE, 1, FALSE),
-  (2, 5000, 'Highlands Coffee', '2017-05-08', NULL, FALSE, 1, FALSE),
-  (2, 70000, 'Year-end party', '2017-05-09', NULL, FALSE, 1, FALSE),
-  (2, 990000, 'Hang Duong Quan', '2017-05-12', NULL, FALSE, 1, FALSE),
+  (2, 37600, 'Grab', '2017-05-01',NULL, FALSE, NULL),
+  (2, 56000, 'Vinasun', '2017-05-02', NULL, FALSE, NULL),
+  (2, 78000, 'New Sun Hotel', '2017-05-03', NULL, FALSE, NULL),
+  (2, 90000, 'Bun Bo Ganh', '2017-05-04', NULL, FALSE, NULL),
+  (2, 120000, 'That\'s cafe', '2017-05-05', NULL, FALSE, NULL),
+  (2, 14000, 'Citibank annual fee', '2017-05-06', NULL, FALSE, 1),
+  (2, 45000, 'Maximax', '2017-05-07', NULL, FALSE, 1),
+  (2, 5000, 'Highlands Coffee', '2017-05-08', NULL, FALSE, 1),
+  (2, 70000, 'Year-end party', '2017-05-09', NULL, FALSE, 1),
+  (2, 990000, 'Hang Duong Quan', '2017-05-12', NULL, FALSE, 1),
 
-  (2, 15000, 'The Coffee House', '2017-06-01',NULL, FALSE, NULL, TRUE),
-  (2, 45000, 'Gongcha', '2017-06-02', NULL, FALSE, NULL, TRUE),
-  (2, 55000, 'KOI', '2017-06-03', NULL, FALSE, NULL, TRUE),
-  (2, 50000, 'Watcha', '2017-06-04', NULL, FALSE, NULL, TRUE),
-  (2, 20000, 'Nha Khoa Minh Khai', '2017-06-05', NULL, FALSE, NULL, TRUE),
-  (2, 15000, 'CGV', '2017-06-06', NULL, FALSE, 1, FALSE),
-  (2, 45000, 'AEON Mall', '2017-06-07', NULL, FALSE, 1, FALSE),
-  (2, 55000, 'Tokio Deli', '2017-06-08', NULL, FALSE, 1, FALSE),
-  (2, 50000, 'Traveloka', '2017-06-09', NULL, FALSE, 1, FALSE),
-  (2, 20000, 'Uber', '2017-06-12', NULL, FALSE, 1, FALSE)
+  (2, 15000, 'The Coffee House', '2017-06-01',NULL, FALSE, NULL),
+  (2, 45000, 'Gongcha', '2017-06-02', NULL, FALSE, NULL),
+  (2, 55000, 'KOI', '2017-06-03', NULL, FALSE, NULL),
+  (2, 50000, 'Watcha', '2017-06-04', NULL, FALSE, NULL),
+  (2, 20000, 'Nha Khoa Minh Khai', '2017-06-05', NULL, FALSE, NULL),
+  (2, 15000, 'CGV', '2017-06-06', NULL, FALSE, 1),
+  (2, 45000, 'AEON Mall', '2017-06-07', NULL, FALSE, 1),
+  (2, 55000, 'Tokio Deli', '2017-06-08', NULL, FALSE, 1),
+  (2, 50000, 'Traveloka', '2017-06-09', NULL, FALSE, 1),
+  (2, 20000, 'Uber', '2017-06-12', NULL, FALSE, 1)
 ;

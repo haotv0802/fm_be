@@ -49,7 +49,6 @@ public class ExpensesDao implements IExpensesDao {
                      + "	e.for_person,                                        "
                      + "	e.is_an_event,                                       "
                      + "	e.card_id,                                           "
-                     + "	e.pay_in_cash,                                       "
                      + "	c.card_number,                                       "
                      + "	c.name card_info,                                    "
                      + "	p.name payment_method                                "
@@ -101,14 +100,23 @@ public class ExpensesDao implements IExpensesDao {
       expense.setForPerson(rs.getString("for_person"));
       expense.setAnEvent(rs.getBoolean("is_an_event"));
       expense.setCardId(rs.getInt("card_id"));
-      boolean payInCash = rs.getBoolean("pay_in_cash");
-      if (payInCash) {
+
+      if (null == expense.getCardId() || expense.getCardId() == 0) {
         expense.setPaymentMethod("CASH");
       } else {
         expense.setPaymentMethod(rs.getString("payment_method"));
         expense.setCardInfo(rs.getString("card_info"));
         expense.setCardNumber(rs.getString("card_number"));
       }
+
+//      boolean payInCash = rs.getBoolean("pay_in_cash");
+//      if (payInCash) {
+//        expense.setPaymentMethod("CASH");
+//      } else {
+//        expense.setPaymentMethod(rs.getString("payment_method"));
+//        expense.setCardInfo(rs.getString("card_info"));
+//        expense.setCardNumber(rs.getString("card_number"));
+//      }
       return expense;
   }
 
@@ -133,7 +141,6 @@ public class ExpensesDao implements IExpensesDao {
         + "	e.for_person,                                        "
         + "	e.is_an_event,                                       "
         + "	e.card_id,                                           "
-        + "	e.pay_in_cash,                                       "
         + "	c.card_number,                                       "
         + "	c.name card_info,                                    "
         + "	p.name payment_method                                "
@@ -185,21 +192,20 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public Long addExpense(Expense expenseCreation, int userId) {
+  public Long addExpense(Expense expense, int userId) {
     final String sql =
-          "INSERT INTO fm_expenses (user_id, amount, date, place, for_person, is_an_event, card_id, pay_in_cash) "
-        + "VALUES (:userId, :amount, :date, :place, :forPerson, :isAnEvent, :cardId, :payInCash)                                              "
+          "INSERT INTO fm_expenses (user_id, amount, date, place, for_person, is_an_event, card_id) "
+        + "VALUES (:userId, :amount, :date, :place, :forPerson, :isAnEvent, :cardId)                "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("userId", userId);
-    paramsMap.addValue("amount", expenseCreation.getAmount());
-    paramsMap.addValue("date", expenseCreation.getDate());
-    paramsMap.addValue("place", expenseCreation.getPlace());
-    paramsMap.addValue("forPerson", expenseCreation.getForPerson());
-    paramsMap.addValue("isAnEvent", expenseCreation.isAnEvent());
-    paramsMap.addValue("cardId", expenseCreation.getCardId());
-    paramsMap.addValue("payInCash", null);
+    paramsMap.addValue("amount", expense.getAmount());
+    paramsMap.addValue("date", expense.getDate());
+    paramsMap.addValue("place", expense.getPlace());
+    paramsMap.addValue("forPerson", expense.getForPerson());
+    paramsMap.addValue("isAnEvent", expense.getAnEvent());
+    paramsMap.addValue("cardId", expense.getCardId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -210,7 +216,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public void updateExpense(Expense expenseCreation) {
+  public void updateExpense(Expense expense) {
     final String sql =
         "UPDATE fm_expenses        "
       + "SET                       "
@@ -219,24 +225,27 @@ public class ExpensesDao implements IExpensesDao {
       + "	place = :place,          "
       + "	for_person = :forPerson, "
       + "	is_an_event = :isAnEvent,"
-      + "	card_id = :cardId,       "
-      + "	pay_in_cash = :payInCash "
+      + "	card_id = :cardId        "
       + "WHERE                     "
       + "	id = :id                 "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("id", expenseCreation.getId());
-    paramsMap.addValue("amount", expenseCreation.getAmount());
-    paramsMap.addValue("date", expenseCreation.getDate());
-    paramsMap.addValue("place", expenseCreation.getPlace());
-    paramsMap.addValue("forPerson", expenseCreation.getForPerson());
-    paramsMap.addValue("isAnEvent", expenseCreation.isAnEvent());
-    paramsMap.addValue("cardId", expenseCreation.getCardId());
-    paramsMap.addValue("payInCash", null);
+    paramsMap.addValue("id", expense.getId());
+    paramsMap.addValue("amount", expense.getAmount());
+    paramsMap.addValue("date", expense.getDate());
+    paramsMap.addValue("place", expense.getPlace());
+    paramsMap.addValue("forPerson", expense.getForPerson());
+    paramsMap.addValue("isAnEvent", expense.getAnEvent());
+    paramsMap.addValue("cardId", expense.getCardId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public void deleteExpense(Expense expense) {
+
   }
 }
