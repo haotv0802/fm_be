@@ -77,3 +77,8 @@ VALUES
   (2, 50000, 'Traveloka', '2017-06-09', NULL, FALSE, 1),
   (2, 20000, 'Uber', '2017-06-12', NULL, FALSE, 1)
 ;
+
+INSERT INTO `fm_person_picker`
+(`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `official_income`, `payment_date_of_month`, `user_id`)
+VALUES ('Chau', 'Nguyen', NULL, '2017-07-05', TRUE, 'chaunguyen@gmail.com', '84096729775', 123456789, 05, 2),
+  ('Nhi', 'Nguyen', NULL, '2017-07-05', TRUE, 'nhinguyen@gmail.com', '84096729775', 123456789, 05, 2)
