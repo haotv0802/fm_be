@@ -207,7 +207,7 @@ public class ExpensesDao implements IExpensesDao {
     paramsMap.addValue("date", expense.getDate());
     paramsMap.addValue("place", expense.getPlace());
     paramsMap.addValue("forPerson", expense.getForPerson());
-    paramsMap.addValue("isAnEvent", expense.getAnEvent());
+    paramsMap.addValue("isAnEvent", expense.getAnEvent() == null ? false : expense.getAnEvent());
     paramsMap.addValue("cardId", expense.getCardId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
@@ -239,7 +239,7 @@ public class ExpensesDao implements IExpensesDao {
     paramsMap.addValue("date", expense.getDate());
     paramsMap.addValue("place", expense.getPlace());
     paramsMap.addValue("forPerson", expense.getForPerson());
-    paramsMap.addValue("isAnEvent", expense.getAnEvent());
+    paramsMap.addValue("isAnEvent", expense.getAnEvent() == null ? false : expense.getAnEvent());
     paramsMap.addValue("cardId", expense.getCardId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
