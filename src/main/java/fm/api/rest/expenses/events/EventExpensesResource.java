@@ -39,14 +39,14 @@ public class EventExpensesResource extends BaseResource {
 
   @GetMapping("/eventExpenses/{expenseId}/check")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public Boolean isEventExisting(
+  public ResponseEntity isEventExisting(
       @PathVariable("expenseId") int expenseId,
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
-    return eventExpensesService.isEventExisting(expenseId);
-//    LOGGER.info("isEventExisting: " + value);
-//    return new ResponseEntity<>(new Object() {
-//      public final Boolean isEventExisting = value;
-//    }, HttpStatus.NO_CONTENT);
+    boolean value = eventExpensesService.isEventExisting(expenseId);
+    LOGGER.info("isEventExisting: " + value);
+    return new ResponseEntity(new Object() {
+      public final Boolean isEventExisting = value;
+    }, HttpStatus.OK);
   }
 }

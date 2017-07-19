@@ -27,7 +27,7 @@ public class EventExpensesResourceTest extends BaseDocumentation {
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
-        .andExpect(status().is(204))
+        .andExpect(status().is(200))
     ;
   }
 
