@@ -78,6 +78,13 @@ VALUES
   (2, 20000, 'Uber', '2017-06-12', NULL, FALSE, 1)
 ;
 
+
+INSERT INTO fm_event_expenses (`amount`, `place`, `date`, `for_person`, `by_person`, `card_id`, `expense_id`)
+    VALUES (123, 'Dim Tu Tac', '2017-07-05', 'unknown', 'unknown', 1, 1),
+      (456, 'KOI', '2017-07-06', 'unknown', 'unknown', 1, 1)
+
+;
+
 INSERT INTO `fm_person_picker`
 (`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `official_income`, `payment_date_of_month`, `user_id`)
 VALUES ('Chau', 'Nguyen', NULL, '2017-07-05', TRUE, 'chaunguyen@gmail.com', '84096729775', 123456789, 05, 2),

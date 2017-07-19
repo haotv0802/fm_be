@@ -1,6 +1,7 @@
 package fm.api.rest.expenses.events;
 
 import fm.api.rest.BaseResource;
+import fm.api.rest.expenses.events.beans.EventPresenter;
 import fm.api.rest.expenses.events.interfaces.IEventExpensesService;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
@@ -48,5 +49,15 @@ public class EventExpensesResource extends BaseResource {
     return new ResponseEntity(new Object() {
       public final Boolean isEventExisting = value;
     }, HttpStatus.OK);
+  }
+
+
+  @GetMapping("/eventExpenses/{expenseId}")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public EventPresenter getEvent(
+      @PathVariable("expenseId") int expenseId,
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang) {
+    return eventExpensesService.getEvent(userDetails.getUserId(), expenseId);
   }
 }

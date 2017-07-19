@@ -31,4 +31,14 @@ public class EventExpensesResourceTest extends BaseDocumentation {
     ;
   }
 
+  @Test
+  public void testGetEvent() throws Exception {
+    mockMvc
+        .perform(get("/svc/eventExpenses/{expenseId}", 1)
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
 }
