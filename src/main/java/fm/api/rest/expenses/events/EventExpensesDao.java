@@ -1,6 +1,5 @@
 package fm.api.rest.expenses.events;
 
-import fm.api.rest.expenses.ExpensePresenter;
 import fm.api.rest.expenses.events.beans.EventExpensePresenter;
 import fm.api.rest.expenses.events.beans.EventPresenter;
 import fm.api.rest.expenses.events.interfaces.IEventExpensesDao;
@@ -17,6 +16,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -99,6 +99,11 @@ public class EventExpensesDao implements IEventExpensesDao {
     List<EventExpensePresenter> eventExpenses = getExpenses(expenseId);
     if (!CollectionUtils.isEmpty(eventExpenses)) {
       eventPresenter.setExpenses(eventExpenses);
+      BigDecimal totalSpendings = BigDecimal.ZERO;
+      for (int i = 0; i < eventExpenses.size(); i++) {
+        totalSpendings = totalSpendings.add(eventExpenses.get(i).getAmount());
+      }
+      eventPresenter.setTotal(totalSpendings);
     }
     return eventPresenter;
   }

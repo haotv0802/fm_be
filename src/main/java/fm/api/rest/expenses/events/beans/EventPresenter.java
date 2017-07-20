@@ -20,6 +20,7 @@ public class EventPresenter {
   private String forPerson;
   private Integer eventTypeId;
   private List<EventExpensePresenter> expenses;
+  private BigDecimal total;
 
   public Integer getId() {
     return id;
@@ -83,5 +84,13 @@ public class EventPresenter {
 
   public void setExpenses(List<EventExpensePresenter> expenses) {
     this.expenses = expenses;
+  }
+
+  public BigDecimal getTotal() {
+    return total;
+  }
+
+  public void setTotal(BigDecimal total) {
+    this.total = total;
   }
 }
