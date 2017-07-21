@@ -170,6 +170,9 @@ public class ExpensesDao implements IExpensesDao {
 
     BigDecimal totalSpendings = BigDecimal.ZERO;
     for (int i = 0; i < expensesList.size(); i++) {
+      if (null == expensesList.get(i).getAmount()) {
+        continue;
+      }
       totalSpendings = totalSpendings.add(expensesList.get(i).getAmount());
     }
 

@@ -77,12 +77,13 @@ VALUES
   (2, 50000, 'Traveloka', '2017-06-09', NULL, FALSE, 1),
   (2, 20000, 'Uber', '2017-06-12', NULL, FALSE, 1)
 ;
-
-
+INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `date`, `for_person`, `is_an_event`, `card_id`, `event_type_id`, `event_name`)
+VALUES
+  (2, NULL, 'Vung Tau', now(), NULL, TRUE, 1, NULL, 'New Event')
+;
 INSERT INTO fm_event_expenses (`amount`, `place`, `date`, `for_person`, `by_person`, `card_id`, `expense_id`)
-    VALUES (123, 'Dim Tu Tac', '2017-07-05', 'unknown', 'unknown', 1, 1),
-      (456, 'KOI', '2017-07-06', 'unknown', 'unknown', 1, 1)
-
+    VALUES (123, 'Dim Tu Tac', '2017-07-05', 'unknown', 'unknown', 1, 21),
+      (456, 'KOI', '2017-07-06', 'unknown', 'unknown', 1, 21)
 ;
 
 INSERT INTO `fm_person_picker`
