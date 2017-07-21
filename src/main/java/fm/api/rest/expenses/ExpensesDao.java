@@ -123,7 +123,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public ExpensesDetails getExpenesDetails(int userId) {
+  public ExpensesDetailsPresenter getExpenesDetails(int userId) {
     List<String> months = this.getMonths(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
@@ -132,7 +132,7 @@ public class ExpensesDao implements IExpensesDao {
     return this.getExpenesDetailsByMonth(userId, months.get(0));
   }
 
-  private ExpensesDetails getExpenesDetailsByMonth(int userId, String month) {
+  private ExpensesDetailsPresenter getExpenesDetailsByMonth(int userId, String month) {
     final String sql =
           "SELECT                                                "
         + "	e.id,                                                "
@@ -164,7 +164,7 @@ public class ExpensesDao implements IExpensesDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    ExpensesDetails expensesDetails = new ExpensesDetails();
+    ExpensesDetailsPresenter expensesDetailsPresenter = new ExpensesDetailsPresenter();
 
     List<ExpensePresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
@@ -176,25 +176,25 @@ public class ExpensesDao implements IExpensesDao {
       totalSpendings = totalSpendings.add(expensesList.get(i).getAmount());
     }
 
-    expensesDetails.setExpenses(expensesList);
-    expensesDetails.setTotal(totalSpendings);
-    return expensesDetails;
+    expensesDetailsPresenter.setExpenses(expensesList);
+    expensesDetailsPresenter.setTotal(totalSpendings);
+    return expensesDetailsPresenter;
   }
 
   @Override
-  public List<ExpensesDetails> getPreviousExpensesDetails(int userId) {
+  public List<ExpensesDetailsPresenter> getPreviousExpensesDetails(int userId) {
     List<String> months = this.getMonths(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
     }
 
-    List<ExpensesDetails> expensesDetailsList = new ArrayList<>();
+    List<ExpensesDetailsPresenter> expensesDetailsPresenterList = new ArrayList<>();
     for (int i = 1; i < months.size(); i++) {
-      ExpensesDetails expensesDetails = this.getExpenesDetailsByMonth(userId, months.get(i));
-      expensesDetailsList.add(expensesDetails);
+      ExpensesDetailsPresenter expensesDetailsPresenter = this.getExpenesDetailsByMonth(userId, months.get(i));
+      expensesDetailsPresenterList.add(expensesDetailsPresenter);
     }
 
-    return expensesDetailsList;
+    return expensesDetailsPresenterList;
   }
 
   @Override

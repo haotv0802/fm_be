@@ -7,9 +7,7 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
-import static com.fasterxml.jackson.databind.type.TypeFactory.defaultInstance;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -17,17 +15,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by haho on 3/22/2017.
  */
 public class ExpensesResourceTest extends BaseDocumentation {
-
-  @Test
-  public void testGetExpenses() throws Exception {
-    mockMvc
-        .perform(get("/svc/expenses")
-            .header("Accept-Language", "en")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-        )
-        .andExpect(status().is(200))
-    ;
-  }
 
   @Test
   public void testAddExpense() throws Exception {
@@ -61,11 +48,10 @@ public class ExpensesResourceTest extends BaseDocumentation {
         .andReturn()
     ;
 
-    List<ExpensePresenter> expenses = objectMapper.readValue(
-        result.getResponse().getContentAsString(),
-        defaultInstance().constructCollectionType(List.class, ExpensePresenter.class)
-    );
-    ExpensePresenter expensePresenter = expenses.get(0);
+    ExpensesDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+        result.getResponse().getContentAsString(), ExpensesDetailsPresenter.class);
+    ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
+
     Expense expense = new Expense();
     expense.setAmount(expensePresenter.getAmount());
     expense.setAnEvent(expensePresenter.getAnEvent());
@@ -94,7 +80,6 @@ public class ExpensesResourceTest extends BaseDocumentation {
         ;
   }
 
-
   @Test
   public void testDeleteExpense() throws Exception {
     MvcResult result = mockMvc
@@ -106,11 +91,9 @@ public class ExpensesResourceTest extends BaseDocumentation {
         .andReturn()
         ;
 
-    List<ExpensePresenter> expenses = objectMapper.readValue(
-        result.getResponse().getContentAsString(),
-        defaultInstance().constructCollectionType(List.class, ExpensePresenter.class)
-    );
-    ExpensePresenter expensePresenter = expenses.get(0);
+    ExpensesDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+        result.getResponse().getContentAsString(), ExpensesDetailsPresenter.class);
+    ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
     mockMvc
         .perform(delete("/svc/expenses/{expenseId}/delete", expensePresenter.getId())
             .header("Accept-Language", "en")
@@ -130,9 +113,9 @@ public class ExpensesResourceTest extends BaseDocumentation {
   }
 
   @Test
-  public void testGetExpensesDetails() throws Exception {
+  public void testGetExpenses() throws Exception {
     mockMvc
-        .perform(get("/svc/expensesDetails")
+        .perform(get("/svc/expenses")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
@@ -141,9 +124,9 @@ public class ExpensesResourceTest extends BaseDocumentation {
   }
 
   @Test
-  public void getPreviousExpensesDetails() throws Exception {
+  public void getPreviousExpenses() throws Exception {
     mockMvc
-        .perform(get("/svc/previousExpensesDetails")
+        .perform(get("/svc/previousExpenses")
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )

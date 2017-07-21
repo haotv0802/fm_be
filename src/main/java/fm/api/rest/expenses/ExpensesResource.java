@@ -38,14 +38,6 @@ public class ExpensesResource extends BaseResource {
     this.expenseEditValidator = expenseEditValidator;
   }
 
-  @GetMapping("/expenses")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<ExpensePresenter> getExpenses(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang) {
-    return this.expensesService.getExpenses(userDetails.getUserId());
-  }
-
   @PostMapping("/expenses")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity addExpense(
@@ -91,17 +83,17 @@ public class ExpensesResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @GetMapping("/expensesDetails")
+  @GetMapping("/expenses")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ExpensesDetails getExpensesDetails(
+  public ExpensesDetailsPresenter getExpensesDetails(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getExpensesDetails(userDetails.getUserId());
   }
 
-  @GetMapping("/previousExpensesDetails")
+  @GetMapping("/previousExpenses")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<ExpensesDetails> getPreviousExpensesDetails(
+  public List<ExpensesDetailsPresenter> getPreviousExpensesDetails(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId());

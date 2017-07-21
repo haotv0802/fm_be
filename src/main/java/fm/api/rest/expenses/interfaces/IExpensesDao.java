@@ -2,7 +2,7 @@ package fm.api.rest.expenses.interfaces;
 
 import fm.api.rest.expenses.ExpensePresenter;
 import fm.api.rest.expenses.Expense;
-import fm.api.rest.expenses.ExpensesDetails;
+import fm.api.rest.expenses.ExpensesDetailsPresenter;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import java.util.List;
 public interface IExpensesDao {
   List<ExpensePresenter> getExpenses(int userId);
 
-  ExpensesDetails getExpenesDetails(int userId);
+  ExpensesDetailsPresenter getExpenesDetails(int userId);
 
-  List<ExpensesDetails> getPreviousExpensesDetails(int userId);
+  List<ExpensesDetailsPresenter> getPreviousExpensesDetails(int userId);
 
   Long addExpense(Expense expense, int userId);
 
