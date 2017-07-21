@@ -4,6 +4,7 @@ import fm.api.rest.expenses.ExpensePresenter;
 import fm.api.rest.expenses.Expense;
 import fm.api.rest.expenses.ExpensesDetailsPresenter;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -19,6 +20,8 @@ public interface IExpensesDao {
   Long addExpense(Expense expense, int userId);
 
   void updateExpense(Expense expense);
+
+  void updateExpense(BigDecimal amount, int userId, int expenseId);
 
   void deleteExpense(int expenseId);
 

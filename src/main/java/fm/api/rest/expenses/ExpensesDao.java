@@ -251,6 +251,26 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
+  public void updateExpense(BigDecimal amount, int userId, int expenseId) {
+    final String sql =
+        "UPDATE fm_expenses                     "
+      + "SET                                    "
+      + "	amount = :amount                      "
+      + "WHERE                                  "
+      + "	user_id = :userId AND id = :expenseId "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("amount", amount);
+    paramsMap.addValue("userId", userId);
+    paramsMap.addValue("expenseId", expenseId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
   public void deleteExpense(int expenseId) {
     final String sql =
         "UPDATE fm_expenses        "

@@ -15,6 +15,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -67,6 +68,27 @@ public class ExpensesResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
+  /**
+   * The service is to update amount of Expense which is actually an event.
+   * Each time user perform an update or add action on EventExpenses, the total of event expenses will be updated to such expense.
+   * @param userDetails
+   * @param lang
+   * @param expenseId
+   * @param amount
+   * @return ResponseEntity
+   */
+  @PatchMapping("/expenses/{expenseId}/{amount}/update")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ResponseEntity updateAmount(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("expenseId") int expenseId,
+      @PathVariable("amount") BigDecimal amount
+  ) {
+    this.expensesService.updateExpense(amount, userDetails.getUserId(), expenseId);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+
   @DeleteMapping("/expenses/{expenseId}/delete")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity deleteExpense(
@@ -85,7 +107,7 @@ public class ExpensesResource extends BaseResource {
 
   @GetMapping("/expenses")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ExpensesDetailsPresenter getExpensesDetails(
+  public ExpensesDetailsPresenter getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getExpensesDetails(userDetails.getUserId());
@@ -93,7 +115,7 @@ public class ExpensesResource extends BaseResource {
 
   @GetMapping("/previousExpenses")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<ExpensesDetailsPresenter> getPreviousExpensesDetails(
+  public List<ExpensesDetailsPresenter> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId());
