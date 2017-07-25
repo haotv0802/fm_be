@@ -1,6 +1,7 @@
 package fm.api.rest.expenses.events;
 
 import fm.api.rest.expenses.events.beans.EventPresenter;
+import fm.api.rest.expenses.events.beans.Expense;
 import fm.api.rest.expenses.events.interfaces.IEventExpensesDao;
 import fm.api.rest.expenses.events.interfaces.IEventExpensesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,5 +38,10 @@ public class EventExpensesService implements IEventExpensesService {
   @Override
   public EventPresenter getEvent(int userId, int expenseId) {
     return eventExpensesDao.getEvent(userId, expenseId);
+  }
+
+  @Override
+  public Long addExpense(Expense expense, int expenseId) {
+    return this.eventExpensesDao.addExpense(expense, expenseId);
   }
 }

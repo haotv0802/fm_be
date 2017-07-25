@@ -1,18 +1,16 @@
 package fm.api.rest.expenses.events;
 
 import fm.api.rest.BaseDocumentation;
-import fm.api.rest.expenses.Expense;
-import fm.api.rest.expenses.ExpensePresenter;
+import fm.api.rest.expenses.events.beans.EventPresenter;
+import fm.api.rest.expenses.events.beans.Expense;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.List;
 
-import static com.fasterxml.jackson.databind.type.TypeFactory.defaultInstance;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -33,6 +31,46 @@ public class EventExpensesResourceTest extends BaseDocumentation {
 
   @Test
   public void testGetEvent() throws Exception {
+    mockMvc
+        .perform(get("/svc/eventExpenses/{expenseId}", 1)
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void testAddEventExpense() throws Exception {
+    MvcResult mvcResult = mockMvc
+        .perform(get("/svc/eventExpenses/{expenseId}", 1)
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+        .andReturn()
+    ;
+
+    EventPresenter eventPresenter = objectMapper.readValue(mvcResult.getResponse().getContentAsString(), EventPresenter.class);
+
+    Expense creation = new Expense();
+    creation.setAmount(new BigDecimal(1234));
+    creation.setAnEvent(false);
+    creation.setCardId(2);
+    creation.setDate(new Date());
+    creation.setForPerson(null);
+    creation.setPlace("ILA");
+
+    mockMvc
+        .perform(get("/svc/eventExpenses/{expenseId}", eventPresenter.getId())
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(creation))
+        )
+        .andExpect(status().is(200))
+    ;
+
     mockMvc
         .perform(get("/svc/eventExpenses/{expenseId}", 1)
             .header("Accept-Language", "en")

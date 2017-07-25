@@ -2,6 +2,7 @@ package fm.api.rest.expenses.events;
 
 import fm.api.rest.expenses.events.beans.EventExpensePresenter;
 import fm.api.rest.expenses.events.beans.EventPresenter;
+import fm.api.rest.expenses.events.beans.Expense;
 import fm.api.rest.expenses.events.interfaces.IEventExpensesDao;
 import fm.common.JdbcUtils;
 import fm.common.dao.DaoUtils;
@@ -13,6 +14,8 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
 
@@ -106,6 +109,29 @@ public class EventExpensesDao implements IEventExpensesDao {
       eventPresenter.setTotal(totalSpendings);
     }
     return eventPresenter;
+  }
+
+  @Override
+  public Long addExpense(Expense expense, int expenseId) {
+    final String sql =
+              "INSERT INTO fm_event_expenses (amount, date, place, for_person, card_id, expense_id) "
+            + "VALUES (:amount, :date, :place, :forPerson, :cardId, :expenseId)                     "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("amount", expense.getAmount());
+    paramsMap.addValue("date", expense.getDate());
+    paramsMap.addValue("place", expense.getPlace());
+    paramsMap.addValue("forPerson", expense.getForPerson());
+    paramsMap.addValue("cardId", expense.getCardId());
+    paramsMap.addValue("expenseId", expenseId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    KeyHolder keyHolder = new GeneratedKeyHolder();
+    namedTemplate.update(sql, paramsMap, keyHolder);
+    final Long id = keyHolder.getKey().longValue();
+    return id;
   }
 
   private List<EventExpensePresenter> getExpenses(int expenseId) {

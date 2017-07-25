@@ -1,6 +1,7 @@
 package fm.api.rest.expenses.events.interfaces;
 
 import fm.api.rest.expenses.events.beans.EventPresenter;
+import fm.api.rest.expenses.events.beans.Expense;
 
 /**
  * Property of CODIX Bulgaria EAD
@@ -14,4 +15,6 @@ public interface IEventExpensesDao {
   Boolean isEventExisting(int expenseId);
 
   EventPresenter getEvent(int userId, int expenseId);
+
+  Long addExpense(Expense expense, int expenseId);
 }
