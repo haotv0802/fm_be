@@ -72,4 +72,27 @@ public class EventExpensesResource extends BaseResource {
       public final Long expenseId = id;
     }, HttpStatus.CREATED);
   }
+
+  @PatchMapping("/eventExpenses/{eventId}")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ResponseEntity updateExpense(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("eventId") int eventId,
+      @RequestBody Expense expenseCreation
+  ) {
+    this.eventExpensesService.updateExpense(expenseCreation, eventId);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
+
+  @DeleteMapping("/eventExpenses/{eventId}")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ResponseEntity deleteExpense(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("eventId") int eventId
+  ) {
+    this.eventExpensesService.deleteExpense(eventId);
+    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+  }
 }

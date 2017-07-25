@@ -16,4 +16,8 @@ public interface IEventExpensesService {
   EventPresenter getEvent(int userId, int expenseId);
 
   Long addExpense(Expense expense, int expenseId);
+
+  void updateExpense(Expense expense, int eventId);
+
+  void deleteExpense(int eventId);
 }

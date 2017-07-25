@@ -134,6 +134,51 @@ public class EventExpensesDao implements IEventExpensesDao {
     return id;
   }
 
+  @Override
+  public void updateExpense(Expense expense, int eventId) {
+    final String sql =
+        "UPDATE fm_event_expenses   "
+      + "SET                        "
+      + "	amount = :amount,         "
+      + "	date = :date,             "
+      + "	place = :place,           "
+      + "	for_person = :forPerson,  "
+      + "	card_id = :cardId         "
+      + "WHERE                      "
+      + "	id = :id                  "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("amount", expense.getAmount());
+    paramsMap.addValue("date", expense.getDate());
+    paramsMap.addValue("place", expense.getPlace());
+    paramsMap.addValue("forPerson", expense.getForPerson());
+    paramsMap.addValue("cardId", expense.getCardId() < 0 ? null : expense.getCardId());
+    paramsMap.addValue("id", eventId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public void deleteExpense(int eventId) {
+    final String sql =
+        "UPDATE fm_event_expenses   "
+      + "SET                        "
+      + "	is_deleted = TRUE         "
+      + "WHERE                      "
+      + "	id = :id                  "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", eventId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
   private List<EventExpensePresenter> getExpenses(int expenseId) {
     final String sql =
         "SELECT                                                "
