@@ -211,7 +211,7 @@ public class ExpensesDao implements IExpensesDao {
     paramsMap.addValue("place", expense.getPlace());
     paramsMap.addValue("forPerson", expense.getForPerson());
     paramsMap.addValue("isAnEvent", expense.getAnEvent() == null ? false : expense.getAnEvent());
-    paramsMap.addValue("cardId", expense.getCardId());
+    paramsMap.addValue("cardId", expense.getCardId() < 0 ? null : expense.getCardId());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -264,6 +264,29 @@ public class ExpensesDao implements IExpensesDao {
     paramsMap.addValue("amount", amount);
     paramsMap.addValue("userId", userId);
     paramsMap.addValue("expenseId", expenseId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  @Override
+  public void updateAmount(int expenseId) {
+    final String sql =
+              "UPDATE fm_expenses e         "
+            + "SET                          "
+            + "	amount = (SELECT            "
+            + "			SUM(ee.amount)          "
+            + "		FROM                      "
+            + "			fm_event_expenses ee    "
+            + "		WHERE                     "
+            + "			ee.expense_id = :id)    "
+            + "WHERE                        "
+            + "	e.id = :id                  "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", expenseId);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

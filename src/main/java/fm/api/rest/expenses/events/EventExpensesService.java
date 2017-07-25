@@ -4,6 +4,7 @@ import fm.api.rest.expenses.events.beans.EventPresenter;
 import fm.api.rest.expenses.events.beans.Expense;
 import fm.api.rest.expenses.events.interfaces.IEventExpensesDao;
 import fm.api.rest.expenses.events.interfaces.IEventExpensesService;
+import fm.api.rest.expenses.interfaces.IExpensesDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,14 @@ public class EventExpensesService implements IEventExpensesService {
 
   private final IEventExpensesDao eventExpensesDao;
 
+  private final IExpensesDao expensesDao;
+
   @Autowired
   public EventExpensesService(
-      @Qualifier("eventExpensesDao") IEventExpensesDao eventExpensesDao
+      @Qualifier("eventExpensesDao") IEventExpensesDao eventExpensesDao,
+      @Qualifier("expensesDao") IExpensesDao expensesDao
   ) {
+    this.expensesDao = expensesDao;
     Assert.notNull(eventExpensesDao);
 
     this.eventExpensesDao = eventExpensesDao;
@@ -42,6 +47,8 @@ public class EventExpensesService implements IEventExpensesService {
 
   @Override
   public Long addExpense(Expense expense, int expenseId) {
-    return this.eventExpensesDao.addExpense(expense, expenseId);
+    long id = this.eventExpensesDao.addExpense(expense, expenseId);
+    this.expensesDao.updateAmount(expenseId);
+    return id;
   }
 }

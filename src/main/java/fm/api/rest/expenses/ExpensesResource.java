@@ -77,7 +77,7 @@ public class ExpensesResource extends BaseResource {
    * @param amount
    * @return ResponseEntity
    */
-  @PatchMapping("/expenses/{expenseId}/{amount}/update")
+  @PatchMapping("/expenses/{expenseId}/{amount}/updateAmount")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateAmount(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -86,6 +86,17 @@ public class ExpensesResource extends BaseResource {
       @PathVariable("amount") BigDecimal amount
   ) {
     this.expensesService.updateExpense(amount, userDetails.getUserId(), expenseId);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+
+  @PatchMapping("/expenses/{expenseId}/updateAmount")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ResponseEntity updateAmount(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @PathVariable("expenseId") int expenseId
+  ) {
+    this.expensesService.updateAmount(expenseId);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 

@@ -123,7 +123,7 @@ public class EventExpensesDao implements IEventExpensesDao {
     paramsMap.addValue("date", expense.getDate());
     paramsMap.addValue("place", expense.getPlace());
     paramsMap.addValue("forPerson", expense.getForPerson());
-    paramsMap.addValue("cardId", expense.getCardId());
+    paramsMap.addValue("cardId", expense.getCardId() < 0 ? null : expense.getCardId());
     paramsMap.addValue("expenseId", expenseId);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());

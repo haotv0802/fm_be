@@ -96,7 +96,40 @@ public class ExpensesResourceTest extends BaseDocumentation {
     ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
 
     mockMvc
-        .perform(patch("/svc/expenses/{expenseId}/{amount}/update", expensePresenter.getId(), 123456)
+        .perform(patch("/svc/expenses/{expenseId}/{amount}/updateAmount", expensePresenter.getId(), 123456)
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            .contentType(MediaType.APPLICATION_JSON)
+        )
+        .andExpect(status().is(204))
+    ;
+
+    mockMvc
+        .perform(get("/svc/expenses")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void testUpdateAmountWithoutGivenNumber() throws Exception {
+    MvcResult result = mockMvc
+        .perform(get("/svc/expenses")
+            .header("Accept-Language", "en")
+            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+        )
+        .andExpect(status().is(200))
+        .andReturn()
+        ;
+
+    ExpensesDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+        result.getResponse().getContentAsString(), ExpensesDetailsPresenter.class);
+    ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
+
+    mockMvc
+        .perform(patch("/svc/expenses/{expenseId}/updateAmount", expensePresenter.getId())
             .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
             .contentType(MediaType.APPLICATION_JSON)
