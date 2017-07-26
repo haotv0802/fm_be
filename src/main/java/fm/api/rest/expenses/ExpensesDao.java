@@ -211,7 +211,11 @@ public class ExpensesDao implements IExpensesDao {
     paramsMap.addValue("place", expense.getPlace());
     paramsMap.addValue("forPerson", expense.getForPerson());
     paramsMap.addValue("isAnEvent", expense.getAnEvent() == null ? false : expense.getAnEvent());
-    paramsMap.addValue("cardId", expense.getCardId() < 0 ? null : expense.getCardId());
+    Integer cardId = null;
+    if (null != expense.getCardId()) {
+      cardId = expense.getCardId() < 0 ? null : expense.getCardId();
+    }
+    paramsMap.addValue("cardId", cardId);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -243,7 +247,11 @@ public class ExpensesDao implements IExpensesDao {
     paramsMap.addValue("place", expense.getPlace());
     paramsMap.addValue("forPerson", expense.getForPerson());
     paramsMap.addValue("isAnEvent", expense.getAnEvent() == null ? false : expense.getAnEvent());
-    paramsMap.addValue("cardId", expense.getCardId());
+    Integer cardId = null;
+    if (null != expense.getCardId()) {
+      cardId = expense.getCardId() < 0 ? null : expense.getCardId();
+    }
+    paramsMap.addValue("cardId", cardId);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -280,7 +288,8 @@ public class ExpensesDao implements IExpensesDao {
             + "		FROM                      "
             + "			fm_event_expenses ee    "
             + "		WHERE                     "
-            + "			ee.expense_id = :id)    "
+            + "			ee.expense_id = :id     "
+            + "			AND is_deleted = FALSE) "
             + "WHERE                        "
             + "	e.id = :id                  "
         ;
