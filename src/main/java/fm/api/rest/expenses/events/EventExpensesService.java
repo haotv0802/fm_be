@@ -55,10 +55,12 @@ public class EventExpensesService implements IEventExpensesService {
   @Override
   public void updateExpense(Expense expense, int eventId) {
     this.eventExpensesDao.updateExpense(expense, eventId);
+    this.expensesDao.updateAmount(expense.getId());
   }
 
   @Override
-  public void deleteExpense(int eventId) {
+  public void deleteExpense(int expenseId, int eventId) {
     this.eventExpensesDao.deleteExpense(eventId);
+    this.expensesDao.updateAmount(expenseId);
   }
 }

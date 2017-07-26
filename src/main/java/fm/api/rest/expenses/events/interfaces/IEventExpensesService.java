@@ -19,5 +19,5 @@ public interface IEventExpensesService {
 
   void updateExpense(Expense expense, int eventId);
 
-  void deleteExpense(int eventId);
+  void deleteExpense(int expenseId, int eventId);
 }

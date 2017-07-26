@@ -79,7 +79,6 @@ public class EventExpensesDao implements IEventExpensesDao {
                      + "WHERE                                                    "
                      + "    e.user_id = :userId AND is_deleted = FALSE           "
                      + "        AND e.id = :expenseId                            "
-                     + "ORDER BY id ASC                                          "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -146,7 +145,7 @@ public class EventExpensesDao implements IEventExpensesDao {
       + "	card_id = :cardId         "
       + "WHERE                      "
       + "	id = :id                  "
-        ;
+      ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("amount", expense.getAmount());
@@ -198,7 +197,7 @@ public class EventExpensesDao implements IEventExpensesDao {
       + "	fm_payment_methods p ON c.card_type_id = p.id        "
       + "WHERE                                                 "
       + "	is_deleted = FALSE AND e.expense_id = :expenseId     "
-      + "ORDER BY id ASC                                       "
+      + "ORDER BY e.date DESC                                  "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

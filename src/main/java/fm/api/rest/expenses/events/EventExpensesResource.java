@@ -73,26 +73,28 @@ public class EventExpensesResource extends BaseResource {
     }, HttpStatus.CREATED);
   }
 
-  @PatchMapping("/eventExpenses/{eventId}")
+  @PatchMapping("/eventExpenses/{expenseId}/{eventId}")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
       @PathVariable("eventId") int eventId,
-      @RequestBody Expense expenseCreation
+      @PathVariable("expenseId") int expenseId, // check if expenseId is the same as id of expense object.
+      @RequestBody Expense expense
   ) {
-    this.eventExpensesService.updateExpense(expenseCreation, eventId);
+    this.eventExpensesService.updateExpense(expense, eventId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 
-  @DeleteMapping("/eventExpenses/{eventId}")
+  @DeleteMapping("/eventExpenses/{expenseId}/{eventId}")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity deleteExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
-      @PathVariable("eventId") int eventId
+      @PathVariable("eventId") int eventId,
+      @PathVariable("expenseId") int expenseId
   ) {
-    this.eventExpensesService.deleteExpense(eventId);
+    this.eventExpensesService.deleteExpense(expenseId, eventId);
     return new ResponseEntity<>(HttpStatus.NO_CONTENT);
   }
 }
