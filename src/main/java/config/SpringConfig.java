@@ -114,7 +114,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //    final String pass = "manager";
 
     final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management";
-    final String usr = "haho";
+    final String usr = "root";
     final String pass = "hoanhhao";
 
     log.debug("databaseUrl=={}", databaseUrl);
