@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 3/22/2017.
  */
-public class EventExpensesResourceTest extends BaseDocumentation {
+public class EventMoneyFlowResourceTest extends BaseDocumentation {
 
   @Test
   public void testIsEventExisting() throws Exception {

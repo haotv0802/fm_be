@@ -399,6 +399,9 @@
                     <port>8880</port>
                     <server>LocalTomcat8</server>
                     <path>/${project.build.finalName}</path>
+                    <systemProperties>
+                        <MAVEN_OPTS>-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8880</MAVEN_OPTS>
+                    </systemProperties>
                 </configuration>
             </plugin>
 

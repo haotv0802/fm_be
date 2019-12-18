@@ -113,7 +113,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //    final String usr = "imxdb";
 //    final String pass = "manager";
 
-    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management";
+    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=UTC";
     final String usr = "root";
     final String pass = "hoanhhao";
 

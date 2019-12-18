@@ -1,6 +1,6 @@
-package fm.api.rest.expenses;
+package fm.api.rest.moneyflow;
 
-import fm.api.rest.expenses.interfaces.IExpensesDao;
+import fm.api.rest.moneyflow.interfaces.IMoneyFlowDao;
 import fm.common.JdbcUtils;
 import fm.common.ValidationException;
 import fm.common.dao.DaoUtils;
@@ -25,14 +25,14 @@ import java.util.List;
  * Created by haho on 6/22/2017.
  */
 @Repository("expensesDao")
-public class ExpensesDao implements IExpensesDao {
+public class MoneyFlowDao implements IMoneyFlowDao {
 
-  private static final Logger LOGGER = LogManager.getLogger(ExpensesDao.class);
+  private static final Logger LOGGER = LogManager.getLogger(MoneyFlowDao.class);
 
   private final NamedParameterJdbcTemplate namedTemplate;
 
   @Autowired
-  public ExpensesDao(NamedParameterJdbcTemplate namedTemplate) {
+  public MoneyFlowDao(NamedParameterJdbcTemplate namedTemplate) {
     Assert.notNull(namedTemplate);
     this.namedTemplate = namedTemplate;
   }
@@ -198,7 +198,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public Long addExpense(Expense expense, int userId) {
+  public Long addExpense(Item item, int userId) {
     final String sql =
           "INSERT INTO fm_expenses (user_id, amount, date, place, for_person, is_an_event, card_id) "
         + "VALUES (:userId, :amount, :date, :place, :forPerson, :isAnEvent, :cardId)                "
@@ -206,14 +206,14 @@ public class ExpensesDao implements IExpensesDao {
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("userId", userId);
-    paramsMap.addValue("amount", expense.getAmount());
-    paramsMap.addValue("date", expense.getDate());
-    paramsMap.addValue("place", expense.getPlace());
-    paramsMap.addValue("forPerson", expense.getForPerson());
-    paramsMap.addValue("isAnEvent", expense.getAnEvent() == null ? false : expense.getAnEvent());
+    paramsMap.addValue("amount", item.getAmount());
+    paramsMap.addValue("date", item.getDate());
+    paramsMap.addValue("place", item.getPlace());
+    paramsMap.addValue("forPerson", item.getForPerson());
+    paramsMap.addValue("isAnEvent", item.getAnEvent() == null ? false : item.getAnEvent());
     Integer cardId = null;
-    if (null != expense.getCardId()) {
-      cardId = expense.getCardId() < 0 ? null : expense.getCardId();
+    if (null != item.getCardId()) {
+      cardId = item.getCardId() < 0 ? null : item.getCardId();
     }
     paramsMap.addValue("cardId", cardId);
 
@@ -226,7 +226,7 @@ public class ExpensesDao implements IExpensesDao {
   }
 
   @Override
-  public void updateExpense(Expense expense) {
+  public void updateExpense(Item item) {
     final String sql =
         "UPDATE fm_expenses        "
       + "SET                       "
@@ -241,15 +241,15 @@ public class ExpensesDao implements IExpensesDao {
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("id", expense.getId());
-    paramsMap.addValue("amount", expense.getAmount());
-    paramsMap.addValue("date", expense.getDate());
-    paramsMap.addValue("place", expense.getPlace());
-    paramsMap.addValue("forPerson", expense.getForPerson());
-    paramsMap.addValue("isAnEvent", expense.getAnEvent() == null ? false : expense.getAnEvent());
+    paramsMap.addValue("id", item.getId());
+    paramsMap.addValue("amount", item.getAmount());
+    paramsMap.addValue("date", item.getDate());
+    paramsMap.addValue("place", item.getPlace());
+    paramsMap.addValue("forPerson", item.getForPerson());
+    paramsMap.addValue("isAnEvent", item.getAnEvent() == null ? false : item.getAnEvent());
     Integer cardId = null;
-    if (null != expense.getCardId()) {
-      cardId = expense.getCardId() < 0 ? null : expense.getCardId();
+    if (null != item.getCardId()) {
+      cardId = item.getCardId() < 0 ? null : item.getCardId();
     }
     paramsMap.addValue("cardId", cardId);
 
