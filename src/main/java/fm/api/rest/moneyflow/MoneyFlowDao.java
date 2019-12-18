@@ -52,7 +52,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
                      + "	p.name payment_method                                        "
                      + "FROM                                                           "
                      + "	(fm_money_flow e                                             "
-                     + "	LEFT JOIN fm_cards_information c ON e.money_source_id = c.id)"
+                     + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)     "
                      + "		LEFT JOIN                                                  "
                      + "	fm_payment_methods p ON c.card_type_id = p.id                "
                      + "WHERE                                                          "

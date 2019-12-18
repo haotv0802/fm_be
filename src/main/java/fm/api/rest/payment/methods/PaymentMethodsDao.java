@@ -40,7 +40,7 @@ public class PaymentMethodsDao implements IPaymentMethodsDao {
     final String sql = "SELECT                                                    "
                      + "	c.id, c.card_number, p.name card_type, c.name card_info "
                      + "FROM                                                      "
-                     + "	fm_cards_information c                                  "
+                     + "	fm_money_source c                                       "
                      + "		INNER JOIN                                            "
                      + "	fm_payment_methods p ON c.card_type_id = p.id           "
                      + "WHERE                                                     "
