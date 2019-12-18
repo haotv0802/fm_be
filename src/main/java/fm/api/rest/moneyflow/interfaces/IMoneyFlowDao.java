@@ -1,8 +1,8 @@
 package fm.api.rest.moneyflow.interfaces;
 
+import fm.api.rest.moneyflow.ExpensesDetailsPresenter;
 import fm.api.rest.moneyflow.Item;
 import fm.api.rest.moneyflow.ExpensePresenter;
-import fm.api.rest.moneyflow.ExpensesDetailsPresenter;
 
 import java.math.BigDecimal;
 import java.util.List;

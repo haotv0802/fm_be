@@ -12,10 +12,8 @@ public class ExpensePresenter {
   private Integer userId;
   private BigDecimal amount;
   private Date date;
-  private String place;
-  private String forPerson;
-  private Boolean isAnEvent;
-  private Integer cardId;
+  private String name;
+  private Integer moneySourceId;
   private String paymentMethod;
   private String cardNumber;
   private String cardInfo;
@@ -52,36 +50,20 @@ public class ExpensePresenter {
     this.date = date;
   }
 
-  public String getPlace() {
-    return place;
+  public String getName() {
+    return name;
   }
 
-  public void setPlace(String place) {
-    this.place = place;
+  public void setName(String name) {
+    this.name = name;
   }
 
-  public String getForPerson() {
-    return forPerson;
+  public Integer getMoneySourceId() {
+    return moneySourceId;
   }
 
-  public void setForPerson(String forPerson) {
-    this.forPerson = forPerson;
-  }
-
-  public Boolean getAnEvent() {
-    return isAnEvent;
-  }
-
-  public void setAnEvent(Boolean anEvent) {
-    isAnEvent = anEvent;
-  }
-
-  public Integer getCardId() {
-    return cardId;
-  }
-
-  public void setCardId(Integer cardId) {
-    this.cardId = cardId;
+  public void setMoneySourceId(Integer moneySourceId) {
+    this.moneySourceId = moneySourceId;
   }
 
   public String getPaymentMethod() {

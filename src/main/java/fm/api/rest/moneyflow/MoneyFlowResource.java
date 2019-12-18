@@ -39,7 +39,7 @@ public class MoneyFlowResource extends BaseResource {
     this.expenseEditValidator = expenseEditValidator;
   }
 
-  @PostMapping("/expenses")
+  @PostMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity addExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -52,7 +52,7 @@ public class MoneyFlowResource extends BaseResource {
     }, HttpStatus.CREATED);
   }
 
-  @PatchMapping("/expenses")
+  @PatchMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -77,7 +77,7 @@ public class MoneyFlowResource extends BaseResource {
    * @param amount
    * @return ResponseEntity
    */
-  @PatchMapping("/expenses/{expenseId}/{amount}/updateAmount")
+  @PatchMapping("/moneyflow/{expenseId}/{amount}/updateAmount")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateAmount(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -89,7 +89,7 @@ public class MoneyFlowResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @PatchMapping("/expenses/{expenseId}/updateAmount")
+  @PatchMapping("/moneyflow/{expenseId}/updateAmount")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateAmount(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -100,7 +100,7 @@ public class MoneyFlowResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @DeleteMapping("/expenses/{expenseId}/delete")
+  @DeleteMapping("/moneyflow/{expenseId}/delete")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity deleteExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -116,7 +116,7 @@ public class MoneyFlowResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
-  @GetMapping("/expenses")
+  @GetMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ExpensesDetailsPresenter getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -124,7 +124,7 @@ public class MoneyFlowResource extends BaseResource {
     return this.expensesService.getExpensesDetails(userDetails.getUserId());
   }
 
-  @GetMapping("/previousExpenses")
+  @GetMapping("/previousmoneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ExpensesDetailsPresenter> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
