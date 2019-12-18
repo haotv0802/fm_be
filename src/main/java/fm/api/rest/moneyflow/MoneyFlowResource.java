@@ -29,8 +29,8 @@ public class MoneyFlowResource extends BaseResource {
 
   @Autowired
   public MoneyFlowResource(
-      @Qualifier("expensesService") IMoneyFlowService expensesService,
-      @Qualifier("expenseEditValidator") Validator<MoneyFlowEditValidation> expenseEditValidator
+      @Qualifier("moneyFlowService") IMoneyFlowService expensesService,
+      @Qualifier("moneyFlowEditValidator") Validator<MoneyFlowEditValidation> expenseEditValidator
   ) {
     Assert.notNull(expenseEditValidator);
     Assert.notNull(expensesService);

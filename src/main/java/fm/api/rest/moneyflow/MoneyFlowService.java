@@ -13,14 +13,14 @@ import java.util.List;
 /**
  * Created by haho on 6/22/2017.
  */
-@Service("expensesService")
+@Service("moneyFlowService")
 public class MoneyFlowService implements IMoneyFlowService {
 
   private final IMoneyFlowDao expensesDao;
 
   @Autowired
   public MoneyFlowService(
-      @Qualifier("expensesDao") IMoneyFlowDao expensesDao
+      @Qualifier("moneyFlowDao") IMoneyFlowDao expensesDao
   ) {
     Assert.notNull(expensesDao);
 

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * Created by haho on 6/22/2017.
  */
-@Repository("expensesDao")
+@Repository("moneyFlowDao")
 public class MoneyFlowDao implements IMoneyFlowDao {
 
   private static final Logger LOGGER = LogManager.getLogger(MoneyFlowDao.class);
@@ -97,7 +97,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
       expense.setAmount(rs.getBigDecimal("amount"));
       expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
       expense.setName(rs.getString("name"));
-      expense.setMoneySourceId(rs.getInt("card_id"));
+      expense.setMoneySourceId(rs.getInt("money_source_id"));
 
       if (null == expense.getMoneySourceId() || expense.getMoneySourceId() == 0) {
         expense.setPaymentMethod("CASH");
@@ -126,8 +126,8 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         + "	e.user_id,                                              "
         + "	e.amount,                                               "
         + "	e.date,                                                 "
-        + "	e.place,                                                "
-        + "	e.is_an_event,                                          "
+        + "	e.name,                                                 "
+        + "	c.card_number,                                          "
         + "	e.money_source_id,                                      "
         + "	c.name card_info,                                       "
         + "	p.name payment_method                                   "
@@ -135,7 +135,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         + "	(fm_money_flow e                                        "
         + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)"
         + "		LEFT JOIN                                             "
-        + "	fm_payment_methods p ON c.money_source_id = p.id        "
+        + "	fm_payment_methods p ON c.card_type_id = p.id           "
         + "WHERE                                                    "
         + "	e.user_id = :userId                                     "
         + "        AND DATE_FORMAT(date, '%Y-%m') = :month          "

@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 /**
  * Created by haho on 7/4/2017.
  */
-@Service("expenseEditValidator")
+@Service("moneyFlowEditValidator")
 public class MoneyFlowEditValidator implements Validator<MoneyFlowEditValidation> {
 
   private final IMoneyFlowDao expensesDao;
 
   @Autowired
-  public MoneyFlowEditValidator(@Qualifier("expensesDao") IMoneyFlowDao expensesDao) {
+  public MoneyFlowEditValidator(@Qualifier("moneyFlowDao") IMoneyFlowDao expensesDao) {
     Assert.notNull(expensesDao);
 
     this.expensesDao = expensesDao;
