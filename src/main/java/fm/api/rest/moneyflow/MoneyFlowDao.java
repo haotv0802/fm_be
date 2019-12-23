@@ -220,7 +220,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
       + "	amount = :amount,                "
       + "	date = :date,                    "
       + "	name = :name,                    "
-      + "	isSpending = :isSpending,        "
+      + "	is_spending = :isSpending,        "
       + "	money_source_id = :moneySourceId "
       + "WHERE                             "
       + "	id = :id                         "
@@ -234,7 +234,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     paramsMap.addValue("isSpending", item.getSpending());
     Integer moneySourceId = null;
     if (null != item.getMoneySourceId()) {
-      moneySourceId = item.getMoneySourceId() < 0 ? null : item.getMoneySourceId();
+      moneySourceId = item.getMoneySourceId() <= 0 ? null : item.getMoneySourceId();
     }
     paramsMap.addValue("moneySourceId", moneySourceId);
 

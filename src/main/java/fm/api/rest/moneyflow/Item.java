@@ -15,6 +15,19 @@ public class Item {
   private Integer moneySourceId;
   private Boolean isSpending;
 
+  public Item() {
+
+  }
+
+  public Item(ItemPresenter presenter) {
+    this.setId(presenter.getId());
+    this.setAmount(presenter.getAmount());
+    this.setDate(presenter.getDate());
+    this.setMoneySourceId(presenter.getMoneySourceId());
+    this.setSpending(presenter.getSpending());
+    this.setName(presenter.getName());
+  }
+
   public Integer getId() {
     return id;
   }

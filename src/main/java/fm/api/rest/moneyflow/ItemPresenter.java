@@ -18,6 +18,7 @@ public class ItemPresenter {
   private String cardNumber;
   private String cardInfo;
   private Boolean isSpending;
+  private Boolean isUpdated = false;
 
   public Integer getId() {
     return id;
@@ -97,5 +98,13 @@ public class ItemPresenter {
 
   public void setSpending(Boolean spending) {
     isSpending = spending;
+  }
+
+  public Boolean getUpdated() {
+    return isUpdated;
+  }
+
+  public void setUpdated(Boolean updated) {
+    isUpdated = updated;
   }
 }

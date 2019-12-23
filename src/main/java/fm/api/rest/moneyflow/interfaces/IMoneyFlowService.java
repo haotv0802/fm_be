@@ -19,7 +19,7 @@ public interface IMoneyFlowService {
 
   Long addExpense(Item item, int userId);
 
-  void updateExpense(Item item);
+  void updateExpense(ItemPresenter item);
 
   void updateExpense(BigDecimal amount, int userId, int expenseId);
 

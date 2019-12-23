@@ -48,8 +48,8 @@ public class MoneyFlowService implements IMoneyFlowService {
   }
 
   @Override
-  public void updateExpense(Item item) {
-    this.expensesDao.updateExpense(item);
+  public void updateExpense(ItemPresenter presenter) {
+    this.expensesDao.updateExpense(new Item(presenter));
   }
 
   @Override

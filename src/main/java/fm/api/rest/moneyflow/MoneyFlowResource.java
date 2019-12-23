@@ -57,7 +57,7 @@ public class MoneyFlowResource extends BaseResource {
   public ResponseEntity updateExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang,
-      @RequestBody Item item
+      @RequestBody ItemPresenter item
   ) {
     MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
     validation.setUserId(userDetails.getUserId());
@@ -65,6 +65,28 @@ public class MoneyFlowResource extends BaseResource {
     expenseEditValidator.validate(validation);
 
     this.expensesService.updateExpense(item);
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
+
+  @PatchMapping("/moneyflow/list")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ResponseEntity updateItems(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @RequestBody List<ItemPresenter> items
+  ) {
+    for(ItemPresenter item : items) {
+      MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
+      validation.setUserId(userDetails.getUserId());
+      validation.setExpenseId(item.getId());
+      expenseEditValidator.validate(validation);
+    }
+
+    for(ItemPresenter item : items) {
+      if (item.getUpdated()) {
+        this.expensesService.updateExpense(item);
+      }
+    }
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
