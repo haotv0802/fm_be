@@ -7,7 +7,7 @@ import java.util.Date;
  * Created by haho on 6/22/2017.
  * The java object is for values presentation.
  */
-public class ExpensePresenter {
+public class ItemPresenter {
   private Integer id;
   private Integer userId;
   private BigDecimal amount;

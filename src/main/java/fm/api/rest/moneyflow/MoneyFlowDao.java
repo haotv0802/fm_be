@@ -39,7 +39,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
   @Override
   @Deprecated
-  public List<ExpensePresenter> getExpenses(int userId) {
+  public List<ItemPresenter> getExpenses(int userId) {
     final String sql = "SELECT                                                         "
                      + "	e.id,                                                        "
                      + "	e.user_id,                                                   "
@@ -67,7 +67,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    List<ExpensePresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
+    List<ItemPresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
     return expensesList;
   }
@@ -91,8 +91,8 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return namedTemplate.queryForList(sql, paramsMap, String.class);
   }
 
-  private ExpensePresenter buildExpense(ResultSet rs) throws SQLException {
-      ExpensePresenter expense = new ExpensePresenter();
+  private ItemPresenter buildExpense(ResultSet rs) throws SQLException {
+      ItemPresenter expense = new ItemPresenter();
       expense.setId(rs.getInt("id"));
       expense.setUserId(rs.getInt("user_id"));
       expense.setAmount(rs.getBigDecimal("amount"));
@@ -112,7 +112,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   }
 
   @Override
-  public ExpensesDetailsPresenter getExpenesDetails(int userId) {
+  public ItemDetailsPresenter getExpenesDetails(int userId) {
     List<String> months = this.getMonths(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
@@ -121,7 +121,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return this.getExpenesDetailsByMonth(userId, months.get(0));
   }
 
-  private ExpensesDetailsPresenter getExpenesDetailsByMonth(int userId, String month) {
+  private ItemDetailsPresenter getExpenesDetailsByMonth(int userId, String month) {
     final String sql =
           "SELECT                                                   "
         + "	e.id,                                                   "
@@ -152,9 +152,9 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
-    ExpensesDetailsPresenter expensesDetailsPresenter = new ExpensesDetailsPresenter();
+    ItemDetailsPresenter itemDetailsPresenter = new ItemDetailsPresenter();
 
-    List<ExpensePresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
+    List<ItemPresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
     BigDecimal totalSpendings = BigDecimal.ZERO;
     for (int i = 0; i < expensesList.size(); i++) {
@@ -164,25 +164,25 @@ public class MoneyFlowDao implements IMoneyFlowDao {
       totalSpendings = totalSpendings.add(expensesList.get(i).getAmount());
     }
 
-    expensesDetailsPresenter.setExpenses(expensesList);
-    expensesDetailsPresenter.setTotal(totalSpendings);
-    return expensesDetailsPresenter;
+    itemDetailsPresenter.setExpenses(expensesList);
+    itemDetailsPresenter.setTotal(totalSpendings);
+    return itemDetailsPresenter;
   }
 
   @Override
-  public List<ExpensesDetailsPresenter> getPreviousExpensesDetails(int userId) {
+  public List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId) {
     List<String> months = this.getMonths(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
     }
 
-    List<ExpensesDetailsPresenter> expensesDetailsPresenterList = new ArrayList<>();
+    List<ItemDetailsPresenter> itemDetailsPresenterList = new ArrayList<>();
     for (int i = 1; i < months.size(); i++) {
-      ExpensesDetailsPresenter expensesDetailsPresenter = this.getExpenesDetailsByMonth(userId, months.get(i));
-      expensesDetailsPresenterList.add(expensesDetailsPresenter);
+      ItemDetailsPresenter itemDetailsPresenter = this.getExpenesDetailsByMonth(userId, months.get(i));
+      itemDetailsPresenterList.add(itemDetailsPresenter);
     }
 
-    return expensesDetailsPresenterList;
+    return itemDetailsPresenterList;
   }
 
   @Override

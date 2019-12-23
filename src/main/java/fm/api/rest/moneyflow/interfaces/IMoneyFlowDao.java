@@ -1,8 +1,8 @@
 package fm.api.rest.moneyflow.interfaces;
 
-import fm.api.rest.moneyflow.ExpensesDetailsPresenter;
+import fm.api.rest.moneyflow.ItemDetailsPresenter;
 import fm.api.rest.moneyflow.Item;
-import fm.api.rest.moneyflow.ExpensePresenter;
+import fm.api.rest.moneyflow.ItemPresenter;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -11,11 +11,11 @@ import java.util.List;
  * Created by haho on 6/22/2017.
  */
 public interface IMoneyFlowDao {
-  List<ExpensePresenter> getExpenses(int userId);
+  List<ItemPresenter> getExpenses(int userId);
 
-  ExpensesDetailsPresenter getExpenesDetails(int userId);
+  ItemDetailsPresenter getExpenesDetails(int userId);
 
-  List<ExpensesDetailsPresenter> getPreviousExpensesDetails(int userId);
+  List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId);
 
   Long addExpense(Item item, int userId);
 

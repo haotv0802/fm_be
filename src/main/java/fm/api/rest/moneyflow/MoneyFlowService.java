@@ -28,17 +28,17 @@ public class MoneyFlowService implements IMoneyFlowService {
   }
 
   @Override
-  public ExpensesDetailsPresenter getExpensesDetails(int userId) {
+  public ItemDetailsPresenter getExpensesDetails(int userId) {
     return this.expensesDao.getExpenesDetails(userId);
   }
 
   @Override
-  public List<ExpensesDetailsPresenter> getPreviousExpensesDetails(int userId) {
+  public List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId) {
     return this.expensesDao.getPreviousExpensesDetails(userId);
   }
 
   @Override
-  public List<ExpensePresenter> getExpenses(int userId) {
+  public List<ItemPresenter> getExpenses(int userId) {
     return this.expensesDao.getExpenses(userId);
   }
 

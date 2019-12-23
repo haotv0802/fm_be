@@ -6,15 +6,15 @@ import java.util.List;
 /**
  * Created by haho on 6/23/2017.
  */
-public class ExpensesDetailsPresenter {
-  private List<ExpensePresenter> expenses;
+public class ItemDetailsPresenter {
+  private List<ItemPresenter> expenses;
   private BigDecimal total;
 
-  public List<ExpensePresenter> getExpenses() {
+  public List<ItemPresenter> getExpenses() {
     return expenses;
   }
 
-  public void setExpenses(List<ExpensePresenter> expenses) {
+  public void setExpenses(List<ItemPresenter> expenses) {
     this.expenses = expenses;
   }
 
