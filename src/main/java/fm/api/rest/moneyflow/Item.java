@@ -13,6 +13,7 @@ public class Item {
   private Date date;
   private String name;
   private Integer moneySourceId;
+  private Boolean isSpending;
 
   public Integer getId() {
     return id;
@@ -52,5 +53,13 @@ public class Item {
 
   public void setMoneySourceId(Integer moneySourceId) {
     this.moneySourceId = moneySourceId;
+  }
+
+  public Boolean getSpending() {
+    return isSpending;
+  }
+
+  public void setSpending(Boolean spending) {
+    isSpending = spending;
   }
 }

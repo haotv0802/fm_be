@@ -47,6 +47,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
                      + "	e.date,                                                      "
                      + "	e.name,                                                      "
                      + "	e.money_source_id,                                           "
+                     + "	e.is_spending,                                               "
                      + "	c.card_number,                                               "
                      + "	c.name card_info,                                            "
                      + "	p.name payment_method                                        "
@@ -98,6 +99,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
       expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
       expense.setName(rs.getString("name"));
       expense.setMoneySourceId(rs.getInt("money_source_id"));
+      expense.setSpending(rs.getBoolean("is_spending"));
 
       if (null == expense.getMoneySourceId() || expense.getMoneySourceId() == 0) {
         expense.setPaymentMethod("CASH");
@@ -127,6 +129,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         + "	e.amount,                                               "
         + "	e.date,                                                 "
         + "	e.name,                                                 "
+        + "	e.is_spending,                                          "
         + "	c.card_number,                                          "
         + "	e.money_source_id,                                      "
         + "	c.name card_info,                                       "
@@ -185,8 +188,8 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   @Override
   public Long addExpense(Item item, int userId) {
     final String sql =
-          "INSERT INTO fm_money_flow (user_id, amount, date, name, money_source_id) "
-        + "VALUES (:userId, :amount, :date, :name, :money_source_id)                "
+          "INSERT INTO fm_money_flow (user_id, amount, date, name, money_source_id, is_spending) "
+        + "VALUES (:userId, :amount, :date, :name, :money_source_id, :is_spending)               "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -194,6 +197,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     paramsMap.addValue("amount", item.getAmount());
     paramsMap.addValue("date", item.getDate());
     paramsMap.addValue("name", item.getName());
+    paramsMap.addValue("is_spending", item.getSpending());
     Integer cardId = null;
     if (null != item.getMoneySourceId()) {
       cardId = item.getMoneySourceId() < 0 ? null : item.getMoneySourceId();
@@ -216,6 +220,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
       + "	amount = :amount,                "
       + "	date = :date,                    "
       + "	name = :name,                    "
+      + "	isSpending = :isSpending,        "
       + "	money_source_id = :moneySourceId "
       + "WHERE                             "
       + "	id = :id                         "
@@ -226,6 +231,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     paramsMap.addValue("amount", item.getAmount());
     paramsMap.addValue("date", item.getDate());
     paramsMap.addValue("name", item.getName());
+    paramsMap.addValue("isSpending", item.getSpending());
     Integer moneySourceId = null;
     if (null != item.getMoneySourceId()) {
       moneySourceId = item.getMoneySourceId() < 0 ? null : item.getMoneySourceId();

@@ -17,6 +17,7 @@ public class ExpensePresenter {
   private String paymentMethod;
   private String cardNumber;
   private String cardInfo;
+  private Boolean isSpending;
 
   public Integer getId() {
     return id;
@@ -88,5 +89,13 @@ public class ExpensePresenter {
 
   public void setCardInfo(String cardInfo) {
     this.cardInfo = cardInfo;
+  }
+
+  public Boolean getSpending() {
+    return isSpending;
+  }
+
+  public void setSpending(Boolean spending) {
+    isSpending = spending;
   }
 }
