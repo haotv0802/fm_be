@@ -14,6 +14,7 @@ public class ItemPresenter {
   private Date date;
   private String name;
   private Integer moneySourceId;
+  private String moneySourceName;
   private String paymentMethod;
   private String cardNumber;
   private String cardInfo;
@@ -106,5 +107,13 @@ public class ItemPresenter {
 
   public void setUpdated(Boolean updated) {
     isUpdated = updated;
+  }
+
+  public String getMoneySourceName() {
+    return moneySourceName;
+  }
+
+  public void setMoneySourceName(String moneySourceName) {
+    this.moneySourceName = moneySourceName;
   }
 }

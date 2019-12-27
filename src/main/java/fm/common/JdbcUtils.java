@@ -7,8 +7,6 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 /**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
  * Date:  17/06/2016 Time: 7:35 PM
  */
 public final class JdbcUtils {

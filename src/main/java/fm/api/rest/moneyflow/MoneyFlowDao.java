@@ -47,6 +47,10 @@ public class MoneyFlowDao implements IMoneyFlowDao {
                      + "	e.date,                                                      "
                      + "	e.name,                                                      "
                      + "	e.money_source_id,                                           "
+                     + "	CASE                                                         "
+                     + "	  WHEN c.name IS NULL THEN 'CASH'                            "
+                     + "	  ELSE c.name                                                "
+                     + "	END money_source_name,                                       "
                      + "	e.is_spending,                                               "
                      + "	c.card_number,                                               "
                      + "	c.name card_info,                                            "
@@ -99,6 +103,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
       expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
       expense.setName(rs.getString("name"));
       expense.setMoneySourceId(rs.getInt("money_source_id"));
+      expense.setMoneySourceName(rs.getString("money_source_name"));
       expense.setSpending(rs.getBoolean("is_spending"));
 
       if (null == expense.getMoneySourceId() || expense.getMoneySourceId() == 0) {
@@ -132,6 +137,10 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         + "	e.is_spending,                                          "
         + "	c.card_number,                                          "
         + "	e.money_source_id,                                      "
+        + "	CASE                                                    "
+        + "	  WHEN c.name IS NULL THEN 'CASH'                       "
+        + "	  ELSE c.name                                           "
+        + "	END money_source_name,                                  "
         + "	c.name card_info,                                       "
         + "	p.name payment_method                                   "
         + "FROM                                                     "
@@ -218,9 +227,9 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         "UPDATE fm_money_flow              "
       + "SET                               "
       + "	amount = :amount,                "
-      + "	date = :date,                    "
+      + "	date = DATE(:date),              "
       + "	name = :name,                    "
-      + "	is_spending = :isSpending,        "
+      + "	is_spending = :isSpending,       "
       + "	money_source_id = :moneySourceId "
       + "WHERE                             "
       + "	id = :id                         "
