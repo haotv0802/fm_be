@@ -13,9 +13,9 @@ import java.util.List;
 public interface IMoneyFlowDao {
   List<ItemPresenter> getExpenses(int userId);
 
-  ItemDetailsPresenter getExpenesDetails(int userId);
+  List<ItemPresenter> getExpenesDetails(int userId);
 
-  List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId);
+  List<List<ItemPresenter>> getPreviousExpensesDetails(int userId);
 
   Long addExpense(Item item, int userId);
 

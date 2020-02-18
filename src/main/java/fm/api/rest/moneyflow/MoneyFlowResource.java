@@ -140,7 +140,7 @@ public class MoneyFlowResource extends BaseResource {
 
   @GetMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ItemDetailsPresenter getExpenses(
+  public List<ItemPresenter> getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getExpensesDetails(userDetails.getUserId());
@@ -148,7 +148,7 @@ public class MoneyFlowResource extends BaseResource {
 
   @GetMapping("/previousmoneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<ItemDetailsPresenter> getPreviousExpenses(
+  public List<List<ItemPresenter>> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId());
