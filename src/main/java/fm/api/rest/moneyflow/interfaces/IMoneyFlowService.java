@@ -13,9 +13,9 @@ import java.util.List;
 public interface IMoneyFlowService {
   List<ItemPresenter> getExpenses(int userId);
 
-  List<ItemPresenter> getExpensesDetails(int userId);
+  ItemDetailsPresenter getExpensesDetails(int userId);
 
-  List<List<ItemPresenter>> getPreviousExpensesDetails(int userId);
+  List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId);
 
   Long addExpense(Item item, int userId);
 

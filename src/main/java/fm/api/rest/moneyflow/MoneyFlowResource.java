@@ -138,9 +138,15 @@ public class MoneyFlowResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
+  /**
+   * The service is to get all expenses in current month.
+   * @param userDetails
+   * @param lang
+   * @return
+   */
   @GetMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<ItemPresenter> getExpenses(
+  public ItemDetailsPresenter getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getExpensesDetails(userDetails.getUserId());
@@ -148,7 +154,7 @@ public class MoneyFlowResource extends BaseResource {
 
   @GetMapping("/previousmoneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<List<ItemPresenter>> getPreviousExpenses(
+  public List<ItemDetailsPresenter> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @HeaderLang String lang) {
     return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId());

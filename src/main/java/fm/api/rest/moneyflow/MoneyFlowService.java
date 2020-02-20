@@ -28,12 +28,12 @@ public class MoneyFlowService implements IMoneyFlowService {
   }
 
   @Override
-  public List<ItemPresenter> getExpensesDetails(int userId) {
+  public ItemDetailsPresenter getExpensesDetails(int userId) {
     return this.expensesDao.getExpenesDetails(userId);
   }
 
   @Override
-  public List<List<ItemPresenter>> getPreviousExpensesDetails(int userId) {
+  public List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId) {
     return this.expensesDao.getPreviousExpensesDetails(userId);
   }
 
