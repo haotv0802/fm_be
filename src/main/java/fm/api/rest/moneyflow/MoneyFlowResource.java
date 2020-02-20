@@ -160,11 +160,12 @@ public class MoneyFlowResource extends BaseResource {
       return this.expensesService.getYearsList(userDetails.getUserId());
   }
 
-  @GetMapping("/previousmoneyflow")
+  @GetMapping("/previousmoneyflow/{year}")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @PathVariable("year") Integer year,
       @HeaderLang String lang) {
-    return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId());
+    return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId(), year);
   }
 }

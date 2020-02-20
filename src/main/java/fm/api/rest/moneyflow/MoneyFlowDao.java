@@ -101,18 +101,42 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
   private List<String> getMonths(int userId) {
     final String sql =
-          "SELECT DISTINCT                    "
-        + "	DATE_FORMAT(date, '%Y-%m') month  "
-        + "FROM                               "
-        + "	fm_money_flow                     "
-        + "WHERE                              "
-        + "	user_id = :userId                 "
-        + "	AND is_deleted = FALSE            "
-        + "ORDER BY month DESC                "
+          "SELECT DISTINCT                                                    "
+        + "	DATE_FORMAT(date, '%Y-%m') month                                  "
+        + "FROM                                                               "
+        + "	fm_money_flow                                                     "
+        + "WHERE                                                              "
+        + "	user_id = :userId                                                 "
+        + "	AND is_deleted = FALSE                                            "
+        + "	AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(date, '%Y-%m') "
+        + "ORDER BY month DESC                                                "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("userId", userId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForList(sql, paramsMap, String.class);
+  }
+
+  private List<String> getMonths(int userId, int year) {
+    final String sql =
+              "SELECT DISTINCT                                                    "
+            + "	DATE_FORMAT(date, '%Y-%m') month                                  "
+            + "FROM                                                               "
+            + "	fm_money_flow                                                     "
+            + "WHERE                                                              "
+            + "	user_id = :userId                                                 "
+            + "	AND is_deleted = FALSE                                            "
+            + "	AND DATE_FORMAT(date, '%Y') = :year                               "
+            + "	AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(date, '%Y-%m') "
+            + "ORDER BY month DESC                                                "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("userId", userId);
+    paramsMap.addValue("year", year);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -209,14 +233,14 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   }
 
   @Override
-  public List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId) {
-    List<String> months = this.getMonths(userId);
+  public List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId, int year) {
+    List<String> months = this.getMonths(userId, year);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
     }
 
     List<ItemDetailsPresenter> itemDetailsPresenterList = new ArrayList<>();
-    for (int i = 1; i < months.size(); i++) {
+    for (int i = 0; i < months.size(); i++) {
       ItemDetailsPresenter itemDetailsPresenter = this.getExpenesDetailsByMonth(userId, months.get(i));
       itemDetailsPresenterList.add(itemDetailsPresenter);
     }

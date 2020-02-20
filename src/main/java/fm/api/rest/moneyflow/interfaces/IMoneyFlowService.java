@@ -15,7 +15,7 @@ public interface IMoneyFlowService {
 
   ItemDetailsPresenter getExpensesDetails(int userId);
 
-  List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId);
+  List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId, int year);
 
   List<Integer> getYearsList(int userId);
 
