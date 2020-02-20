@@ -40,7 +40,8 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   @Override
   @Deprecated
   public List<ItemPresenter> getExpenses(int userId) {
-    final String sql = "SELECT                                                         "
+    final String sql =
+          "SELECT                                                        "
         + "	e.id,                                                        "
         + "	e.user_id,                                                   "
         + "	e.amount,                                                    "
@@ -55,15 +56,15 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         + "	c.card_number,                                               "
         + "	c.name card_info,                                            "
         + "	p.name payment_method                                        "
-        + "FROM                                                           "
+        + "FROM                                                          "
         + "	(fm_money_flow e                                             "
         + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)     "
         + "		LEFT JOIN                                                  "
         + "	fm_payment_methods p ON c.card_type_id = p.id                "
-        + "WHERE                                                          "
+        + "WHERE                                                         "
         + "	e.user_id = :userId                                          "
-        + "        AND is_deleted = FALSE                                 "
-        + "ORDER BY id ASC                                                "
+        + "        AND is_deleted = FALSE                                "
+        + "ORDER BY id ASC                                               "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -76,14 +77,37 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return expensesList;
   }
 
+
+  @Override
+  public List<Integer> getYearsList(int userId) {
+    final String sql =
+              "SELECT DISTINCT                "
+            + "	DATE_FORMAT(date, '%Y') year  "
+            + "FROM                           "
+            + "	fm_money_flow                 "
+            + "WHERE                          "
+            + "	user_id = :userId             "
+            + "	AND is_deleted = FALSE        "
+            + "ORDER BY year DESC             "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("userId", userId);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForList(sql, paramsMap, Integer.class);
+  }
+
   private List<String> getMonths(int userId) {
-    final String sql = "SELECT DISTINCT                    "
-        + "	DATE_FORMAT(date, '%Y-%m') month "
+    final String sql =
+          "SELECT DISTINCT                    "
+        + "	DATE_FORMAT(date, '%Y-%m') month  "
         + "FROM                               "
-        + "	fm_money_flow                    "
+        + "	fm_money_flow                     "
         + "WHERE                              "
-        + "	user_id = :userId                "
-        + "	AND is_deleted = FALSE           "
+        + "	user_id = :userId                 "
+        + "	AND is_deleted = FALSE            "
         + "ORDER BY month DESC                "
         ;
 
@@ -128,7 +152,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
   private ItemDetailsPresenter getExpenesDetailsByMonth(int userId, String month) {
     final String sql =
-        "SELECT                                                   "
+              "SELECT                                                   "
             + "	e.id,                                                   "
             + "	e.user_id,                                              "
             + "	e.amount,                                               "
@@ -203,7 +227,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   @Override
   public Long addExpense(Item item, int userId) {
     final String sql =
-        "INSERT INTO fm_money_flow (user_id, amount, date, name, money_source_id, is_spending) "
+              "INSERT INTO fm_money_flow (user_id, amount, date, name, money_source_id, is_spending) "
             + "VALUES (:userId, :amount, :date, :name, :money_source_id, :is_spending)               "
         ;
 
@@ -230,7 +254,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   @Override
   public void updateExpense(Item item) {
     final String sql =
-        "UPDATE fm_money_flow              "
+              "UPDATE fm_money_flow              "
             + "SET                               "
             + "	amount = :amount,                "
             + "	date = DATE(:date),              "
@@ -261,7 +285,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   @Override
   public void updateExpense(BigDecimal amount, int userId, int expenseId) {
     final String sql =
-        "UPDATE fm_money_flow                   "
+              "UPDATE fm_money_flow                   "
             + "SET                                    "
             + "	amount = :amount                      "
             + "WHERE                                  "
@@ -281,7 +305,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   @Override
   public void updateAmount(int expenseId) {
     final String sql =
-        "UPDATE fm_money_flow e       "
+              "UPDATE fm_money_flow e       "
             + "SET                          "
             + "	amount = (SELECT            "
             + "			SUM(ee.amount)          "
@@ -305,7 +329,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   @Override
   public void deleteExpense(int expenseId) {
     final String sql =
-        "UPDATE fm_money_flow        "
+              "UPDATE fm_money_flow        "
             + "SET                         "
             + "	is_deleted = TRUE          "
             + "WHERE                       "
@@ -324,7 +348,6 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   public boolean checkIfLoginUserOwner(int expenseId, int userId) {
     final String sql = "SELECT COUNT(*) FROM fm_money_flow WHERE id = :id AND user_id = :userId"
         ;
-
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("id", expenseId);
     paramsMap.addValue("userId", userId);

@@ -17,6 +17,8 @@ public interface IMoneyFlowDao {
 
   List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId);
 
+  List<Integer> getYearsList(int userId);
+
   Long addExpense(Item item, int userId);
 
   void updateExpense(Item item);
