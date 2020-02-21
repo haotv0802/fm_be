@@ -166,7 +166,7 @@ public class MoneyFlowResource extends BaseResource {
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable("year") Integer year,
       @HeaderLang String lang) {
-    return this.expensesService.getPreviousExpensesDetails(userDetails.getUserId(), year);
+    return this.expensesService.getExpensesByYear(userDetails.getUserId(), year);
   }
 
   @GetMapping("/moneyflow/lastmonths")

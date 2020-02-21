@@ -15,7 +15,7 @@ public interface IMoneyFlowService {
 
   ItemDetailsPresenter getExpensesDetails(int userId);
 
-  List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId, int year);
+  List<ItemDetailsPresenter> getExpensesByYear(int userId, int year);
 
   List<ItemDetailsPresenter> getLastMonths(int userId);
 

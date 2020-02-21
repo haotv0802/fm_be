@@ -33,7 +33,7 @@ public class MoneyFlowService implements IMoneyFlowService {
   }
 
   @Override
-  public List<ItemDetailsPresenter> getPreviousExpensesDetails(int userId, int year) {
+  public List<ItemDetailsPresenter> getExpensesByYear(int userId, int year) {
     return this.expensesDao.getExpensesByYear(userId, year);
   }
 

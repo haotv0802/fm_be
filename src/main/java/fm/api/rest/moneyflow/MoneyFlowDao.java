@@ -19,6 +19,7 @@ import java.math.BigDecimal;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -108,7 +109,6 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         + "WHERE                                                              "
         + "	user_id = :userId                                                 "
         + "	AND is_deleted = FALSE                                            "
-        + "	AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(date, '%Y-%m') "
         + "ORDER BY month DESC                                                "
         ;
 
@@ -235,7 +235,8 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     List<ItemPresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
 
-    BigDecimal totalSpendings = BigDecimal.ZERO;
+    // Calculate Total of all expenses and put it in Detail object.
+    BigDecimal totalSending = BigDecimal.ZERO;
     for (int i = 0; i < expensesList.size(); i++) {
       ItemPresenter itemPresenter = expensesList.get(i);
       if (null == itemPresenter.getAmount()) {
@@ -243,14 +244,21 @@ public class MoneyFlowDao implements IMoneyFlowDao {
       }
 
       if (itemPresenter.getSpending()) {
-        totalSpendings = totalSpendings.subtract(expensesList.get(i).getAmount());
+        totalSending = totalSending.subtract(expensesList.get(i).getAmount());
       } else {
-        totalSpendings = totalSpendings.add(expensesList.get(i).getAmount());
+        totalSending = totalSending.add(expensesList.get(i).getAmount());
       }
     }
-
     itemDetailsPresenter.setExpenses(expensesList);
-    itemDetailsPresenter.setTotal(totalSpendings);
+    itemDetailsPresenter.setTotal(totalSending);
+
+    // get year and month into Detail object
+    ItemPresenter itemPresenter = expensesList.get(0);
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(itemPresenter.getDate());
+    itemDetailsPresenter.setMonth(cal.get(Calendar.MONTH) + 1);
+    itemDetailsPresenter.setYear(cal.get(Calendar.YEAR));
+
     return itemDetailsPresenter;
   }
 

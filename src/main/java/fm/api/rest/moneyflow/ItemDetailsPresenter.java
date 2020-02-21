@@ -9,6 +9,8 @@ import java.util.List;
 public class ItemDetailsPresenter {
   private List<ItemPresenter> expenses;
   private BigDecimal total;
+  private Integer month;
+  private Integer year;
 
   public List<ItemPresenter> getExpenses() {
     return expenses;
@@ -24,5 +26,21 @@ public class ItemDetailsPresenter {
 
   public void setTotal(BigDecimal total) {
     this.total = total;
+  }
+
+  public Integer getMonth() {
+    return month;
+  }
+
+  public void setMonth(Integer month) {
+    this.month = month;
+  }
+
+  public Integer getYear() {
+    return year;
+  }
+
+  public void setYear(Integer year) {
+    this.year = year;
   }
 }
