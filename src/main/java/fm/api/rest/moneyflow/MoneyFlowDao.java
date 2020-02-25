@@ -100,7 +100,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return namedTemplate.queryForList(sql, paramsMap, Integer.class);
   }
 
-  private List<String> getMonths(int userId) {
+  private List<String> getMonthsWithYear(int userId) {
     final String sql =
           "SELECT DISTINCT                                                    "
         + "	DATE_FORMAT(date, '%Y-%m') month                                  "
@@ -142,7 +142,13 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return namedTemplate.queryForList(sql, paramsMap, String.class);
   }
 
-  private List<String> getMonths(int userId, int year) {
+  /**
+   * Get list of months with year, ex: 2020-02, 2020-01
+   * @param userId
+   * @param year
+   * @return
+   */
+  private List<String> getMonthsWithYear(int userId, int year) {
     final String sql =
               "SELECT DISTINCT                                                    "
             + "	DATE_FORMAT(date, '%Y-%m') month                                  "
@@ -188,15 +194,56 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
   @Override
   public ItemDetailsPresenter getExpenesDetails(int userId) {
-    List<String> months = this.getMonths(userId);
+    List<String> months = this.getMonthsWithYear(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
     }
 
-    return this.getExpenesDetailsByMonth(userId, months.get(0));
+    return this.getExpensesDetailsByMonth(userId, months.get(0));
   }
 
-  private ItemDetailsPresenter getExpenesDetailsByMonth(int userId, String month) {
+  @Override
+  public ItemDetailsPresenter getExpensesDetailsByYearAndMonth(int userId, int year, int month) {
+    final String sql =
+              "SELECT                                                   "
+            + "	e.id,                                                   "
+            + "	e.user_id,                                              "
+            + "	e.amount,                                               "
+            + "	e.date,                                                 "
+            + "	e.name,                                                 "
+            + "	e.is_spending,                                          "
+            + "	c.card_number,                                          "
+            + "	e.money_source_id,                                      "
+            + "	CASE                                                    "
+            + "	  WHEN c.name IS NULL THEN 'CASH'                       "
+            + "	  ELSE c.name                                           "
+            + "	END money_source_name,                                  "
+            + "	c.name card_info,                                       "
+            + "	p.name payment_method                                   "
+            + "FROM                                                     "
+            + "	(fm_money_flow e                                        "
+            + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)"
+            + "		LEFT JOIN                                             "
+            + "	fm_payment_methods p ON c.card_type_id = p.id           "
+            + "WHERE                                                    "
+            + "	e.user_id = :userId                                     "
+            + "        AND DATE_FORMAT(date, '%Y') = :year              "
+            + "        AND DATE_FORMAT(date, '%m') = :month            "
+            + "        AND is_deleted = FALSE                           "
+            + "ORDER BY e.date DESC                                     "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("userId", userId);
+    paramsMap.addValue("year", year);
+    paramsMap.addValue("month", month);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return buildItemDetailsPresenter(sql, paramsMap);
+  }
+
+  private ItemDetailsPresenter getExpensesDetailsByMonth(int userId, String month) {
     final String sql =
               "SELECT                                                   "
             + "	e.id,                                                   "
@@ -231,6 +278,10 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
+    return buildItemDetailsPresenter(sql, paramsMap);
+  }
+
+  private ItemDetailsPresenter buildItemDetailsPresenter(String sql, MapSqlParameterSource paramsMap) {
     ItemDetailsPresenter itemDetailsPresenter = new ItemDetailsPresenter();
 
     List<ItemPresenter> expensesList = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> buildExpense(rs));
@@ -264,14 +315,14 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
   @Override
   public List<ItemDetailsPresenter> getExpensesByYear(int userId, int year) {
-    List<String> months = this.getMonths(userId, year);
+    List<String> months = this.getMonthsWithYear(userId, year);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
     }
 
     List<ItemDetailsPresenter> itemDetailsPresenterList = new ArrayList<>();
     for (int i = 0; i < months.size(); i++) {
-      ItemDetailsPresenter itemDetailsPresenter = this.getExpenesDetailsByMonth(userId, months.get(i));
+      ItemDetailsPresenter itemDetailsPresenter = this.getExpensesDetailsByMonth(userId, months.get(i));
       itemDetailsPresenterList.add(itemDetailsPresenter);
     }
 
@@ -287,7 +338,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     List<ItemDetailsPresenter> itemDetailsPresenterList = new ArrayList<>();
     for (int i = 0; i < months.size(); i++) {
-      ItemDetailsPresenter itemDetailsPresenter = this.getExpenesDetailsByMonth(userId, months.get(i));
+      ItemDetailsPresenter itemDetailsPresenter = this.getExpensesDetailsByMonth(userId, months.get(i));
       itemDetailsPresenterList.add(itemDetailsPresenter);
     }
 

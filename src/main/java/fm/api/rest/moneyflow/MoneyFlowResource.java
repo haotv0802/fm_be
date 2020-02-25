@@ -169,6 +169,16 @@ public class MoneyFlowResource extends BaseResource {
     return this.expensesService.getExpensesByYear(userDetails.getUserId(), year);
   }
 
+  @GetMapping("/moneyflow/{year}/{month}")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ItemDetailsPresenter getExpensesByYearAndMonth(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @PathVariable("year") Integer year,
+      @PathVariable("month") Integer month,
+      @HeaderLang String lang) {
+    return this.expensesService.getExpenseByYearAndMonth(userDetails.getUserId(), year, month);
+  }
+
   @GetMapping("/moneyflow/lastmonths")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getPreviousExpenses(

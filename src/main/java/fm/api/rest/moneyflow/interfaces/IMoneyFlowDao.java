@@ -17,6 +17,8 @@ public interface IMoneyFlowDao {
 
   List<ItemDetailsPresenter> getExpensesByYear(int userId, int year);
 
+  ItemDetailsPresenter getExpensesDetailsByYearAndMonth(int userId, int year, int month);
+
   List<ItemDetailsPresenter> getLastMonths(int userId);
 
   List<Integer> getYearsList(int userId);

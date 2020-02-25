@@ -38,6 +38,11 @@ public class MoneyFlowService implements IMoneyFlowService {
   }
 
   @Override
+  public ItemDetailsPresenter getExpenseByYearAndMonth(int userId, int year, int month) {
+    return this.expensesDao.getExpensesDetailsByYearAndMonth(userId, year, month);
+  }
+
+  @Override
   public List<ItemDetailsPresenter> getLastMonths(int userId) {
     return this.expensesDao.getLastMonths(userId);
   }
