@@ -229,7 +229,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
             + "WHERE                                                    "
             + "	e.user_id = :userId                                     "
             + "        AND DATE_FORMAT(date, '%Y') = :year              "
-            + "        AND DATE_FORMAT(date, '%m') = :month            "
+            + "        AND DATE_FORMAT(date, '%m') = :month             "
             + "        AND is_deleted = FALSE                           "
             + "ORDER BY e.date DESC                                     "
         ;
@@ -270,14 +270,14 @@ public class MoneyFlowDao implements IMoneyFlowDao {
             + "	e.user_id = :userId                                     "
             + "        AND DATE_FORMAT(date, '%Y-%m') = :month          "
             + "        AND is_deleted = FALSE                           "
-            + ((null != name && !StringUtils.isEmpty(name)) ? "AND e.name = :name" : "")
+            + ((null != name && !StringUtils.isEmpty(name)) ? "AND e.name LIKE :name " : "")
             + "ORDER BY e.date DESC                                     "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("userId", userId);
     paramsMap.addValue("month", month);
-    paramsMap.addValue("name", name);
+    paramsMap.addValue("name", "%" + name + "%");
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -291,27 +291,19 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     // Calculate Total of all expenses and put it in Detail object.
     BigDecimal totalSending = BigDecimal.ZERO;
-    for (int i = 0; i < expensesList.size(); i++) {
-      ItemPresenter itemPresenter = expensesList.get(i);
+    for (ItemPresenter itemPresenter : expensesList) {
       if (null == itemPresenter.getAmount()) {
         continue;
       }
 
       if (itemPresenter.getSpending()) {
-        totalSending = totalSending.subtract(expensesList.get(i).getAmount());
+        totalSending = totalSending.subtract(itemPresenter.getAmount());
       } else {
-        totalSending = totalSending.add(expensesList.get(i).getAmount());
+        totalSending = totalSending.add(itemPresenter.getAmount());
       }
     }
     itemDetailsPresenter.setExpenses(expensesList);
     itemDetailsPresenter.setTotal(totalSending);
-
-    // get year and month into Detail object
-    ItemPresenter itemPresenter = expensesList.get(0);
-    Calendar cal = Calendar.getInstance();
-    cal.setTime(itemPresenter.getDate());
-    itemDetailsPresenter.setMonth(cal.get(Calendar.MONTH) + 1);
-    itemDetailsPresenter.setYear(cal.get(Calendar.YEAR));
 
     return itemDetailsPresenter;
   }
@@ -326,6 +318,9 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     List<ItemDetailsPresenter> itemDetailsPresenterList = new ArrayList<>();
     for (int i = 0; i < months.size(); i++) {
       ItemDetailsPresenter itemDetailsPresenter = this.getExpensesDetailsByMonth(userId, months.get(i), name);
+      String[] yearAndMonth = months.get(i).split("-");
+      itemDetailsPresenter.setYear(Integer.valueOf(yearAndMonth[0]));
+      itemDetailsPresenter.setMonth(Integer.valueOf(yearAndMonth[1]));
       itemDetailsPresenterList.add(itemDetailsPresenter);
     }
 
