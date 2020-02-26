@@ -28,13 +28,13 @@ public class MoneyFlowService implements IMoneyFlowService {
   }
 
   @Override
-  public ItemDetailsPresenter getExpensesDetails(int userId) {
-    return this.expensesDao.getExpenesDetails(userId);
+  public ItemDetailsPresenter getExpensesDetails(int userId, String name) {
+    return this.expensesDao.getExpenesDetails(userId, name);
   }
 
   @Override
-  public List<ItemDetailsPresenter> getExpensesByYear(int userId, int year) {
-    return this.expensesDao.getExpensesByYear(userId, year);
+  public List<ItemDetailsPresenter> getExpensesByYear(int userId, int year, String name) {
+    return this.expensesDao.getExpensesByYear(userId, year, name);
   }
 
   @Override
@@ -43,8 +43,8 @@ public class MoneyFlowService implements IMoneyFlowService {
   }
 
   @Override
-  public List<ItemDetailsPresenter> getLastMonths(int userId) {
-    return this.expensesDao.getLastMonths(userId);
+  public List<ItemDetailsPresenter> getLastMonths(int userId, String name) {
+    return this.expensesDao.getLastMonths(userId, name);
   }
 
   @Override

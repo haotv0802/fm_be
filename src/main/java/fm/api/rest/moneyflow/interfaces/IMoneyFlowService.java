@@ -13,13 +13,13 @@ import java.util.List;
 public interface IMoneyFlowService {
   List<ItemPresenter> getExpenses(int userId);
 
-  ItemDetailsPresenter getExpensesDetails(int userId);
+  ItemDetailsPresenter getExpensesDetails(int userId, String name);
 
-  List<ItemDetailsPresenter> getExpensesByYear(int userId, int year);
+  List<ItemDetailsPresenter> getExpensesByYear(int userId, int year, String name);
 
   ItemDetailsPresenter getExpenseByYearAndMonth(int userId, int year, int month);
 
-  List<ItemDetailsPresenter> getLastMonths(int userId);
+  List<ItemDetailsPresenter> getLastMonths(int userId, String name);
 
   List<Integer> getYearsList(int userId);
 

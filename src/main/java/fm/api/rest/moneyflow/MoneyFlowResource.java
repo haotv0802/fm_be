@@ -148,10 +148,17 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ItemDetailsPresenter getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @RequestParam(value = "name", required = false) String name,
       @HeaderLang String lang) {
-    return this.expensesService.getExpensesDetails(userDetails.getUserId());
+    return this.expensesService.getExpensesDetails(userDetails.getUserId(), name);
   }
 
+  /**
+   * Get list of years displayed on Money flow page. The purpose is to let user to decide which year details to be shown.
+   * @param userDetails
+   * @param lang
+   * @return
+   */
   @GetMapping("/moneyflowyearlist")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<Integer> getYearsList(
@@ -165,8 +172,9 @@ public class MoneyFlowResource extends BaseResource {
   public List<ItemDetailsPresenter> getExpensesByYear(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable("year") Integer year,
+      @RequestParam(value = "name", required = false) String name,
       @HeaderLang String lang) {
-    return this.expensesService.getExpensesByYear(userDetails.getUserId(), year);
+    return this.expensesService.getExpensesByYear(userDetails.getUserId(), year, name);
   }
 
   @GetMapping("/moneyflow/{year}/{month}")
@@ -183,7 +191,10 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @RequestParam(value = "name", required = false) String name,
       @HeaderLang String lang) {
-    return this.expensesService.getLastMonths(userDetails.getUserId());
+    return this.expensesService.getLastMonths(userDetails.getUserId(), name);
   }
+
+
 }

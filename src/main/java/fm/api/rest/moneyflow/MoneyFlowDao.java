@@ -14,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.sql.ResultSet;
@@ -193,13 +194,13 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   }
 
   @Override
-  public ItemDetailsPresenter getExpenesDetails(int userId) {
+  public ItemDetailsPresenter getExpenesDetails(int userId, String name) {
     List<String> months = this.getMonthsWithYear(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
     }
 
-    return this.getExpensesDetailsByMonth(userId, months.get(0));
+    return this.getExpensesDetailsByMonth(userId, months.get(0), name);
   }
 
   @Override
@@ -243,7 +244,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return buildItemDetailsPresenter(sql, paramsMap);
   }
 
-  private ItemDetailsPresenter getExpensesDetailsByMonth(int userId, String month) {
+  private ItemDetailsPresenter getExpensesDetailsByMonth(int userId, String month, String name) {
     final String sql =
               "SELECT                                                   "
             + "	e.id,                                                   "
@@ -269,12 +270,14 @@ public class MoneyFlowDao implements IMoneyFlowDao {
             + "	e.user_id = :userId                                     "
             + "        AND DATE_FORMAT(date, '%Y-%m') = :month          "
             + "        AND is_deleted = FALSE                           "
+            + ((null != name && !StringUtils.isEmpty(name)) ? "AND e.name = :name" : "")
             + "ORDER BY e.date DESC                                     "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("userId", userId);
     paramsMap.addValue("month", month);
+    paramsMap.addValue("name", name);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -314,7 +317,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   }
 
   @Override
-  public List<ItemDetailsPresenter> getExpensesByYear(int userId, int year) {
+  public List<ItemDetailsPresenter> getExpensesByYear(int userId, int year, String name) {
     List<String> months = this.getMonthsWithYear(userId, year);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
@@ -322,7 +325,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     List<ItemDetailsPresenter> itemDetailsPresenterList = new ArrayList<>();
     for (int i = 0; i < months.size(); i++) {
-      ItemDetailsPresenter itemDetailsPresenter = this.getExpensesDetailsByMonth(userId, months.get(i));
+      ItemDetailsPresenter itemDetailsPresenter = this.getExpensesDetailsByMonth(userId, months.get(i), name);
       itemDetailsPresenterList.add(itemDetailsPresenter);
     }
 
@@ -330,7 +333,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
   }
 
   @Override
-  public List<ItemDetailsPresenter> getLastMonths(int userId) {
+  public List<ItemDetailsPresenter> getLastMonths(int userId, String name) {
     List<String> months = this.getMonthsInCurrentYear(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
@@ -338,7 +341,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
 
     List<ItemDetailsPresenter> itemDetailsPresenterList = new ArrayList<>();
     for (int i = 0; i < months.size(); i++) {
-      ItemDetailsPresenter itemDetailsPresenter = this.getExpensesDetailsByMonth(userId, months.get(i));
+      ItemDetailsPresenter itemDetailsPresenter = this.getExpensesDetailsByMonth(userId, months.get(i), name);
       itemDetailsPresenterList.add(itemDetailsPresenter);
     }
 
