@@ -69,6 +69,77 @@ CREATE TABLE `fm_user_role_details`
     AUTO_INCREMENT = 11
     DEFAULT CHARSET = utf8;
 
+
+--
+-- Table structure for table `Banks`
+--
+DROP
+    TABLE IF EXISTS `fm_banks`;
+CREATE TABLE `fm_banks`
+(
+    `id`      BIGINT AUTO_INCREMENT,
+    `name`    VARCHAR(45) NOT NULL,
+    `address` VARCHAR(45) NOT NULL,
+    `website` VARCHAR(45),
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
+--
+-- Table structure for table `individuals`
+--
+DROP TABLE IF EXISTS `fm_individuals`;
+CREATE TABLE `fm_individuals`
+(
+    `id`           BIGINT AUTO_INCREMENT,
+    `first_name`   VARCHAR(45) NOT NULL,
+    `last_name`    VARCHAR(45) NOT NULL,
+    `middle_name`  VARCHAR(45),
+    `birthday`     DATE,
+    `gender`       VARCHAR(10),
+    `email`        VARCHAR(50) NOT NULL,
+    `phone_number` VARCHAR(50),
+    `income`       DOUBLE,
+    `user_id`      BIGINT      NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `fm_individuals_id_unique` (`id`),
+    UNIQUE KEY `fm_individuals_user_id_unique` (`user_id`), #  An individual has ONLY 1 user account.
+    UNIQUE KEY `fm_individuals_email_unique` (`email`),     #  One email is belong to only 1 individual.
+    CONSTRAINT `fm_individuals_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
+)
+    ENGINE = InnoDB
+    DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `Promotion category`
+--
+DROP
+    TABLE IF EXISTS `fm_promotion_categories`;
+CREATE TABLE `fm_promotion_categories`
+(
+    `id`   BIGINT AUTO_INCREMENT,
+    `name` VARCHAR(45) NOT NULL,
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `Promotion`
+--
+DROP
+    TABLE IF EXISTS `fm_promotions`;
+CREATE TABLE `fm_promotions`
+(
+    `id`          BIGINT AUTO_INCREMENT,
+    `name`        VARCHAR(45) NOT NULL,
+    `category_id` BIGINT      NOT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
 DROP TABLE IF EXISTS `fm_payment_methods`;
 CREATE TABLE `fm_payment_methods`
 (
@@ -84,18 +155,20 @@ DROP TABLE IF EXISTS `fm_money_source`;
 CREATE TABLE `fm_money_source`
 (
     `id`            BIGINT      NOT NULL AUTO_INCREMENT,
-    `name`          VARCHAR(45) NULL, # HSBC, ANZ 123
+    `name`          VARCHAR(45) NULL, # HSBC, ANZ 123 or any name you like for such source.
     `start_date`    DATE        NULL,
     `expiry_date`   DATE        NULL,
     `card_number`   VARCHAR(45) NULL, # last 6 digits
     `amount`        DOUBLE      NOT NULL,
     `card_type_id`  BIGINT      NULL,
-    `user_id`       BIGINT      NULL,
+    `user_id` BIGINT      NULL,
     `is_terminated` BOOLEAN DEFAULT FALSE,
+    `bank_id`       BIGINT      NOT NULL,
     PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_cards_information_id_unique` (`id`, `card_number`, `user_id`),
-    CONSTRAINT `fm_cards_information_card_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
-    CONSTRAINT `fm_cards_information_card_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`)
+    UNIQUE KEY `fm_money_source_id_unique` (`id`, `card_number`, `user_id`),
+    CONSTRAINT `fm_money_source_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
+    CONSTRAINT `fm_money_source_individual_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`),
+    CONSTRAINT `fm_money_source_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 )
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8;
@@ -124,14 +197,15 @@ CREATE TABLE `fm_money_flow`
 -- Table structure for table `error_tracking`
 --
 DROP TABLE IF EXISTS `fm_error_tracking`;
-CREATE TABLE `fm_error_tracking` (
-                                     `id`            BIGINT       NOT NULL AUTO_INCREMENT,
-                                     `error_message` VARCHAR(100) NOT NULL,
-                                     `stack_trace`   TEXT         NOT NULL,
-                                     `user`          VARCHAR(50),
-                                     `error_date`    DATETIME     NOT NULL DEFAULT now(),
-                                     PRIMARY KEY (`id`),
-                                     UNIQUE KEY `error_tracking_id_unique` (`id`)
+CREATE TABLE `fm_error_tracking`
+(
+    `id`            BIGINT       NOT NULL AUTO_INCREMENT,
+    `error_message` VARCHAR(100) NOT NULL,
+    `stack_trace`   TEXT         NOT NULL,
+    `user`          VARCHAR(50),
+    `error_date`    DATETIME     NOT NULL DEFAULT now(),
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `error_tracking_id_unique` (`id`)
 )
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8;

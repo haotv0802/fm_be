@@ -1,6 +1,5 @@
 package fm.api.rest.payment.methods;
 
-import fm.api.rest.expenses.ExpensesDao;
 import fm.api.rest.payment.methods.beans.CardInformation;
 import fm.api.rest.payment.methods.interfaces.IPaymentMethodsDao;
 import fm.common.dao.DaoUtils;
@@ -13,7 +12,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import javax.smartcardio.Card;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -24,7 +22,7 @@ import java.util.List;
 @Repository("paymentMethodsDao")
 public class PaymentMethodsDao implements IPaymentMethodsDao {
 
-  private static final Logger LOGGER = LogManager.getLogger(ExpensesDao.class);
+  private static final Logger LOGGER = LogManager.getLogger(PaymentMethodsDao.class);
 
   private final NamedParameterJdbcTemplate namedTemplate;
 

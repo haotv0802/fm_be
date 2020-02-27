@@ -1,6 +1,9 @@
 package fm.api.rest.expenses;
 
 import fm.api.rest.BaseDocumentation;
+import fm.api.rest.moneyflow.Item;
+import fm.api.rest.moneyflow.ItemDetailsPresenter;
+import fm.api.rest.moneyflow.ItemPresenter;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.testng.annotations.Test;
@@ -18,13 +21,13 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
 
   @Test
   public void testAddExpense() throws Exception {
-    Expense creation = new Expense();
+    Item creation = new Item();
     creation.setAmount(new BigDecimal(1234));
-    creation.setAnEvent(false);
-    creation.setCardId(2);
+//    creation.setAnEvent(false);
+//    creation.setCardId(2);
     creation.setDate(new Date());
-    creation.setForPerson(null);
-    creation.setPlace("ILA");
+//    creation.setForPerson(null);
+//    creation.setPlace("ILA");
 
     mockMvc
         .perform(post("/svc/expenses")
@@ -48,17 +51,13 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         .andReturn()
     ;
 
-    ExpensesDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
-        result.getResponse().getContentAsString(), ExpensesDetailsPresenter.class);
-    ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
+    ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+        result.getResponse().getContentAsString(), ItemDetailsPresenter.class);
+    ItemPresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
 
-    Expense expense = new Expense();
+    Item expense = new Item();
     expense.setAmount(expensePresenter.getAmount());
-    expense.setAnEvent(expensePresenter.getAnEvent());
-    expense.setCardId(expensePresenter.getCardId());
     expense.setDate(new Date());
-    expense.setForPerson(null);
-    expense.setPlace("VUS");
     expense.setId(expensePresenter.getId());
 
     mockMvc
@@ -91,9 +90,9 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         .andReturn()
         ;
 
-    ExpensesDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
-        result.getResponse().getContentAsString(), ExpensesDetailsPresenter.class);
-    ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
+    ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+        result.getResponse().getContentAsString(), ItemDetailsPresenter.class);
+    ItemPresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
 
     mockMvc
         .perform(patch("/svc/expenses/{expenseId}/{amount}/updateAmount", expensePresenter.getId(), 123456)
@@ -124,9 +123,9 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         .andReturn()
         ;
 
-    ExpensesDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
-        result.getResponse().getContentAsString(), ExpensesDetailsPresenter.class);
-    ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
+    ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+        result.getResponse().getContentAsString(), ItemDetailsPresenter.class);
+    ItemPresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
 
     mockMvc
         .perform(patch("/svc/expenses/{expenseId}/updateAmount", expensePresenter.getId())
@@ -157,9 +156,9 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         .andReturn()
         ;
 
-    ExpensesDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
-        result.getResponse().getContentAsString(), ExpensesDetailsPresenter.class);
-    ExpensePresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
+    ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+        result.getResponse().getContentAsString(), ItemDetailsPresenter.class);
+    ItemPresenter expensePresenter = expensesDetailsPresenter.getExpenses().get(0);
     mockMvc
         .perform(delete("/svc/expenses/{expenseId}/delete", expensePresenter.getId())
             .header("Accept-Language", "en")

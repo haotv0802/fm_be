@@ -30,9 +30,13 @@ INSERT INTO `fm_user_role_details` VALUES
 
 INSERT INTO fm_payment_methods(`id`, `name`) VALUES (1, 'VISA CREDIT'), (2, 'VISA DEBIT'), (3, 'American Express');
 
-INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`)
-VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2);
+INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (1, 'VISA DEBIT', '123 Dong Khoi', 'hsbc.com.vn');
 
+INSERT INTO fm_individuals (`id`, `first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `income`, `user_id`)
+VALUES (1, 'Hao', 'Ho', 'Anh', '1988-04-19', 'Male', 'hoanhhao@gmail.com', '0906729775', '1000000000', 2);
+
+INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`, `bank_id`)
+VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2, 1);
 
 INSERT INTO fm_money_flow (`user_id`, `amount`, `name`, `date`, `is_deleted`, `money_source_id`)
 VALUES
