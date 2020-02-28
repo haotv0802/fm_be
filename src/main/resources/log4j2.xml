@@ -3,7 +3,7 @@
 <Configuration status="warn">
   <Appenders>
     <RandomAccessFile name="File"
-                      fileName="/logs/fm-${date:yyyy-MM-dd}.log"
+                      fileName="logs/fm-${date:yyyy-MM-dd}.log"
                       immediateFlush="false"
                       append="true">
       <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" />

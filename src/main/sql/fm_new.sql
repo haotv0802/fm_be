@@ -85,7 +85,6 @@ CREATE TABLE `fm_banks`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
 --
 -- Table structure for table `individuals`
 --
@@ -132,10 +131,17 @@ DROP
 CREATE TABLE `fm_promotions`
 (
     `id`          BIGINT AUTO_INCREMENT,
-    `name`        VARCHAR(45) NOT NULL,
+    `title`       VARCHAR(45) NOT NULL,
+    `content`     VARCHAR(45) NOT NULL,
+    `discount`    VARCHAR(45) NOT NULL, # Could be % or specific amount
+    `start_date`  DATE        NOT NULL,
+    `end_date`    DATE        NOT NULL,
+
     `category_id` BIGINT      NOT NULL,
+    `bank_id`     BIGINT      NOT NULL,
     PRIMARY KEY (`id`),
-    CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`)
+    CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`),
+    CONSTRAINT `fm_promotions_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
@@ -161,7 +167,7 @@ CREATE TABLE `fm_money_source`
     `card_number`   VARCHAR(45) NULL, # last 6 digits
     `amount`        DOUBLE      NOT NULL,
     `card_type_id`  BIGINT      NULL,
-    `user_id` BIGINT      NULL,
+    `user_id`       BIGINT      NULL,
     `is_terminated` BOOLEAN DEFAULT FALSE,
     `bank_id`       BIGINT      NOT NULL,
     PRIMARY KEY (`id`),
