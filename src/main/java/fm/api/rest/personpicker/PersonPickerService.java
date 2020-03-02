@@ -1,8 +1,8 @@
-package fm.api.rest.person.picker;
+package fm.api.rest.personpicker;
 
-import fm.api.rest.person.picker.beans.PersonPresenter;
-import fm.api.rest.person.picker.interfaces.IPersonPickerDao;
-import fm.api.rest.person.picker.interfaces.IPersonPickerService;
+import fm.api.rest.personpicker.beans.PersonPresenter;
+import fm.api.rest.personpicker.interfaces.IPersonPickerDao;
+import fm.api.rest.personpicker.interfaces.IPersonPickerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

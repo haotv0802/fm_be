@@ -1,7 +1,7 @@
-package fm.api.rest.person.picker;
+package fm.api.rest.personpicker;
 
-import fm.api.rest.person.picker.beans.PersonPresenter;
-import fm.api.rest.person.picker.interfaces.IPersonPickerDao;
+import fm.api.rest.personpicker.beans.PersonPresenter;
+import fm.api.rest.personpicker.interfaces.IPersonPickerDao;
 import fm.common.JdbcUtils;
 import fm.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;

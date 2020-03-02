@@ -1,8 +1,8 @@
-package fm.api.rest.payment.methods;
+package fm.api.rest.paymentmethods;
 
 import fm.api.rest.BaseResource;
-import fm.api.rest.payment.methods.beans.CardInformation;
-import fm.api.rest.payment.methods.interfaces.IPaymentMethodsService;
+import fm.api.rest.paymentmethods.beans.CardInformation;
+import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsService;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Qualifier;

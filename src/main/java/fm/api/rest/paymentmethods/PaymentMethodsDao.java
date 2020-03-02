@@ -1,7 +1,7 @@
-package fm.api.rest.payment.methods;
+package fm.api.rest.paymentmethods;
 
-import fm.api.rest.payment.methods.beans.CardInformation;
-import fm.api.rest.payment.methods.interfaces.IPaymentMethodsDao;
+import fm.api.rest.paymentmethods.beans.CardInformation;
+import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsDao;
 import fm.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

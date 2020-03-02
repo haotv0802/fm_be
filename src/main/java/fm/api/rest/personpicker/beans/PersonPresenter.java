@@ -1,4 +1,4 @@
-package fm.api.rest.person.picker.beans;
+package fm.api.rest.personpicker.beans;
 
 import java.math.BigDecimal;
 import java.util.Date;

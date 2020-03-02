@@ -1,4 +1,4 @@
-package fm.api.rest.payment.methods.beans;
+package fm.api.rest.paymentmethods.beans;
 
 /**
  * Created by haho on 6/26/2017.

@@ -1,12 +1,14 @@
 package fm.api.rest.individual;
 
 import fm.api.rest.individual.interfaces.IIndividualDao;
+import fm.api.rest.moneysource.interfaces.IMoneySourceDao;
 import fm.common.JdbcUtils;
 import fm.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -21,10 +23,18 @@ public class IndividualDao implements IIndividualDao {
 
   private final NamedParameterJdbcTemplate namedTemplate;
 
+  private IMoneySourceDao moneySourceDao;
+
   @Autowired
-  public IndividualDao(NamedParameterJdbcTemplate namedTemplate) {
+  public IndividualDao(
+      NamedParameterJdbcTemplate namedTemplate,
+      @Qualifier("moneySourceDao") IMoneySourceDao moneySourceDao
+  ) {
     Assert.notNull(namedTemplate);
+    Assert.notNull(moneySourceDao);
+
     this.namedTemplate = namedTemplate;
+    this.moneySourceDao = moneySourceDao;
   }
 
   @Override
@@ -40,23 +50,9 @@ public class IndividualDao implements IIndividualDao {
         + "     i.email,                                          "
         + "     i.phone_number,                                   "
         + "     i.income,                                         "
-        + "     i.user_id,                                        "
-        + "     m.id money_source_id,                             "
-        + "     m.name money_source_name,                         "
-        + "     m.start_date money_source_start_date,             "
-        + "     m.expiry_date money_source_expiry_date,           "
-        + "     m.card_number money_source_card_number,           "
-        + "     m.amount money_source_credit_limit,               "
-        + "     m.card_type_id money_source_card_type_id,         "
-        + "     m.user_id,                                        "
-        + "     m.is_terminated money_source_is_terminated,       "
-        + "     m.bank_id money_source_bank_id                    "
+        + "     i.user_id                                         "
         + "    FROM                                               "
-        + "        (                                              "
-        + "            fm_individuals i                           "
-        + "            inner join fm_users u on i.user_id = u.id  "
-        + "        )                                              "
-        + "    inner join fm_money_source m on u.id = m.user_id   "
+        + "     fm_individuals i                                  "
         + "    WHERE                                              "
         + "    i.user_id = :userId                                "
     ;
@@ -77,14 +73,8 @@ public class IndividualDao implements IIndividualDao {
           individualPresenter.setEmail(rs.getString("email"));
           individualPresenter.setPhoneNumber(rs.getString("phone_number"));
           individualPresenter.setIncome(rs.getBigDecimal("income"));
-          individualPresenter.setMoneySourceId(rs.getLong("money_source_id"));
-          individualPresenter.setMoneySourceName(rs.getString("money_source_name"));
-          individualPresenter.setStartDate(JdbcUtils.toUtilDate(rs.getDate("money_source_start_date")));
-          individualPresenter.setExpiryDate(JdbcUtils.toUtilDate(rs.getDate("money_source_expiry_date")));
-          individualPresenter.setCardNumber(rs.getString("money_source_card_number"));
-          individualPresenter.setCreditLimit(rs.getBigDecimal("money_source_credit_limit"));
-          individualPresenter.setTerminated(rs.getBoolean("money_source_is_terminated"));
-          individualPresenter.setBankId(rs.getLong("money_source_bank_id"));
+
+          individualPresenter.setMoneySourcePresenters(this.moneySourceDao.getMoneySources(userId));
 
           return individualPresenter;
         }

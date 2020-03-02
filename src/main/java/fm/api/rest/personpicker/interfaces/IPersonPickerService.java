@@ -1,6 +1,6 @@
-package fm.api.rest.person.picker.interfaces;
+package fm.api.rest.personpicker.interfaces;
 
-import fm.api.rest.person.picker.beans.PersonPresenter;
+import fm.api.rest.personpicker.beans.PersonPresenter;
 
 import java.util.List;
 

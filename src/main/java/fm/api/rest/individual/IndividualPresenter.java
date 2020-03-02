@@ -1,7 +1,10 @@
 package fm.api.rest.individual;
 
+import fm.api.rest.moneysource.MoneySourcePresenter;
+
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by haoho on 2/28/20 14:16.
@@ -16,16 +19,7 @@ public class IndividualPresenter {
   private String email;
   private String phoneNumber;
   private BigDecimal income;
-
-  // Money Source
-  private Long moneySourceId;
-  private String moneySourceName;
-  private Date startDate;
-  private Date expiryDate;
-  private String cardNumber;
-  private BigDecimal creditLimit;
-  private Boolean terminated;
-  private Long bankId;
+  private List<MoneySourcePresenter> moneySourcePresenters;
 
   public Long getId() {
     return id;
@@ -99,67 +93,11 @@ public class IndividualPresenter {
     this.income = income;
   }
 
-  public Long getMoneySourceId() {
-    return moneySourceId;
+  public List<MoneySourcePresenter> getMoneySourcePresenters() {
+    return moneySourcePresenters;
   }
 
-  public void setMoneySourceId(Long moneySourceId) {
-    this.moneySourceId = moneySourceId;
-  }
-
-  public String getMoneySourceName() {
-    return moneySourceName;
-  }
-
-  public void setMoneySourceName(String moneySourceName) {
-    this.moneySourceName = moneySourceName;
-  }
-
-  public Date getStartDate() {
-    return startDate;
-  }
-
-  public void setStartDate(Date startDate) {
-    this.startDate = startDate;
-  }
-
-  public Date getExpiryDate() {
-    return expiryDate;
-  }
-
-  public void setExpiryDate(Date expiryDate) {
-    this.expiryDate = expiryDate;
-  }
-
-  public String getCardNumber() {
-    return cardNumber;
-  }
-
-  public void setCardNumber(String cardNumber) {
-    this.cardNumber = cardNumber;
-  }
-
-  public BigDecimal getCreditLimit() {
-    return creditLimit;
-  }
-
-  public void setCreditLimit(BigDecimal creditLimit) {
-    this.creditLimit = creditLimit;
-  }
-
-  public Boolean getTerminated() {
-    return terminated;
-  }
-
-  public void setTerminated(Boolean terminated) {
-    this.terminated = terminated;
-  }
-
-  public Long getBankId() {
-    return bankId;
-  }
-
-  public void setBankId(Long bankId) {
-    this.bankId = bankId;
+  public void setMoneySourcePresenters(List<MoneySourcePresenter> moneySourcePresenters) {
+    this.moneySourcePresenters = moneySourcePresenters;
   }
 }

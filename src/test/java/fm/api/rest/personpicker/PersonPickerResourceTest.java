@@ -1,4 +1,4 @@
-package fm.api.rest.payment.methods;
+package fm.api.rest.personpicker;
 
 import fm.api.rest.BaseDocumentation;
 import org.testng.annotations.Test;
@@ -7,15 +7,15 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * Created by haho on 6/26/2017.
+ * Created by haho on 7/5/2017.
  */
-public class PaymentMethodsResourceTest extends BaseDocumentation {
+public class PersonPickerResourceTest extends BaseDocumentation {
 
   @Test
-  public void testGetCardsInformation() throws Exception {
+  public void testGetPersonsList() throws Exception {
     mockMvc
-        .perform(get("/svc/paymentMethods")
-            .header("Accept-Language", "")
+        .perform(get("/svc/personPicker")
+            .header("Accept-Language", "en")
             .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
         )
         .andExpect(status().is(200))

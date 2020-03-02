@@ -1,8 +1,8 @@
-package fm.api.rest.person.picker;
+package fm.api.rest.personpicker;
 
 import fm.api.rest.BaseResource;
-import fm.api.rest.person.picker.beans.PersonPresenter;
-import fm.api.rest.person.picker.interfaces.IPersonPickerService;
+import fm.api.rest.personpicker.beans.PersonPresenter;
+import fm.api.rest.personpicker.interfaces.IPersonPickerService;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
