@@ -27,7 +27,6 @@ public class IndividualDao implements IIndividualDao {
     this.namedTemplate = namedTemplate;
   }
 
-
   @Override
   public IndividualPresenter getIndividual(int userId) {
     final String sql =
