@@ -8,5 +8,7 @@ import java.util.List;
  * Created by haoho on 3/2/20 10:58.
  */
 public interface IBankDao {
-  List<BankPresenter> getBanks(Integer userId);
+  List<BankPresenter> getBanksByUserId(Integer userId);
+
+  BankPresenter getBankById(Long id);
 }

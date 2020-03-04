@@ -26,6 +26,6 @@ public class BankService implements IBankService {
 
   @Override
   public List<BankPresenter> getBanks(Integer userId) {
-    return this.bankDao.getBanks(userId);
+    return this.bankDao.getBanksByUserId(userId);
   }
 }

@@ -30,7 +30,7 @@ public class BankDao implements IBankDao {
   }
 
   @Override
-  public List<BankPresenter> getBanks(Integer userId) {
+  public List<BankPresenter> getBanksByUserId(Integer userId) {
     final String sql =
           "SELECT                                            "
         + " b.id,                                            "
@@ -60,5 +60,37 @@ public class BankDao implements IBankDao {
     );
 
     return bankPresenters;
+  }
+
+  @Override
+  public BankPresenter getBankById(Long id) {
+    final String sql =
+              "SELECT      "
+            + " b.id,      "
+            + " b.name,    "
+            + " b.address, "
+            + " b.website  "
+            + "FROM        "
+            + " fm_banks b "
+            + "WHERE       "
+            + " b.id = :id "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("id", id);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    BankPresenter bank = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
+          BankPresenter bankPresenter = new BankPresenter();
+          bankPresenter.setId(rs.getLong("id"));
+          bankPresenter.setName(rs.getString("name"));
+          bankPresenter.setAddress(rs.getString("address"));
+          bankPresenter.setWebsite(rs.getString("website"));
+          return bankPresenter;
+        }
+    );
+
+    return bank;
   }
 }

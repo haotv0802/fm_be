@@ -1,5 +1,7 @@
 package fm.api.rest.moneysource;
 
+import fm.api.rest.bank.BankPresenter;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -15,6 +17,7 @@ public class MoneySourcePresenter {
   private BigDecimal creditLimit;
   private Boolean terminated;
   private Long bankId;
+  private BankPresenter bank;
 
   public Long getId() {
     return id;
@@ -78,5 +81,13 @@ public class MoneySourcePresenter {
 
   public void setBankId(Long bankId) {
     this.bankId = bankId;
+  }
+
+  public BankPresenter getBank() {
+    return bank;
+  }
+
+  public void setBank(BankPresenter bank) {
+    this.bank = bank;
   }
 }
