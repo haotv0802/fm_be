@@ -85,4 +85,36 @@ public class MoneySourceDao implements IMoneySourceDao {
 
     return moneyPresenters;
   }
+
+  @Override
+  public void updateMoneySource(MoneySourcePresenter moneySource) {
+    final String sql =
+              "UPDATE                              "
+            + "   fm_money_source                  "
+            + "SET                                 "
+            + "   name = :name,                    "
+            + "   start_date = DATE(:start_date),  "
+            + "   expiry_date = DATE(:expiry_date),"
+            + "   card_number = :card_number,      "
+            + "   amount = :amount,                "
+            + "   is_terminated = :terminated,     "
+            + "   bank_id = :bank_id               "
+            + "WHERE                               "
+            + "   id = :id                         "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", moneySource.getName());
+    paramsMap.addValue("start_date", moneySource.getStartDate());
+    paramsMap.addValue("expiry_date", moneySource.getExpiryDate());
+    paramsMap.addValue("card_number", moneySource.getCardNumber());
+    paramsMap.addValue("amount", moneySource.getCreditLimit());
+    paramsMap.addValue("terminated", moneySource.getTerminated());
+    paramsMap.addValue("bank_id", moneySource.getBankId());
+    paramsMap.addValue("id", moneySource.getId());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
 }

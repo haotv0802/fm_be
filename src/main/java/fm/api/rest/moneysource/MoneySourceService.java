@@ -21,4 +21,9 @@ public class MoneySourceService implements IMoneySourceService {
 
     this.moneySourceDao = moneySourceDao;
   }
+
+  @Override
+  public void updateMoneySource(MoneySourcePresenter moneySource) {
+    this.moneySourceDao.updateMoneySource(moneySource);
+  }
 }

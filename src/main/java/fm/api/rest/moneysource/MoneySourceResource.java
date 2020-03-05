@@ -1,6 +1,18 @@
 package fm.api.rest.moneysource;
 
 import fm.api.rest.BaseResource;
+import fm.api.rest.moneysource.interfaces.IMoneySourceService;
+import fm.auth.UserDetailsImpl;
+import fm.common.beans.HeaderLang;
+import io.jsonwebtoken.lang.Assert;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -8,4 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class MoneySourceResource extends BaseResource {
+
+  private IMoneySourceService moneySourceService;
+
+  @Autowired
+  public MoneySourceResource(
+      @Qualifier("moneySourceService") IMoneySourceService moneySourceService
+  ) {
+    Assert.notNull(moneySourceService);
+
+    this.moneySourceService = moneySourceService;
+  }
+
+  @PatchMapping("/moneysource")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public ResponseEntity getIndividual(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang,
+      @RequestBody MoneySourcePresenter moneySource
+  ) {
+    this.moneySourceService.updateMoneySource(moneySource);
+
+    return new ResponseEntity(HttpStatus.NO_CONTENT);
+  }
 }

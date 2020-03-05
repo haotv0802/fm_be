@@ -2,9 +2,6 @@ package fm.api.rest.individual;
 
 import fm.api.rest.BaseResource;
 import fm.api.rest.individual.interfaces.IIndividualService;
-import fm.api.rest.moneyflow.Item;
-import fm.api.rest.moneyflow.ItemPresenter;
-import fm.api.rest.moneyflow.validators.MoneyFlowEditValidation;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
 import io.jsonwebtoken.lang.Assert;
@@ -14,7 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Created by haoho on 2/28/20 13:46.
