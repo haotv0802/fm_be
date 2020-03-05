@@ -63,6 +63,35 @@ public class BankDao implements IBankDao {
   }
 
   @Override
+  public List<BankPresenter> getAllBanks() {
+    final String sql =
+              "SELECT      "
+            + " b.id,      "
+            + " b.name,    "
+            + " b.address, "
+            + " b.website  "
+            + "FROM        "
+            + " fm_banks b "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+          BankPresenter bankPresenter = new BankPresenter();
+          bankPresenter.setId(rs.getLong("id"));
+          bankPresenter.setName(rs.getString("name"));
+          bankPresenter.setAddress(rs.getString("address"));
+          bankPresenter.setWebsite(rs.getString("website"));
+          return bankPresenter;
+        }
+    );
+
+    return bankPresenters;
+  }
+
+  @Override
   public BankPresenter getBankById(Long id) {
     final String sql =
               "SELECT      "

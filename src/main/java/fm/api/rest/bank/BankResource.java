@@ -40,4 +40,13 @@ public class BankResource extends BaseResource {
     return this.bankService.getBanks(userDetails.getUserId());
   }
 
+  @GetMapping("/bank/all")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public List<BankPresenter> getAllBanks(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang
+  ) {
+    return this.bankService.getAllBanks();
+  }
+
 }

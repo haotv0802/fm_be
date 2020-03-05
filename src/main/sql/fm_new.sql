@@ -81,6 +81,7 @@ CREATE TABLE `fm_banks`
     `name`    VARCHAR(45) NOT NULL,
     `address` VARCHAR(45) NOT NULL,
     `website` VARCHAR(45),
+    `logo`    VARCHAR(45), -- Logos of Banks
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

@@ -10,5 +10,7 @@ import java.util.List;
 public interface IBankDao {
   List<BankPresenter> getBanksByUserId(Integer userId);
 
+  List<BankPresenter> getAllBanks();
+
   BankPresenter getBankById(Long id);
 }

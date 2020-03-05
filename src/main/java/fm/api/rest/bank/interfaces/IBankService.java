@@ -9,4 +9,6 @@ import java.util.List;
  */
 public interface IBankService {
   List<BankPresenter> getBanks(Integer userId);
+
+  List<BankPresenter> getAllBanks();
 }
