@@ -12,6 +12,7 @@ CREATE TABLE `fm_auth_token`
     `token_type`  VARCHAR(45) NOT NULL,
     `auth_object` BLOB        NOT NULL,
     `exp_date`    DATETIME    NOT NULL,
+    `created`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `auth_token_id_unique` (`id`)
 )
@@ -26,6 +27,7 @@ CREATE TABLE `fm_user_roles`
 (
     `id`        BIGINT      NOT NULL,
     `role_name` VARCHAR(45) NOT NULL,
+    `created`   DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_user_role_id_unique` (`id`),
     UNIQUE KEY `fm_user_role_role_name_unique` (`role_name`)
@@ -42,6 +44,7 @@ CREATE TABLE `fm_users`
     `id`        BIGINT      NOT NULL,
     `user_name` VARCHAR(45) NOT NULL,
     `password`  VARCHAR(45) NOT NULL,
+    `created`   DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_user_table_id_unique` (`id`),
     UNIQUE KEY `fm_user_table_user_name_unique` (`user_name`)
@@ -58,6 +61,7 @@ CREATE TABLE `fm_user_role_details`
     `id`      BIGINT NOT NULL AUTO_INCREMENT,
     `user_id` BIGINT NOT NULL,
     `role_id` BIGINT NOT NULL,
+    `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_user_role_unique` (`user_id`, `role_id`),
     UNIQUE KEY `fm_user_role_user_id_unique` (`user_id`), #  A user has just ONLY 1 role.
@@ -82,6 +86,7 @@ CREATE TABLE `fm_banks`
     `address` VARCHAR(45) NOT NULL,
     `website` VARCHAR(45),
     `logo`    VARCHAR(45), -- Logos of Banks
+    `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -102,6 +107,7 @@ CREATE TABLE `fm_individuals`
     `phone_number` VARCHAR(50),
     `income`       DOUBLE,
     `user_id`      BIGINT      NOT NULL,
+    `created`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_individuals_id_unique` (`id`),
     UNIQUE KEY `fm_individuals_user_id_unique` (`user_id`), #  An individual has ONLY 1 user account.
@@ -118,8 +124,9 @@ DROP
     TABLE IF EXISTS `fm_promotion_categories`;
 CREATE TABLE `fm_promotion_categories`
 (
-    `id`   BIGINT AUTO_INCREMENT,
-    `name` VARCHAR(45) NOT NULL,
+    `id`      BIGINT AUTO_INCREMENT,
+    `name`    VARCHAR(45) NOT NULL,
+    `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -140,6 +147,7 @@ CREATE TABLE `fm_promotions`
 
     `category_id` BIGINT      NOT NULL,
     `bank_id`     BIGINT      NOT NULL,
+    `created`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`),
     CONSTRAINT `fm_promotions_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
@@ -150,8 +158,10 @@ CREATE TABLE `fm_promotions`
 DROP TABLE IF EXISTS `fm_payment_methods`;
 CREATE TABLE `fm_payment_methods`
 (
-    `id`   BIGINT      NOT NULL AUTO_INCREMENT,
-    `name` VARCHAR(45) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
+    `id`      BIGINT      NOT NULL AUTO_INCREMENT,
+    `name`    VARCHAR(45) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
+    `logo`    VARCHAR(45) NULL,
+    `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_event_types_id_unique` (`id`)
 )
@@ -169,8 +179,9 @@ CREATE TABLE `fm_money_source`
     `amount`        DOUBLE      NOT NULL,
     `card_type_id`  BIGINT      NULL,
     `user_id`       BIGINT      NULL,
-    `is_terminated` BOOLEAN DEFAULT FALSE,
+    `is_terminated` BOOLEAN  DEFAULT FALSE,
     `bank_id`       BIGINT      NOT NULL,
+    `created`       DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_money_source_id_unique` (`id`, `card_number`, `user_id`),
     CONSTRAINT `fm_money_source_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
@@ -192,6 +203,10 @@ CREATE TABLE `fm_money_flow`
     `money_source_id` BIGINT      NULL, # if `is_an_event is TRUE, card_id is NULL, or card_id is NULL means CASH payment
     `is_deleted`      BOOLEAN  DEFAULT FALSE,
     `is_spending`     BOOLEAN  DEFAULT FALSE,
+    `created`         DATETIME DEFAULT now(),
+    `updated`         DATETIME DEFAULT now(),
+    `note`            VARCHAR(45) NULL, # Notes for item
+    `link`            VARCHAR(45) NULL, # URL for reference
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_expenses_id_unique` (`id`),
     CONSTRAINT `fm_expenses_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`),

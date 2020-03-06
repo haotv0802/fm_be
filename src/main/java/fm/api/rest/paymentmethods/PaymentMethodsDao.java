@@ -1,6 +1,7 @@
 package fm.api.rest.paymentmethods;
 
 import fm.api.rest.paymentmethods.beans.CardInformation;
+import fm.api.rest.paymentmethods.beans.PaymentMethod;
 import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsDao;
 import fm.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
@@ -60,6 +61,28 @@ public class PaymentMethodsDao implements IPaymentMethodsDao {
         card.setCardType(rs.getString("card_type"));
         return card;
       }
+    });
+  }
+
+  @Override
+  public List<PaymentMethod> getAllPaymentMethods() {
+    final String sql =
+              "SELECT              "
+            + " id,                "
+            + " name               "
+            + "FROM                "
+            + " fm_payment_methods "
+    ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, (RowMapper<PaymentMethod>) (rs, rowNum) -> {
+      PaymentMethod paymentMethod = new PaymentMethod();
+      paymentMethod.setId(rs.getLong("id"));
+      paymentMethod.setName(rs.getString("name"));
+      return paymentMethod;
     });
   }
 }

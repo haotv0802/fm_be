@@ -75,6 +75,7 @@ public class MoneySourceDao implements IMoneySourceDao {
           moneyPresenter.setCreditLimit(rs.getBigDecimal("amount"));
           moneyPresenter.setTerminated(rs.getBoolean("is_terminated"));
           moneyPresenter.setBankId(rs.getLong("bank_id"));
+          moneyPresenter.setPaymentMethodId(rs.getString("card_type_id"));
 
           BankPresenter bank = this.bankDao.getBankById(rs.getLong("bank_id"));
           moneyPresenter.setBank(bank);

@@ -2,6 +2,7 @@ package fm.api.rest.paymentmethods;
 
 import fm.api.rest.BaseResource;
 import fm.api.rest.paymentmethods.beans.CardInformation;
+import fm.api.rest.paymentmethods.beans.PaymentMethod;
 import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsService;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
@@ -37,5 +38,14 @@ public class PaymentMethodsResource extends BaseResource {
       @HeaderLang String lang) {
 
     return this.paymentMethodsService.getCardsInformation(userDetails.getUserId());
+  }
+
+  @GetMapping("/paymentMethod/list")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public List<PaymentMethod> getAllPaymentMethods(
+      @AuthenticationPrincipal UserDetailsImpl userDetails,
+      @HeaderLang String lang) {
+
+    return this.paymentMethodsService.getAllPaymentMethods();
   }
 }

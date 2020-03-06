@@ -14,6 +14,7 @@ public class MoneySourcePresenter {
   private Date startDate;
   private Date expiryDate;
   private String cardNumber;
+  private String paymentMethodId;
   private BigDecimal creditLimit;
   private Boolean terminated;
   private Long bankId;
@@ -89,5 +90,13 @@ public class MoneySourcePresenter {
 
   public void setBank(BankPresenter bank) {
     this.bank = bank;
+  }
+
+  public String getPaymentMethodId() {
+    return paymentMethodId;
+  }
+
+  public void setPaymentMethodId(String paymentMethodId) {
+    this.paymentMethodId = paymentMethodId;
   }
 }

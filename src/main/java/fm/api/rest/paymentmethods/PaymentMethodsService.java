@@ -1,6 +1,7 @@
 package fm.api.rest.paymentmethods;
 
 import fm.api.rest.paymentmethods.beans.CardInformation;
+import fm.api.rest.paymentmethods.beans.PaymentMethod;
 import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsDao;
 import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -26,5 +27,10 @@ public class PaymentMethodsService implements IPaymentMethodsService {
   @Override
   public List<CardInformation> getCardsInformation(int userId) {
     return this.paymentMethodsDao.getCardsInformation(userId);
+  }
+
+  @Override
+  public List<PaymentMethod> getAllPaymentMethods() {
+    return this.paymentMethodsDao.getAllPaymentMethods();
   }
 }
