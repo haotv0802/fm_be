@@ -1,8 +1,16 @@
 package fm.api.rest.promotions.crawler.utils;
-
+/* Quy created on 3/11/2020  */
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
+import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -13,36 +21,42 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class PromotionUtils {
+    private static final Logger LOGGER = LogManager.getLogger(PromotionUtils.class);
     public String getDate(String text){
-        String datePattern = "([0-9]+[/][0-9]+[/][0-9]{4}[.]{0,1})";
-        Pattern r = Pattern.compile(datePattern);
-        Matcher m = r.matcher(text);
-        StringBuilder sb = new StringBuilder();
-        while(m.find()){
-            if(sb.toString().equals("")){
-                sb.append(m.group(0));
-            }else{
-                sb.append("-");
-                sb.append(m.group(0));
+        if(text != null) {
+            String datePattern = "([0-9]+[/][0-9]+[/][0-9]{4}[.]{0,1})";
+            Pattern r = Pattern.compile(datePattern);
+            Matcher m = r.matcher(text);
+            StringBuilder sb = new StringBuilder();
+            while (m.find()) {
+                if (sb.toString().equals("")) {
+                    sb.append(m.group(0));
+                } else {
+                    sb.append("-");
+                    sb.append(m.group(0));
+                }
             }
-        }
-        if(!sb.toString().equals("")){
-            return sb.toString();
+            if (!sb.toString().equals("")) {
+                return sb.toString();
+            }
         }
         return null;
     }
 
     public String getProvision(String text){
-        String moneyPattern1 ="(([0-9]+[,][0-9]*)[d||đ||vnd||vnđ])";
-        String moneyPattern2 ="(([0-9]+)[%])";
-        Pattern p1= Pattern.compile(moneyPattern1);
-        Matcher m = p1.matcher(text);
-        Pattern p2= Pattern.compile(moneyPattern2);
-        Matcher m2 = p2.matcher(text);
-        if(m2.find()){
-            return m2.group();
-        }else if(m.find()){
-            return m.group();
+        if(text != null) {
+            String moneyPattern1 = "(([0-9]+[,][0-9]*)[d||đ||vnd||vnđ])";
+            String moneyPattern2 = "(([0-9]+)[%])";
+            LOGGER.info("Utils : " + text);
+            Pattern p1 = Pattern.compile(moneyPattern1);
+            Matcher m = p1.matcher(text);
+            Pattern p2 = Pattern.compile(moneyPattern2);
+            Matcher m2 = p2.matcher(text);
+            if (m2.find()) {
+                return m2.group();
+            } else if (m.find()) {
+                return m.group();
+            }
         }
         return null;
     }
@@ -78,7 +92,7 @@ public class PromotionUtils {
         return false;
     }
 
-    public void ExportProvisionExcelFile(Map<String,List<PromotionCrawlerModel>> listProvision, String bankName, String[]header){
+    public void exportProvisionExcelFile(Map<String,List<PromotionCrawlerModel>> listProvision, String bankName, String[]header){
         try {
             String SAMPLE_XLSX_FILE_PATH = bankName+".xlsx";
             Workbook workbook = new XSSFWorkbook();
@@ -132,6 +146,7 @@ public class PromotionUtils {
                 for(int i = 0; i < header.length; i++) {
                     sheet.autoSizeColumn(i);
                 }
+                System.out.println("Export here");
                 FileOutputStream fileOut = null;
                 fileOut = new FileOutputStream(SAMPLE_XLSX_FILE_PATH);
                 workbook.write(fileOut);
@@ -144,4 +159,6 @@ public class PromotionUtils {
         }
 
     }
+
+
 }

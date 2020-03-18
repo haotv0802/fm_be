@@ -1,5 +1,5 @@
 package fm.api.rest.promotions.crawler;
-
+/* Quy created on 3/11/2020  */
 import java.sql.Date;
 
 public class PromotionCrawlerModel {

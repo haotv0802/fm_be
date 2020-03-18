@@ -243,7 +243,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>6.0.5</version>
+            <version>8.0.12</version>
         </dependency>
         <!--Test dependencies group-->
         <dependency>
@@ -362,7 +362,7 @@
           <scope>provided</scope>
         </dependency>
         -->
-
+    <!-- Quy Add 13032020 -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
@@ -378,6 +378,22 @@
             <artifactId>jsoup</artifactId>
             <version>1.7.2</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180813</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+        <!-- Quy Add 13032020 -->
 
     </dependencies>
 
@@ -413,18 +429,18 @@
                 </configuration>
             </plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.tomcat.maven</groupId>-->
-                <!--<artifactId>tomcat7-maven-plugin</artifactId>-->
-                <!--<version>2.2</version>-->
-                <!--&lt;!&ndash; Each developer is to register in theirs own settings.xml a server with id LocalTomcat and a variable $tomcat8.manager.url&ndash;&gt;-->
-                <!--<configuration>-->
-                    <!--<url>${tomcat8.manager.url}</url>-->
-                    <!--<port>8880</port>-->
-                    <!--<server>LocalTomcat8</server>-->
-                    <!--<path>/${project.build.finalName}</path>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <!-- Each developer is to register in theirs own settings.xml a server with id LocalTomcat and a variable $tomcat8.manager.url-->
+                <configuration>
+                    <url>${tomcat8.manager.url}</url>
+                    <port>8880</port>
+                    <server>LocalTomcat8</server>
+                    <path>/${project.build.finalName}</path>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

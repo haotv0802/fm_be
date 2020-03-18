@@ -1,7 +1,7 @@
-package fm.api.rest.promotions.crawler;
-
+package fm.api.rest.promotions.crawler.utils;
+/* Quy created on 3/11/2020  */
+import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
-import fm.api.rest.promotions.crawler.utils.PromotionUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -15,8 +15,8 @@ public class VIBBank implements IPromotionCrawlerService {
     private final PromotionUtils utils = new PromotionUtils();
     private Set<String> listDetailPromoLink = new HashSet<>();
     @Override
-    public void getListPromotionInfo() {
-        List<String> listLinks = utils.getBankPromotionLinks("./config/VIB.properties","VIB");
+    public boolean getListPromotionInfo() {
+        List<String> listLinks = utils.getBankPromotionLinks("./properties/VIB.properties","VIB");
         if(!listLinks.isEmpty()){
             try {
                 Map<String,List<PromotionCrawlerModel>> listPromotion= new TreeMap<>();
@@ -38,13 +38,15 @@ public class VIBBank implements IPromotionCrawlerService {
 
                 }
                 String[] headers = {"Bank","TiTle","Contain","Discount","Category","Start Beign","Date Expire", "Html","Link"};
-                utils.ExportProvisionExcelFile(listPromotion,"VIBBank",headers);
+                utils.exportProvisionExcelFile(listPromotion,"VIBBank",headers);
                 listDetailPromoLink.clear();
+                return true;
             }catch (IOException e){
                 e.printStackTrace();
             }
 
         }
+        return false;
     }
 
     @Override
