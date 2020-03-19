@@ -24,6 +24,12 @@ public class SCBBank {
     private final String mainLink="https://www.scb.com.vn/";
     private PromotionUtils utils= new PromotionUtils();
     private Set<String> listDetailPromoLinks= new HashSet<>();
+    private final String tagTime="Thời gian";
+    private final String tagCardType="Áp dụng";
+    private final String tagCondition="Điều kiện điều khoản";
+    private final String tagLocation="Địa chỉ";
+    private final String tagPromotion="Ưu đãi";
+
 
     public boolean getListPromotionInfo() {
         Map<String, List<PromotionCrawlerModel>> listPromotion= new TreeMap<>();
@@ -34,22 +40,21 @@ public class SCBBank {
                     List<PromotionCrawlerModel> bankProvisionModels = new ArrayList<>();
                     Document promoDoc = Jsoup.connect(link).get();
                     int pageLimit = getLimitPagePromotionCate(promoDoc.getElementsByClass("page-num"));
-//                    for(int i=0;i < pageLimit ; i++){
-//                        String pageLinkPromo = StringUtils.substring(link,0,link.length()-1)+i;
-//                        promoDoc =Jsoup.connect(pageLinkPromo).get();
-//                        Elements promoDivEls = promoDoc.select(".small-plus-item > a");
-//                        for(Element promoDivEl : promoDivEls){
-//                            String linkDetail = promoDivEl.attr("href").toString();
-//                            System.out.println(linkDetail);
-//                            if(listDetailPromoLinks.add(linkDetail)){
-//                                bankProvisionModels.add(getPromotionFromLink(linkDetail,link.split("/")[6]));
-//                            }else{
-//                                System.out.println("ERROR : The link promo is already existed in List");
-//                            }
-//
-//                        }
-//                    }
-                    getPromotionFromLink("https://www.scb.com.vn/vie/uu-dai-chu-the/renaissance-riverside-hotel-saigon","AA");
+                    for(int i=0;i < pageLimit ; i++){
+                        String pageLinkPromo = StringUtils.substring(link,0,link.length()-1)+i;
+                        promoDoc =Jsoup.connect(pageLinkPromo).get();
+                        Elements promoDivEls = promoDoc.select(".small-plus-item > a");
+                        for(Element promoDivEl : promoDivEls){
+                            String linkDetail = promoDivEl.attr("href").toString();
+                            System.out.println(linkDetail);
+                            if(listDetailPromoLinks.add(linkDetail)){
+                                bankProvisionModels.add(getPromotionFromLink(linkDetail,link.split("/")[6]));
+                            }else{
+                                System.out.println("ERROR : The link promo is already existed in List");
+                            }
+
+                        }
+                    }
                     listPromotion.put(link.split("/")[6],bankProvisionModels);
                     for (PromotionCrawlerModel model : bankProvisionModels){
                         System.out.println(model.getHtmlText());
@@ -59,9 +64,9 @@ public class SCBBank {
                         System.out.println(model.getStartDate());
                         System.out.println(model.getEndDate());
                     }
-//                    System.out.println("done");
-//                    String[] headers = {"Bank","TiTle","Contain","Discount","Category","Start Beign","Date Expire", "Html","Link","imgURL","cardType","condition","location"};
-//                    utils.exportProvisionExcelFile(listPromotion,"SCBBank",headers);
+                    System.out.println("done");
+                    String[] headers = {"Bank","TiTle","Contain","Discount","Category","Start Beign","Date Expire", "Html","Link","imgURL","cardType","condition","location"};
+                    utils.exportProvisionExcelFile(listPromotion,"SCBBank",headers);
                 }
                 listDetailPromoLinks.clear();
                 return true;
@@ -80,23 +85,24 @@ public class SCBBank {
         try {
             String startDate="" ;
             String endDate ="" ;
-            Document docPromoDetailInfo = Jsoup.connect(link).get();
-            byte[] utf8Bytes = docPromoDetailInfo.outerHtml().getBytes("UTF-8");
-            String roundTrip = new String(utf8Bytes, "UTF-8");
+//            String tagTime=new String("Thời gian".getBytes(),"UTF-8");
+//            String tagCardType=new String("Áp dụng".getBytes(),"UTF-8");
+//            String tagCondition=new String("Điều kiện điều khoản".getBytes(),"UTF-8");
+//            String tagLocation=new String("Địa chỉ".getBytes(),"UTF-8");
+            Document docPromoDetailInfo = Jsoup.connect(link).timeout(5 * 1000).get();
             docPromoDetailInfo.outputSettings().charset(Charset.forName("UTF-8"));
-            System.out.println(roundTrip);
             Elements elPromoDetailInfo = docPromoDetailInfo.getElementsByClass("content-1");
             String title = getTitle(docPromoDetailInfo.select(".sale-detail-wrap"),".title-d-1");
-            String content = getDetail(elPromoDetailInfo,"p","Ưu Đãi");
-            String date = getDetail(elPromoDetailInfo,"p","Thời gian");
-            String cardType = getDetail(elPromoDetailInfo,"p","Áp dụng");
-            String condition = getDetail(elPromoDetailInfo,"p","Điều kiện điều khoản");
-            String location = getDetail(elPromoDetailInfo,"p","Địa Chỉ");
-            String htmlText = getDetail(elPromoDetailInfo,"content-1","HTML");
+            String content = getDetail(elPromoDetailInfo,"p",0);
+            String date = getDetail(elPromoDetailInfo,"p",1);
+            String cardType = getDetail(elPromoDetailInfo,"p",2);
+            String condition = getDetail(elPromoDetailInfo,"p",3);
+            String location = getDetail(elPromoDetailInfo,"p",4);
+            String htmlText = getDetail(elPromoDetailInfo,"content-1",5);
             String img = getImg(elPromoDetailInfo,"p > img");
             if(date!=null){
-                startDate = date.split("đến")[0];
-                endDate = date.split("đến")[1];
+                startDate = date.split(new String("đến".getBytes(),"UTF-8"))[0];
+                endDate = date.split(new String("đến".getBytes(),"UTF-8"))[1];
             }
             PromotionCrawlerModel model = new PromotionCrawlerModel(title, content,utils.getProvision(content),startDate,endDate,categoryName,"SCB",htmlText, link, img,cardType,condition,location);
             return model;
@@ -106,17 +112,19 @@ public class SCBBank {
         return null;
     }
 
-    public String getDetail(Elements container, String selector, String tagName) {
+    public String getDetail(Elements container, String selector, int tagNumb) {
+        String initTag=initTagName(tagNumb);
         Elements promoDetailEls = container.select(selector);
-        if(tagName.equals("HTML")){
+        if(initTag.equals("HTML")){
             System.out.println("HTLM");
             return container.outerHtml();
         }
         for(Element promoDetail:promoDetailEls){
 //            System.out.println("Detail 1");
-            if(promoDetail.text().contains(tagName)){
+
+            if(promoDetail.text().contains(initTag)){
                 System.out.println("Detail 2");
-                if(promoDetail.text().length() <= tagName.length() + 3){
+                if(promoDetail.text().length() <= initTag.length() + 8){
                     System.out.println("Detail 3");
                     if(promoDetail.nextElementSibling().select("li").size() >0){
                         System.out.println("Detail 4");
@@ -143,6 +151,27 @@ public class SCBBank {
         return null;
     }
 
+    public String initTagName(int tagName){
+        String result="";
+        switch (tagName){
+            case 0:
+                return result="Ưu đãi";
+            case 1:
+                return  result="Thời gian";
+            case 2:
+                return result="Áp dụng";
+            case 3:
+                return result="Điều kiện điều khoản";
+            case 4:
+                return result="Địa chỉ";
+            case 5:
+                return result="HTML";
+                default:
+                    return result="Không có gì";
+
+
+        }
+    }
     public int getLimitPagePromotionCate(Elements elements){
         Elements numberPage = elements.select("li");
         return numberPage.size();
