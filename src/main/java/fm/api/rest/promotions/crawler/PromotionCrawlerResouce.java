@@ -12,14 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PromotionCrawlerResouce extends BaseResource {
     private static final Logger LOGGER = LogManager.getLogger(PromotionCrawlerResouce.class);
     private IBankPromotionCrawler bankPromotionCrawler;
+
     @Autowired
     public PromotionCrawlerResouce(
             @Qualifier("bankPromotionCrawler") IBankPromotionCrawler bankPromotionCrawler
@@ -27,6 +28,7 @@ public class PromotionCrawlerResouce extends BaseResource {
         Assert.notNull(bankPromotionCrawler);
         this.bankPromotionCrawler = bankPromotionCrawler;
     }
+
     @GetMapping("/promotions/crawler/{bankID}")
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public String crawlingPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
