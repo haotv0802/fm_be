@@ -3,6 +3,7 @@
 
  import fm.api.rest.promotions.crawler.interfaces.IBankService;
  import fm.api.rest.promotions.crawler.utils.SCBBank;
+ import fm.api.rest.promotions.crawler.utils.ShinHanBank;
  import fm.api.rest.promotions.crawler.utils.VIBBank;
 
  public class BankPromoServiceImpl implements IBankService {
@@ -20,6 +21,7 @@
 
   @Override
   public void SHBankPromotionCrawling() {
-
+   ShinHanBank bank = new ShinHanBank();
+   bank.doPostRequest("");
   }
  }

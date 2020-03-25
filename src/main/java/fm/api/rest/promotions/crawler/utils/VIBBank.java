@@ -1,28 +1,34 @@
 package fm.api.rest.promotions.crawler.utils;
 /* Quy created on 3/11/2020  */
+import fm.api.rest.promotions.crawler.PromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
+import fm.api.rest.promotions.crawler.interfaces.IBankPromotionService;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.util.*;
 
-public class VIBBank implements IPromotionCrawlerService {
+public class VIBBank implements IBankPromotionService {
     private final String mainLink="https://www.vib.com.vn/";
     private final PromotionUtils utils = new PromotionUtils();
     private Set<String> listDetailPromoLink = new HashSet<>();
+
+
+
     @Override
-    public boolean getListPromotionInfo() {
+    public Map<String,List<PromotionCrawlerModel>> getListPromotionInfo() {
         List<String> listLinks = utils.getBankPromotionLinks("./properties/VIB.properties","VIB");
         if(!listLinks.isEmpty()){
             try {
                 Map<String,List<PromotionCrawlerModel>> listPromotion= new TreeMap<>();
                 for(String item : listLinks){
                     List<PromotionCrawlerModel> listModel = new ArrayList<>();
-                    Document pagePromoByCate = Jsoup.connect(item).get();
+                    Document pagePromoByCate = Jsoup.connect(item).timeout(1000*5).get();
                     Element promotionContainer = pagePromoByCate.getElementById("promotionList");
                     Elements promotionbox = promotionContainer.select(".vib-v2-world-box");
                     for (Element el : promotionbox){
@@ -40,13 +46,13 @@ public class VIBBank implements IPromotionCrawlerService {
                 String[] headers = {"Bank","TiTle","Contain","Discount","Category","Start Beign","Date Expire", "Html","Link"};
                 utils.exportProvisionExcelFile(listPromotion,"VIBBank",headers);
                 listDetailPromoLink.clear();
-                return true;
+                return listPromotion;
             }catch (IOException e){
                 e.printStackTrace();
             }
 
         }
-        return false;
+        return null;
     }
 
     @Override
@@ -102,4 +108,5 @@ public class VIBBank implements IPromotionCrawlerService {
         }
         return locationLists;
     }
+
 }

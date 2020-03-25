@@ -24,14 +24,8 @@ public class SCBBank {
     private final String mainLink="https://www.scb.com.vn/";
     private PromotionUtils utils= new PromotionUtils();
     private Set<String> listDetailPromoLinks= new HashSet<>();
-    private final String tagTime="Thời gian";
-    private final String tagCardType="Áp dụng";
-    private final String tagCondition="Điều kiện điều khoản";
-    private final String tagLocation="Địa chỉ";
-    private final String tagPromotion="Ưu đãi";
 
-
-    public boolean getListPromotionInfo() {
+    public Map<String, List<PromotionCrawlerModel>> getListPromotionInfo() {
         Map<String, List<PromotionCrawlerModel>> listPromotion= new TreeMap<>();
         List<String> listLinks = utils.getBankPromotionLinks("./properties/SCB.properties","SCB");
         if(!listLinks.isEmpty()){
@@ -69,26 +63,19 @@ public class SCBBank {
                     utils.exportProvisionExcelFile(listPromotion,"SCBBank",headers);
                 }
                 listDetailPromoLinks.clear();
-                return true;
+                return listPromotion;
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return false;
+        return null;
     }
-    @Test
-    public void test(){
-        getPromotionFromLink("https://www.scb.com.vn/vie/uu-dai-chu-the/renaissance-riverside-hotel-saigon","AA");
-    }
+
 
     public PromotionCrawlerModel getPromotionFromLink(String link, String categoryName) {
         try {
             String startDate="" ;
             String endDate ="" ;
-//            String tagTime=new String("Thời gian".getBytes(),"UTF-8");
-//            String tagCardType=new String("Áp dụng".getBytes(),"UTF-8");
-//            String tagCondition=new String("Điều kiện điều khoản".getBytes(),"UTF-8");
-//            String tagLocation=new String("Địa chỉ".getBytes(),"UTF-8");
             Document docPromoDetailInfo = Jsoup.connect(link).timeout(5 * 1000).get();
             docPromoDetailInfo.outputSettings().charset(Charset.forName("UTF-8"));
             Elements elPromoDetailInfo = docPromoDetailInfo.getElementsByClass("content-1");
@@ -168,8 +155,6 @@ public class SCBBank {
                 return result="HTML";
                 default:
                     return result="Không có gì";
-
-
         }
     }
     public int getLimitPagePromotionCate(Elements elements){

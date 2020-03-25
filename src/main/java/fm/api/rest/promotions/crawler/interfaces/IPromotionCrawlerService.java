@@ -8,8 +8,6 @@ import java.util.List;
 @Service("promotionCrawlerService")
 public interface IPromotionCrawlerService {
 
-    boolean getListPromotionInfo();
-    PromotionCrawlerModel getPromotionFromLink(String link, String categoryName);
-    String getDetail(Elements container , String selector , String tagName);
-    List<String> getLocations(Elements container);
+    String insertBankPromotion(PromotionCrawlerModel model);
+
 }
