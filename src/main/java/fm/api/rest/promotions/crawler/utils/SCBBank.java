@@ -80,7 +80,7 @@ public class SCBBank {
             docPromoDetailInfo.outputSettings().charset(Charset.forName("UTF-8"));
             Elements elPromoDetailInfo = docPromoDetailInfo.getElementsByClass("content-1");
             String title = getTitle(docPromoDetailInfo.select(".sale-detail-wrap"),".title-d-1");
-            String content = getDetail(elPromoDetailInfo,"p",0);
+             String content = getDetail(elPromoDetailInfo,"p",0);
             String date = getDetail(elPromoDetailInfo,"p",1);
             String cardType = getDetail(elPromoDetailInfo,"p",2);
             String condition = getDetail(elPromoDetailInfo,"p",3);
