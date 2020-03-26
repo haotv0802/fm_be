@@ -5,6 +5,7 @@ package fm.api.rest.promotions.crawler;
 
 
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
+import fm.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -34,7 +35,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     @Override
     public boolean savePromotion(PromotionCrawlerModel promoModel) {
         final String sqlStatement=
-                "INSERT INTO"
+                "INSERT INTO "
                 +"fm_promotions p "
                 +"(title,"
                 +"content,"
@@ -43,14 +44,8 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
                 +"end_date,"
                 +"category_id,"
                 +"bank_id)"
-                +"VALUES"
-                +"(:title,"
-                +":content,"
-                +":discount,"
-                +":start_date,"
-                +":end_date,"
-                +":category_id,"
-                +":bank_id)";
+                +" VALUES "
+                +"(:title,:content,:discount,:start_date,:end_date,:category_id,:bank_id) END ";
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("title",promoModel.getTitle());
         paramsMap.addValue("content",promoModel.getContent());
@@ -63,6 +58,8 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         paramsMap.addValue("end_date",promoModel.getEndDate());
         paramsMap.addValue("category_id","1");
         paramsMap.addValue("bank_id","2");
+        System.out.println(sqlStatement);
+        DaoUtils.debugQuery(LOGGER, sqlStatement, paramsMap.getValues());
         namedTemplate.update(sqlStatement,paramsMap);
         return true;
     }
