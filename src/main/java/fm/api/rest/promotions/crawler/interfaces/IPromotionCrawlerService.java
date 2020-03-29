@@ -9,5 +9,6 @@ import java.util.List;
 public interface IPromotionCrawlerService {
 
     String insertBankPromotion(PromotionCrawlerModel model);
+    List<PromotionCrawlerModel> getPrmoTionByBankIdAndCate(int bankID , int categoryID);
 
 }

@@ -8,6 +8,8 @@
  import org.springframework.stereotype.Service;
  import org.springframework.util.Assert;
 
+ import java.util.List;
+
  @Service("promotionCrawlerService")
  public class PromotionCrawlerService implements IPromotionCrawlerService {
   private IPromotionCrawlerDAO promotionCrawlerDAO;
@@ -27,5 +29,11 @@
     message = "SUCCESS";
    }
    return message;
+  }
+
+  @Override
+  public List<PromotionCrawlerModel> getPrmoTionByBankIdAndCate(int bankID, int categoryID) {
+   promotionCrawlerDAO.getPrmoTionByBankIdAndCate(bankID,categoryID);
+   return null;
   }
  }
