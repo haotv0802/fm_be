@@ -53,7 +53,7 @@ public class PromotionCrawlerResouce extends BaseResource {
             case 1:System.out.println("VIB");
                 message="Success VIB";
 //                bankPromotionService.getPrmoTionByBankIdAndCate(2,1);
-                PromotionCrawlerModel model = new PromotionCrawlerModel("Agoda","Giảm 10% đặt phòng","7%","","2020-04-10","1","2","AA","AA","AA","A","AA","A");
+                PromotionCrawlerModel model = new PromotionCrawlerModel("Agoda","giảm 10% khi đặt phòng tại....","7%","","2020-04-10","1","2","AA","AA","AA","A","AA","A");
                 bankPromotionService.insertBankPromotion(model);
 //                listMap=bankPromotionCrawler.VIBBankPromotion();
 //                for(String item : listMap.keySet()){
