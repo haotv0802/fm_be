@@ -140,7 +140,7 @@ CREATE TABLE `fm_promotions`
 (
     `id`          BIGINT AUTO_INCREMENT,
     `title`       VARCHAR(45) NOT NULL,
-    `content`     VARCHAR(45) NOT NULL,
+    `content`     TEXT NOT NULL,
     `discount`    VARCHAR(45) NOT NULL, # Could be % or specific amount
     `start_date`  DATE        NOT NULL,
     `end_date`    DATE        NOT NULL,
