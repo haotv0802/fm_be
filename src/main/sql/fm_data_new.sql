@@ -51,7 +51,7 @@ VALUES
   (2, 56000, 'Vinasun', '2017-05-02', FALSE, NULL),
   (2, 78000, 'New Sun Hotel', '2017-05-03', FALSE, NULL),
   (2, 90000, 'Bun Bo Ganh', '2017-05-04', FALSE, NULL),
-  (2, 120000, 'That\'s cafe', '2017-05-05', FALSE, NULL),
+  (2, 120000, 'That s cafe', '2017-05-05', FALSE, NULL),
   (2, 14000, 'Citibank annual fee', '2017-05-06', FALSE, 1),
   (2, 45000, 'Maximax', '2017-05-07', FALSE, 1),
   (2, 5000, 'Highlands Coffee', '2017-05-08', FALSE, 1),
@@ -68,3 +68,9 @@ VALUES
   (2, 50000, 'Traveloka', '2017-06-09', FALSE, 1),
   (2, 20000, 'Uber', '2017-06-12', FALSE, 1)
 ;
+
+INSERT INTO fm_promotion_categories (name) VALUES ('Du Lịch');
+INSERT INTO fm_promotion_categories (name) VALUES ('Sức Khỏe');
+INSERT INTO fm_promotion_categories (name) VALUES ('Giáo Dục');
+INSERT INTO fm_promotion_categories (name) VALUES ('Khác');
+
