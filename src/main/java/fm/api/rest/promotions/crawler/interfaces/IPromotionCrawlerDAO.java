@@ -9,5 +9,5 @@ import java.util.Map;
 
 public interface IPromotionCrawlerDAO {
  boolean savePromotion(PromotionCrawlerModel model);
- List<PromotionPresenter> getPrmoTionByBankIdAndCate(int bankID , int categoryID);
+ List<PromotionPresenter> getPrmoTionByBankIdAndCate(int bankID);
 }

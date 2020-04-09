@@ -2,30 +2,29 @@ package fm.api.rest.promotions.crawler.utils;
 /* Quy created on 3/11/2020  */
 import fm.api.rest.promotions.crawler.PromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
+import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.junit.Test;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
 
-
-public class SCBBank {
+@Service("scbCrawler")
+public class SCBCrawler implements IBankPromotionCrawler {
     private static final Logger LOGGER = LogManager.getLogger(PromotionCrawlerDAO.class);
     private final String mainLink="https://www.scb.com.vn/";
     private PromotionUtils utils= new PromotionUtils();
     private Set<String> listDetailPromoLinks= new HashSet<>();
 
-    public Map<String, List<PromotionCrawlerModel>> getListPromotionInfo() {
+    @Override
+    public Map<String, List<PromotionCrawlerModel>> crawl() {
         Map<String, List<PromotionCrawlerModel>> listPromotion= new TreeMap<>();
         List<String> listLinks = utils.getBankPromotionLinks("./properties/SCB.properties","SCB");
         if(!listLinks.isEmpty()){
@@ -60,7 +59,7 @@ public class SCBBank {
                     }
                     System.out.println("done");
                     String[] headers = {"Bank","TiTle","Contain","Discount","Category","Start Beign","Date Expire", "Html","Link","imgURL","cardType","condition","location"};
-                    utils.exportProvisionExcelFile(listPromotion,"SCBBank",headers);
+                    utils.exportProvisionExcelFile(listPromotion,"SCBCrawler",headers);
                 }
                 listDetailPromoLinks.clear();
                 return listPromotion;
@@ -70,7 +69,6 @@ public class SCBBank {
         }
         return null;
     }
-
 
     public PromotionCrawlerModel getPromotionFromLink(String link, String categoryName) {
         try {
@@ -88,10 +86,10 @@ public class SCBBank {
             String htmlText = getDetail(elPromoDetailInfo,"content-1",5);
             String img = getImg(elPromoDetailInfo,"p > img");
             if(date!=null){
-                startDate = date.split(new String("đến".getBytes(),"UTF-8"))[0];
-                endDate = date.split(new String("đến".getBytes(),"UTF-8"))[1];
+                startDate = date.split(new String("??n".getBytes(),"UTF-8"))[0];
+                endDate = date.split(new String("??n".getBytes(),"UTF-8"))[1];
             }
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content,utils.getProvision(content),startDate,endDate,categoryName,"SCB",htmlText, link, img,cardType,condition,location);
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content,utils.getProvision(content)!=null?utils.getProvision(content):"0",startDate,endDate,0,3,htmlText, link, img,cardType,condition,location);
             return model;
         } catch (IOException e) {
             e.printStackTrace();
@@ -142,15 +140,15 @@ public class SCBBank {
         String result="";
         switch (tagName){
             case 0:
-                return result="Ưu đãi";
+                return result="?u ?ãi";
             case 1:
-                return  result="Thời gian";
+                return  result="Th?i gian";
             case 2:
-                return result="Áp dụng";
+                return result="Áp d?ng";
             case 3:
-                return result="Điều kiện điều khoản";
+                return result="?i?u ki?n ?i?u kho?n";
             case 4:
-                return result="Địa chỉ";
+                return result="??a ch?";
             case 5:
                 return result="HTML";
                 default:
@@ -177,4 +175,7 @@ public class SCBBank {
         }
         return null;
     }
+
+
+
 }

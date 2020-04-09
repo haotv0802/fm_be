@@ -70,7 +70,14 @@ VALUES
 ;
 
 INSERT INTO fm_promotion_categories (name) VALUES ('Du Lịch');
+INSERT INTO fm_promotion_categories (name) VALUES ('Nhà Hàng');
+INSERT INTO fm_promotion_categories (name) VALUES ('Mua Sắm');
 INSERT INTO fm_promotion_categories (name) VALUES ('Sức Khỏe');
 INSERT INTO fm_promotion_categories (name) VALUES ('Giáo Dục');
+INSERT INTO fm_promotion_categories (name) VALUES('Điện tử Trả góp');
+INSERT INTO fm_promotion_categories (name) VALUES('Mua sắm Trả góp');
+INSERT INTO fm_promotion_categories (name) VALUES('Sức Khỏe Trả góp');
+INSERT INTO fm_promotion_categories (name) VALUES('Du lịch Trả góp');
+INSERT INTO fm_promotion_categories (name) VALUES('Giáo dục Trả góp');
 INSERT INTO fm_promotion_categories (name) VALUES ('Khác');
 

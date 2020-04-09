@@ -1,6 +1,7 @@
  /* Quy created on 3/22/2020 */
  package fm.api.rest.promotions.crawler;
 
+ import fm.api.rest.promotions.PromotionPresenter;
  import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
  import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
  import org.springframework.beans.factory.annotation.Autowired;
@@ -12,28 +13,27 @@
 
  @Service("promotionCrawlerService")
  public class PromotionCrawlerService implements IPromotionCrawlerService {
-  private IPromotionCrawlerDAO promotionCrawlerDAO;
+     private IPromotionCrawlerDAO promotionCrawlerDAO;
 
-  @Autowired
-  public PromotionCrawlerService(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO promotionCrawlerDAO){
-   Assert.notNull(promotionCrawlerDAO);
-   this.promotionCrawlerDAO = promotionCrawlerDAO;
-  }
+     @Autowired
+     public PromotionCrawlerService(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO promotionCrawlerDAO) {
+         Assert.notNull(promotionCrawlerDAO);
+         this.promotionCrawlerDAO = promotionCrawlerDAO;
+     }
 
 
-  @Override
-  public String insertBankPromotion(PromotionCrawlerModel moddel) {
-   String message = "FAILED";
-   boolean check =promotionCrawlerDAO.savePromotion(moddel);
-   if(check){
-    message = "SUCCESS";
-   }
-   return message;
-  }
+     @Override
+     public String insertBankPromotion(PromotionCrawlerModel moddel) {
+         String message = "FAILED";
+         boolean check = promotionCrawlerDAO.savePromotion(moddel);
+         if (check) {
+             message = "SUCCESS";
+         }
+         return message;
+     }
 
-  @Override
-  public List<PromotionCrawlerModel> getPrmoTionByBankIdAndCate(int bankID, int categoryID) {
-   promotionCrawlerDAO.getPrmoTionByBankIdAndCate(bankID,categoryID);
-   return null;
-  }
+     @Override
+     public List<PromotionPresenter> getPrmoTionByBankIdAndCate(int bankID) {
+         return promotionCrawlerDAO.getPrmoTionByBankIdAndCate(bankID);
+     }
  }

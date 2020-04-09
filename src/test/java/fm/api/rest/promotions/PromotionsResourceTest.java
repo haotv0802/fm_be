@@ -4,6 +4,8 @@ import fm.api.rest.BaseDocumentation;
 import org.springframework.http.MediaType;
 import org.testng.annotations.Test;
 
+import java.io.UnsupportedEncodingException;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -12,17 +14,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class PromotionsResourceTest extends BaseDocumentation {
 
-  @Test
-  public void testPromotionsCrawler() throws Exception {
+    @Test
+    public void testPromotionsCrawler() throws Exception {
 
-    mockMvc
-        .perform(get("/svc/promotions/crawler/1")
-            .header("Accept-Language", "en")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-            .contentType(MediaType.APPLICATION_JSON)
-        )
-        .andExpect(status().is(201))
-    ;
-  }
+        mockMvc
+                .perform(get("/svc/promotions/crawler/vib")
+                        .header("Accept-Language", "en")
+                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().is(201))
+        ;
+    }
 
 }

@@ -19,7 +19,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 @Service("promotionCrawlerDao")
 public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
@@ -37,6 +39,8 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     // Save promotion Value into DB
     @Override
     public boolean savePromotion(PromotionCrawlerModel promoModel) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd",
+                Locale.ENGLISH);
         final String sqlStatement=
                 "INSERT INTO "
                 +"fm_promotions "
@@ -48,7 +52,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
                 +"category_id,"
                 +"bank_id)"
                 +" VALUES "
-                +"(:title,:content,:discount,:start_date,:end_date,:category_id,:bank_id)";
+                +"(:title,:content,:discount,DATE_FORMAT(:start_date, '%Y-%m-%d'),DATE_FORMAT(:end_date, '%Y-%m-%d'),:category_id,:bank_id)";
         try {
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("title",promoModel.getTitle());
@@ -57,10 +61,13 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         if(promoModel.getStartDate().equals("")){
             paramsMap.addValue("start_date", "2000-02-10");
         }else{
-            java.util.Date date = new SimpleDateFormat("YYYY-MM_DD").parse(promoModel.getStartDate());
-            paramsMap.addValue("start_date",date);
+            Date parsedDate = sdf.parse(promoModel.getStartDate());
+            SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
+            paramsMap.addValue("start_date",print.format(parsedDate));
         }
-        paramsMap.addValue("end_date",promoModel.getEndDate());
+        SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
+        Date endDate = print.parse(promoModel.getEndDate());
+        paramsMap.addValue("end_date",print.format(endDate));
         paramsMap.addValue("category_id","1");
         paramsMap.addValue("bank_id","2");
         DaoUtils.debugQuery(LOGGER, sqlStatement, paramsMap.getValues());
@@ -72,16 +79,14 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     }
 
     @Override
-    public List<PromotionPresenter> getPrmoTionByBankIdAndCate(int bankID, int categoryID) {
+    public List<PromotionPresenter> getPrmoTionByBankIdAndCate(int bankID) {
         final String sqlQuery=
                 "SELECT *" +
                         "FROM fm_promotions " +
-                        "WHERE bank_id=:bank_id " +
-                        "AND category_id = :category_id ";
+                        "WHERE bank_id=:bank_id ";
         try {
             final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
             paramsMap.addValue("bank_id",bankID);
-            paramsMap.addValue("category_id",categoryID);
             DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
             List<PromotionPresenter> result = namedTemplate.query(sqlQuery,paramsMap,(rs,rowNum) -> buildExpense(rs));
             return  result;

@@ -17,8 +17,8 @@ public class PromotionCrawlerModel {
     private String discount;
     private String startDate;
     private String endDate;
-    private String category;
-    private String bankId;
+    private int categoryId;
+    private int bankId;
     private String htmlText;
     private String linkDetail;
     private String imgURL;
@@ -26,13 +26,13 @@ public class PromotionCrawlerModel {
     private String condition;
     private String location;
 
-    public PromotionCrawlerModel(String title, String content, String discount, String startDate, String endDate, String category, String bankId, String htmlText, String linkDetail, String imgURL, String cardType, String condition, String location) {
+    public PromotionCrawlerModel(String title, String content, String discount, String startDate, String endDate, int categoryId, int bankId, String htmlText, String linkDetail, String imgURL, String cardType, String condition, String location) {
         this.title = title;
         this.content = content;
         this.discount = discount;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.category = category;
+        this.categoryId = categoryId;
         this.bankId = bankId;
         this.htmlText = htmlText;
         this.linkDetail = linkDetail;
@@ -82,19 +82,19 @@ public class PromotionCrawlerModel {
         this.endDate = endDate;
     }
 
-    public String getCategory() {
-        return category;
+    public int getCategoryId() {
+        return categoryId;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setCategoryId(int categoryId) {
+        this.categoryId = categoryId;
     }
 
-    public String getBankId() {
+    public int getBankId() {
         return bankId;
     }
 
-    public void setBankId(String bankId) {
+    public void setBankId(int bankId) {
         this.bankId = bankId;
     }
 

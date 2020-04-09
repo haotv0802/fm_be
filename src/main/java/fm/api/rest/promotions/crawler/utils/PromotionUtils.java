@@ -1,16 +1,10 @@
 package fm.api.rest.promotions.crawler.utils;
 /* Quy created on 3/11/2020  */
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
-import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -98,7 +92,7 @@ public class PromotionUtils {
             Workbook workbook = new XSSFWorkbook();
             for(String category : listProvision.keySet()){
                 CreationHelper creationHelper = workbook.getCreationHelper();
-                Sheet sheet = workbook.createSheet(category+"_"+listProvision.get(category).get(0).getCategory());
+                Sheet sheet = workbook.createSheet(category);
                 Font headerFont = workbook.createFont();
                 headerFont.setBold(true);
                 headerFont.setFontHeightInPoints((short) 14);
@@ -121,7 +115,7 @@ public class PromotionUtils {
                         row.createCell(1).setCellValue(item.getTitle());
                         row.createCell(2).setCellValue(item.getContent());
                         row.createCell(3).setCellValue(item.getDiscount());
-                        row.createCell(4).setCellValue(item.getCategory());
+                        row.createCell(4).setCellValue(item.getCategoryId());
                         row.createCell(5).setCellValue(item.getStartDate());
                         row.createCell(6).setCellValue(item.getEndDate());
                         row.createCell(7).setCellValue(item.getHtmlText());
@@ -135,7 +129,7 @@ public class PromotionUtils {
                         row.createCell(1).setCellValue(item.getTitle());
                         row.createCell(2).setCellValue(item.getContent());
                         row.createCell(3).setCellValue(item.getDiscount());
-                        row.createCell(4).setCellValue(item.getCategory());
+                        row.createCell(4).setCellValue(item.getCategoryId());
                         row.createCell(5).setCellValue(item.getStartDate());
                         row.createCell(6).setCellValue(item.getEndDate());
                         row.createCell(7).setCellValue(item.getHtmlText());

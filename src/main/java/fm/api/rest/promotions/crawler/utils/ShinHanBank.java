@@ -2,6 +2,7 @@
  package fm.api.rest.promotions.crawler.utils;
 
  import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
+ import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
  import org.apache.http.NameValuePair;
  import org.apache.http.client.entity.UrlEncodedFormEntity;
  import org.apache.http.client.methods.CloseableHttpResponse;
@@ -12,6 +13,7 @@
  import org.apache.http.util.EntityUtils;
  import org.json.JSONArray;
  import org.json.JSONObject;
+ import org.springframework.stereotype.Service;
 
  import java.io.IOException;
  import java.net.URL;
@@ -20,13 +22,17 @@
  import java.util.Map;
  import java.util.TreeMap;
 
- public class ShinHanBank {
-  public boolean doPostRequest(String link){
+ @Service("shinhanCrawler")
+ public class ShinHanBank implements IBankPromotionCrawler {
+
+  @Override
+  public Map<String, List<PromotionCrawlerModel>> crawl() {
+   final String mainLink="https://shinhan.com.vn/get_shinhan_promotion";
    Map<String,List<PromotionCrawlerModel>> listPromotions = new TreeMap<>();
    try {
     List<PromotionCrawlerModel> list = new ArrayList<>();
     String result="";
-    HttpPost postConnection = new HttpPost(link);
+    HttpPost postConnection = new HttpPost(mainLink);
     List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
     urlParameters.add(new BasicNameValuePair("_token", "iEWghzwz8FGa0yCkILYxWtwJx1A8Ya1avRJyPyay"));
     urlParameters.add(new BasicNameValuePair("province", "all"));
@@ -67,15 +73,18 @@
       System.out.println("get_permalinks : " + get_permalinks);
       System.out.println("category : " + category.toString());
       System.out.println("*************************");
-      list.add(new PromotionCrawlerModel(title,description,date_start,date_end,type,image_future,category.toString(),get_permalinks,"","","","","")) ;
+//      list.add(new PromotionCrawlerModel(title,description,date_start,date_end,type,image_future,4,get_permalinks,"","","","","")) ;
      }
-     return true;
     }
 
 
    }  catch (IOException e) {
     System.out.println(e.getMessage());
    }
-   return false;
+   return null;
   }
+
+
+
+
  }
