@@ -1,4 +1,4 @@
-﻿// /* Quy created on 4/8/2020 */
+// /* Quy created on 4/8/2020 */
  package fm.api.rest.promotions.crawler.interfaces;
 
  import fm.api.rest.promotions.crawler.PromotionCrawlerModel;

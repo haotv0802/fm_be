@@ -3,7 +3,6 @@ package fm.api.rest.promotions.crawler;
 
 import fm.api.rest.BaseResource;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotion;
-import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
 import fm.auth.UserDetailsImpl;
 import fm.common.beans.HeaderLang;
 import io.jsonwebtoken.lang.Assert;
@@ -21,16 +20,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class PromotionResource extends BaseResource {
     private static final Logger LOGGER = LogManager.getLogger(PromotionResource.class);
     private IBankPromotion bankPromotion;
-//    private IPromotionCrawlerService bankPromotionService;
 
     @Autowired
-    public PromotionResource(
-            @Qualifier("bankPromotion") IBankPromotion bankPromotion
-//            @Qualifier("promotionCrawlerService") IPromotionCrawlerService bankPromotionService
-    ) {
+    public PromotionResource(@Qualifier("bankPromotion") IBankPromotion bankPromotion){
         Assert.notNull(bankPromotion);
         this.bankPromotion = bankPromotion;
-//        this.bankPromotionService = bankPromotionService;
     }
 
     @GetMapping("/promotions/crawler/{bankID}")
