@@ -18,7 +18,7 @@ public class PromotionsResourceTest extends BaseDocumentation {
     public void testPromotionsCrawler() throws Exception {
 
         mockMvc
-                .perform(get("/svc/promotions/crawler/vib")
+                .perform(get("/svc/promotions/crawler/scb")
                         .header("Accept-Language", "en")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)

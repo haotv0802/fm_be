@@ -1,10 +1,16 @@
 package fm.api.rest.promotions.crawler.utils;
 /* Quy created on 3/11/2020  */
+import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
+import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
+import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,8 +20,18 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Service("promoUtils")
 public class PromotionUtils {
     private static final Logger LOGGER = LogManager.getLogger(PromotionUtils.class);
+    private IPromotionCrawlerDAO iPromotionCrawlerDAO;
+
+    @Autowired
+    public PromotionUtils(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO){
+        Assert.notNull(iPromotionCrawlerDAO);
+        this.iPromotionCrawlerDAO=iPromotionCrawlerDAO;
+    }
+
+
     public String getDate(String text){
         if(text != null) {
             String datePattern = "([0-9]+[/][0-9]+[/][0-9]{4}[.]{0,1})";
@@ -34,7 +50,7 @@ public class PromotionUtils {
                 return sb.toString();
             }
         }
-        return null;
+        return "";
     }
 
     public String getProvision(String text){
@@ -154,5 +170,30 @@ public class PromotionUtils {
 
     }
 
+
+    public boolean checkInfoExit(PromotionCrawlerModel model, List<PromotionPresenter> list) {
+        if (!list.isEmpty()) {
+            for (PromotionPresenter item : list) {
+                if (model.getTitle().equals(item.getTitle())) {
+                    if (model.getContent().equals(item.getContent())) {
+                        if (!model.getDiscount().equals(item.getDiscount()) || !model.getEndDate().equals(item.getEndDate())) {
+                            //do update
+                            LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
+                            return true;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
+    public List<PromotionPresenter> initBankData(int bankId) {
+        List<PromotionPresenter> listBankDataInfo = new ArrayList<>();
+        listBankDataInfo = iPromotionCrawlerDAO.getPrmoTionByBankId(bankId);
+        return listBankDataInfo;
+    }
 
 }

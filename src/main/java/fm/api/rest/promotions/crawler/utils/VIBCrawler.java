@@ -22,24 +22,27 @@ import java.util.*;
 public class VIBCrawler implements IBankPromotionCrawler {
 
     private static final Logger LOGGER = LogManager.getLogger(VIBCrawler.class);
-    private final PromotionUtils utils = new PromotionUtils();
+    private  PromotionUtils promotionUtils;
     private Set<String> listDetailPromoLink = new HashSet<>();
     private IPromotionCrawlerDAO iPromotionCrawlerDAO;
 
 
     @Autowired
-    public VIBCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO) {
+    public VIBCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
+                      @Qualifier("promoUtils") PromotionUtils promotionUtils) {
         Assert.notNull(iPromotionCrawlerDAO);
+        Assert.notNull(promotionUtils);
         this.iPromotionCrawlerDAO = iPromotionCrawlerDAO;
+        this.promotionUtils=promotionUtils;
     }
 
     @Override
     public Map<String, List<PromotionCrawlerModel>> crawl() {
         final String mainLink = "https://www.vib.com.vn/";
-        List<String> listLinks = utils.getBankPromotionLinks("./properties/VIB.properties", "VIB");
+        List<String> listLinks = promotionUtils.getBankPromotionLinks("./properties/VIB.properties", "VIB");
         if (!listLinks.isEmpty()) {
             try {
-                List<PromotionPresenter> listPromoBankData = initBankData(2);
+                List<PromotionPresenter> listPromoBankData = promotionUtils.initBankData(2);
                 Map<String, List<PromotionCrawlerModel>> listPromotion = new TreeMap<>();
                 for (int i = 0; i < listLinks.size(); i++) {
                     List<PromotionCrawlerModel> listModel = new ArrayList<>();
@@ -57,7 +60,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
                         PromotionCrawlerModel model = getPromotionFromLink(link, i);
                         if(model !=null) {
-                            if (checkInfoExit(model, listPromoBankData)) {
+                            if (promotionUtils.checkInfoExit(model, listPromoBankData)) {
                                 LOGGER.info("VIB Bank Promotion Data is Existed");
                             } else {
                                 listModel.add(model);
@@ -70,7 +73,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
                 }
                 String[] headers = {"Bank", "TiTle", "Contain", "Discount", "Category", "Start Beign", "Date Expire", "Html", "Link"};
-                utils.exportProvisionExcelFile(listPromotion, "VIBBank", headers);
+                promotionUtils.exportProvisionExcelFile(listPromotion, "VIBBank", headers);
                 listDetailPromoLink.clear();
                 return listPromotion;
             } catch (IOException e) {
@@ -94,7 +97,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
             String content = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "Content");
             List<String> location = getLocations(promotionPageEls);
             String htmlText = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "HTML");
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, utils.getProvision(content) != null ? utils.getProvision(content) : "0", "", endDate, categoryId, 2, htmlText, link, "IMG", "CARD TYPE", "CONDITION", "LOCATION");
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", "", endDate, categoryId, 2, htmlText, link, "IMG", "CARD TYPE", "CONDITION", "LOCATION");
             return model;
         } catch (Exception e) {
 //            e.printStackTrace();
@@ -109,7 +112,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
                 String result = item.select(selector).text();
                 if (!result.equals("")) {
                     if (tagName.equals("End Date")) {
-                        return utils.getDate(result);
+                        return promotionUtils.getDate(result);
                     } else if (tagName.equals("HTML")) {
                         return item.select(selector).outerHtml();
                     } else {
@@ -136,26 +139,4 @@ public class VIBCrawler implements IBankPromotionCrawler {
         return locationLists;
     }
 
-    private boolean checkInfoExit(PromotionCrawlerModel model, List<PromotionPresenter> list) {
-        for (PromotionPresenter item : list) {
-            if (model.getTitle().equals(item.getTitle())) {
-                if (model.getContent().equals(item.getContent())) {
-                    if (!model.getDiscount().equals(item.getDiscount()) || !model.getEndDate().equals(item.getEndDate())) {
-                        //do update
-                        LOGGER.info("Update VIB Promotion - Promotion link  :  "+ model.getLinkDetail());
-                        return true;
-                    } else {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    private List<PromotionPresenter> initBankData(int bankId) {
-        List<PromotionPresenter> listBankDataInfo = new ArrayList<>();
-        listBankDataInfo = iPromotionCrawlerDAO.getPrmoTionByBankIdAndCate(bankId);
-        return listBankDataInfo;
-    }
 }

@@ -35,41 +35,8 @@ public class PromotionResource extends BaseResource {
 
 
         this.bankPromotion.crawl(bankID);
-        String message = "FALSE";
+        String message = "Success";
         bankPromotion.crawl(bankID);
-//        Map<String, List<PromotionCrawlerModel>> listMap = new TreeMap<>();
-//        switch (bankID) {
-//            case 0:
-//                System.out.println("SCB");
-//                message = "Success SCB";
-//                listMap = bankPromotionCrawler.SCBBankPromotion();
-//                for (String item : listMap.keySet()) {
-//                    for (PromotionCrawlerModel model : listMap.get(item)) {
-//                        bankPromotionService.insertBankPromotion(model);
-//                    }
-//                }
-//                break;
-//            case 1:
-//                System.out.println("VIB");
-//                message = "Thành Công VIB";
-////                bankPromotionService.getPrmoTionByBankIdAndCate(2,1);
-//                List<PromotionPresenter> listBankPromoInfo = bankPromotionService.getPrmoTionByBankIdAndCate(2);
-//                listMap = bankPromotionCrawler.VIBBankPromotion(listBankPromoInfo);
-//                for (String item : listMap.keySet()) {
-//                    for (PromotionCrawlerModel model : listMap.get(item)) {
-//                        bankPromotionService.insertBankPromotion(model);
-//                    }
-//                }
-//
-//                break;
-//            case 2:
-//                System.out.println("ShinHan");
-//                message = "Success SH";
-//                bankPromotionCrawler.SHBankPromotion();
-//                break;
-//        }
-//
-//
         return message;
     }
 

@@ -33,7 +33,7 @@
      }
 
      @Override
-     public List<PromotionPresenter> getPrmoTionByBankIdAndCate(int bankID) {
-         return promotionCrawlerDAO.getPrmoTionByBankIdAndCate(bankID);
+     public List<PromotionPresenter> getPrmoTionByBankId(int bankID) {
+         return promotionCrawlerDAO.getPrmoTionByBankId(bankID);
      }
  }
