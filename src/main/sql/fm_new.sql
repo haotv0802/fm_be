@@ -139,14 +139,14 @@ DROP
 CREATE TABLE `fm_promotions`
 (
     `id`          BIGINT AUTO_INCREMENT,
-    `title`       VARCHAR(45) NOT NULL,
+    `title`       VARCHAR(45)    NOT NULL,
     `content`     NVARCHAR(9000) NOT NULL,
-    `discount`    VARCHAR(45) NOT NULL, # Could be % or specific amount
-    `start_date`  DATE        NOT NULL,
-    `end_date`    DATE        NOT NULL,
-
-    `category_id` BIGINT      NOT NULL,
-    `bank_id`     BIGINT      NOT NULL,
+    `discount`    VARCHAR(45)    NOT NULL, # Could be % or specific amount
+    `start_date`  DATE           NOT NULL,
+    `end_date`    DATE           NOT NULL,
+    `url`         VARCHAR(200)   NOT NULL,
+    `category_id` BIGINT         NOT NULL,
+    `bank_id`     BIGINT         NOT NULL,
     `created`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`),
