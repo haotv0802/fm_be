@@ -1,6 +1,7 @@
 package fm.api.rest.promotions.crawler.utils;
 /* Quy created on 3/11/2020  */
 
+import fm.api.rest.promotions.PromotionModel;
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
@@ -177,5 +178,16 @@ public class SCBCrawler implements IBankPromotionCrawler {
         return null;
     }
 
+    private Map<String, List<PromotionModel>> getEntertainment() {
+        // get category Name by id
+        // INT ID = map.getValue(PromotionConstants.ENTERTAINMENT)
+        // /// CARWLING
+
+        /// put map.put(ID, LIST);
+        //return MAP
+//        this.iPromotionCrawlerDAO.getCategoryAndId().get(PropertyFile.Entertainment);
+
+        return null;
+    }
 
 }

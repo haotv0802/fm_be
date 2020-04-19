@@ -19,10 +19,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service("promotionCrawlerDao")
 public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
@@ -88,8 +85,8 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     public List<PromotionPresenter> getPrmoTionByBankId(int bankID) {
         List<PromotionPresenter> result = new ArrayList<>();
         final String sqlQuery =
-                "SELECT *" +
-                        "FROM fm_promotions " +
+                        "SELECT *               " +
+                        "FROM fm_promotions     " +
                         "WHERE bank_id=:bank_id ";
         try {
             final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -101,6 +98,31 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
             e.printStackTrace();
         }
         return result;
+    }
+
+    @Override
+    public Map<String, Integer> getCategoryAndId() {
+
+        final String sqlQuery =
+                        "SELECT name, id FROM fm_promotion_categories               ";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+        DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
+
+        Map<String, Object> results = namedTemplate.queryForMap(sqlQuery, paramsMap);
+        Set keys = results.keySet();
+        Iterator<String> iterator = keys.iterator();
+
+        Map<String, Integer> categoriesAndIdlist = new HashMap<>();
+
+        while(iterator.hasNext()) {
+            String key = iterator.next();
+
+            categoriesAndIdlist.put(key, (Integer) results.get(key));
+        }
+
+        return categoriesAndIdlist;
     }
 
 
