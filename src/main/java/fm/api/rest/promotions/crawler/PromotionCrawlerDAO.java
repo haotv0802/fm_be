@@ -24,118 +24,120 @@ import java.util.*;
 @Service("promotionCrawlerDao")
 public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
 
-    private static final Logger LOGGER = LogManager.getLogger(PromotionCrawlerDAO.class);
-    private final NamedParameterJdbcTemplate namedTemplate;
+  private static final Logger LOGGER = LogManager.getLogger(PromotionCrawlerDAO.class);
+  private final NamedParameterJdbcTemplate namedTemplate;
 
-    @Autowired
-    public PromotionCrawlerDAO(NamedParameterJdbcTemplate namedTemplate) {
-        Assert.notNull(namedTemplate);
-        this.namedTemplate = namedTemplate;
+  @Autowired
+  public PromotionCrawlerDAO(NamedParameterJdbcTemplate namedTemplate) {
+    Assert.notNull(namedTemplate);
+    this.namedTemplate = namedTemplate;
 
+  }
+
+  // Save promotion Value into DB
+  @Override
+  public boolean savePromotion(PromotionCrawlerModel promoModel) {
+    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd",
+        Locale.ENGLISH);
+    final String sqlStatement =
+        "INSERT INTO "
+            + "fm_promotions "
+            + "(title,"
+            + "content,"
+            + "discount,"
+            + "start_date,"
+            + "end_date,"
+            + "category_id,"
+            + "bank_id)"
+            + " VALUES "
+            + "(:title,:content,:discount,DATE_FORMAT(:start_date, '%Y-%m-%d'),DATE_FORMAT(:end_date, '%Y-%m-%d'),:category_id,:bank_id)";
+    try {
+      final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+      paramsMap.addValue("title", promoModel.getTitle());
+      paramsMap.addValue("content", promoModel.getContent());
+      paramsMap.addValue("discount", promoModel.getDiscount());
+      if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
+        paramsMap.addValue("start_date", "2000-02-10");
+      } else {
+        Date parsedDate = sdf.parse(promoModel.getStartDate());
+        SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
+        paramsMap.addValue("start_date", print.format(parsedDate));
+      }
+      if (promoModel.getEndDate().equals("")) {
+        SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
+        Date endDate = print.parse(promoModel.getEndDate());
+        paramsMap.addValue("end_date", print.format(endDate));
+      } else {
+        paramsMap.addValue("end_date", "2000-02-10");
+      }
+
+      paramsMap.addValue("category_id", "1");
+      paramsMap.addValue("bank_id", "2");
+      DaoUtils.debugQuery(LOGGER, sqlStatement, paramsMap.getValues());
+      namedTemplate.update(sqlStatement, paramsMap);
+    } catch (ParseException e) {
+      e.printStackTrace();
     }
+    return true;
+  }
 
-    // Save promotion Value into DB
-    @Override
-    public boolean savePromotion(PromotionCrawlerModel promoModel) {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MMM-dd",
-                Locale.ENGLISH);
-        final String sqlStatement =
-                "INSERT INTO "
-                        + "fm_promotions "
-                        + "(title,"
-                        + "content,"
-                        + "discount,"
-                        + "start_date,"
-                        + "end_date,"
-                        + "category_id,"
-                        + "bank_id)"
-                        + " VALUES "
-                        + "(:title,:content,:discount,DATE_FORMAT(:start_date, '%Y-%m-%d'),DATE_FORMAT(:end_date, '%Y-%m-%d'),:category_id,:bank_id)";
-        try {
-            final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-            paramsMap.addValue("title", promoModel.getTitle());
-            paramsMap.addValue("content", promoModel.getContent());
-            paramsMap.addValue("discount", promoModel.getDiscount());
-            if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
-                paramsMap.addValue("start_date", "2000-02-10");
-            } else {
-                Date parsedDate = sdf.parse(promoModel.getStartDate());
-                SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
-                paramsMap.addValue("start_date", print.format(parsedDate));
-            }
-            if(promoModel.getEndDate().equals("")){
-                SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
-                Date endDate = print.parse(promoModel.getEndDate());
-                paramsMap.addValue("end_date", print.format(endDate));
-            }else{
-                paramsMap.addValue("end_date", "2000-02-10");
-            }
-
-            paramsMap.addValue("category_id", "1");
-            paramsMap.addValue("bank_id", "2");
-            DaoUtils.debugQuery(LOGGER, sqlStatement, paramsMap.getValues());
-            namedTemplate.update(sqlStatement, paramsMap);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return true;
+  @Override
+  public List<PromotionPresenter> getPrmoTionByBankId(int bankID, int category_id) {
+    List<PromotionPresenter> result = new ArrayList<>();
+    final String sqlQuery =
+        "SELECT *               " +
+            "FROM fm_promotions     " +
+            "WHERE bank_id=:bank_id " +
+            "AND category_id=:category_id   ";
+    try {
+      final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+      paramsMap.addValue("bank_id", bankID);
+      paramsMap.addValue("category_id", category_id);
+      DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
+      result = namedTemplate.query(sqlQuery, paramsMap, (rs, rowNum) -> buildExpense(rs));
+      return result;
+    } catch (Exception e) {
+      e.printStackTrace();
     }
+    return result;
+  }
 
-    @Override
-    public List<PromotionPresenter> getPrmoTionByBankId(int bankID) {
-        List<PromotionPresenter> result = new ArrayList<>();
-        final String sqlQuery =
-                        "SELECT *               " +
-                        "FROM fm_promotions     " +
-                        "WHERE bank_id=:bank_id ";
-        try {
-            final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-            paramsMap.addValue("bank_id", bankID);
-            DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
-            result = namedTemplate.query(sqlQuery, paramsMap, (rs, rowNum) -> buildExpense(rs));
-            return result;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
+  @Override
+  public Map<String, Integer> getCategoryAndId(String name) {
 
-    @Override
-    public Map<String, Integer> getCategoryAndId() {
+    final String sqlQuery =
+        "SELECT name, id FROM fm_promotion_categories  WHERE  name=:name            ";
 
-        final String sqlQuery =
-                        "SELECT name, id FROM fm_promotion_categories               ";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name",name);
+    DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
 
-        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    Map<String, Object> results = namedTemplate.queryForMap(sqlQuery, paramsMap);
+    Set keys = results.keySet();
+//    Iterator<String> iterator = keys.iterator();
 
-        DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
+    Map<String, Integer> categoriesAndIdlist = new HashMap<>();
+    categoriesAndIdlist.put((String)results.get("name"), Math.toIntExact((Long) results.get("id")));
+//    while (iterator.hasNext()) {
+//      String key = iterator.next();
+//
+//      categoriesAndIdlist.put(key, (Integer) results.get(key));
+//    }
 
-        Map<String, Object> results = namedTemplate.queryForMap(sqlQuery, paramsMap);
-        Set keys = results.keySet();
-        Iterator<String> iterator = keys.iterator();
-
-        Map<String, Integer> categoriesAndIdlist = new HashMap<>();
-
-        while(iterator.hasNext()) {
-            String key = iterator.next();
-
-            categoriesAndIdlist.put(key, (Integer) results.get(key));
-        }
-
-        return categoriesAndIdlist;
-    }
+    return categoriesAndIdlist;
+  }
 
 
-    private PromotionPresenter buildExpense(ResultSet rs) throws SQLException {
-        PromotionPresenter presenter = new PromotionPresenter();
-        presenter.setId(rs.getInt("id"));
-        presenter.setTitle(rs.getString("title"));
-        presenter.setContent(rs.getString("content"));
-        presenter.setDiscount(rs.getString("discount"));
-        presenter.setStartDate(rs.getDate("start_date").toString());
-        presenter.setEndDate(rs.getDate("end_date").toString());
-        presenter.setCategoryID(rs.getInt("category_id"));
-        presenter.setBankId(rs.getInt("bank_id"));
-        return presenter;
-    }
+  private PromotionPresenter buildExpense(ResultSet rs) throws SQLException {
+    PromotionPresenter presenter = new PromotionPresenter();
+    presenter.setId(rs.getInt("id"));
+    presenter.setTitle(rs.getString("title"));
+    presenter.setContent(rs.getString("content"));
+    presenter.setDiscount(rs.getString("discount"));
+    presenter.setStartDate(rs.getDate("start_date").toString());
+    presenter.setEndDate(rs.getDate("end_date").toString());
+    presenter.setCategoryID(rs.getInt("category_id"));
+    presenter.setBankId(rs.getInt("bank_id"));
+    return presenter;
+  }
 }

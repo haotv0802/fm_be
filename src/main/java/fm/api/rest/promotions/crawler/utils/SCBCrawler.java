@@ -42,55 +42,55 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
     @Override
     public Map<String, List<PromotionCrawlerModel>> crawl() {
-        Map<String, List<PromotionCrawlerModel>> listPromotion = new TreeMap<>();
-        List<String> listLinks = promotionUtils.getBankPromotionLinks("./properties/SCB.properties", "SCB");
-        if (!listLinks.isEmpty()) {
-            try {
-                List<PromotionPresenter> listBankPromoData = promotionUtils.initBankData(3);
-                int tagNum =1 ;
-                for (String link : listLinks) {
-                    List<PromotionCrawlerModel> bankProvisionModels = new ArrayList<>();
-                    Document promoDoc = Jsoup.connect(link).get();
-                    int pageLimit = getLimitPagePromotionCate(promoDoc.getElementsByClass("page-num"));
-                    for (int i = 0; i < pageLimit; i++) {
-                        String pageLinkPromo = StringUtils.substring(link, 0, link.length() - 1) + i;
-                        promoDoc = Jsoup.connect(pageLinkPromo).get();
-                        Elements promoDivEls = promoDoc.select(".small-plus-item > a");
-                        for (Element promoDivEl : promoDivEls) {
-                            String linkDetail = promoDivEl.attr("href").toString();
-                            System.out.println(linkDetail);
-                            if (listDetailPromoLinks.add(linkDetail)) {
-                                System.out.println("Link failed: " + linkDetail);
-                            } else {
-                                LOGGER.error("The link promotion SCB is already existed in List " + linkDetail);
-                            }
-                        }
-                    }
-                    for (String linkPromo : listDetailPromoLinks) {
-                        Thread.sleep(2000);
-                        System.out.println("Linke nè : "+ linkPromo);
-                        PromotionCrawlerModel model = getPromotionFromLink(linkPromo);
-                        if(listBankPromoData.isEmpty()){
-                            bankProvisionModels.add(model);
-                        }else{
-                            if (promotionUtils.checkInfoExit(model, listBankPromoData)) {
-                                bankProvisionModels.add(model);
-                            }
-                        }
-
-                    }
-
-                    listPromotion.put(tagNum+"", bankProvisionModels);
-                    String[] headers = {"Bank", "TiTle", "Contain", "Discount", "Category", "Start Beign", "Date Expire", "Html", "Link", "imgURL", "cardType", "condition", "location"};
-                    promotionUtils.exportProvisionExcelFile(listPromotion, "SCBCrawler", headers);
-                    tagNum++;
-                }
-                listDetailPromoLinks.clear();
-                return listPromotion;
-            } catch (Exception e) {
-                LOGGER.error(e.getMessage());
-            }
-        }
+//        Map<String, List<PromotionCrawlerModel>> listPromotion = new TreeMap<>();
+//        List<String> listLinks = promotionUtils.getBankPromotionLinks("./properties/SCB.properties", "SCB");
+//        if (!listLinks.isEmpty()) {
+//            try {
+//                List<PromotionPresenter> listBankPromoData = promotionUtils.initBankData(3);
+//                int tagNum =1 ;
+//                for (String link : listLinks) {
+//                    List<PromotionCrawlerModel> bankProvisionModels = new ArrayList<>();
+//                    Document promoDoc = Jsoup.connect(link).get();
+//                    int pageLimit = getLimitPagePromotionCate(promoDoc.getElementsByClass("page-num"));
+//                    for (int i = 0; i < pageLimit; i++) {
+//                        String pageLinkPromo = StringUtils.substring(link, 0, link.length() - 1) + i;
+//                        promoDoc = Jsoup.connect(pageLinkPromo).get();
+//                        Elements promoDivEls = promoDoc.select(".small-plus-item > a");
+//                        for (Element promoDivEl : promoDivEls) {
+//                            String linkDetail = promoDivEl.attr("href").toString();
+//                            System.out.println(linkDetail);
+//                            if (listDetailPromoLinks.add(linkDetail)) {
+//                                System.out.println("Link failed: " + linkDetail);
+//                            } else {
+//                                LOGGER.error("The link promotion SCB is already existed in List " + linkDetail);
+//                            }
+//                        }
+//                    }
+//                    for (String linkPromo : listDetailPromoLinks) {
+//                        Thread.sleep(2000);
+//                        System.out.println("Linke nè : "+ linkPromo);
+//                        PromotionCrawlerModel model = getPromotionFromLink(linkPromo);
+//                        if(listBankPromoData.isEmpty()){
+//                            bankProvisionModels.add(model);
+//                        }else{
+//                            if (promotionUtils.checkInfoExit(model, listBankPromoData)) {
+//                                bankProvisionModels.add(model);
+//                            }
+//                        }
+//
+//                    }
+//
+//                    listPromotion.put(tagNum+"", bankProvisionModels);
+//                    String[] headers = {"Bank", "TiTle", "Contain", "Discount", "Category", "Start Beign", "Date Expire", "Html", "Link", "imgURL", "cardType", "condition", "location"};
+//                    promotionUtils.exportProvisionExcelFile(listPromotion, "SCBCrawler", headers);
+//                    tagNum++;
+//                }
+//                listDetailPromoLinks.clear();
+//                return listPromotion;
+//            } catch (Exception e) {
+//                LOGGER.error(e.getMessage());
+//            }
+//        }
         return null;
     }
 

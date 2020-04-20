@@ -13,27 +13,27 @@
 
  @Service("promotionCrawlerService")
  public class PromotionCrawlerService implements IPromotionCrawlerService {
-     private IPromotionCrawlerDAO promotionCrawlerDAO;
+   private IPromotionCrawlerDAO promotionCrawlerDAO;
 
-     @Autowired
-     public PromotionCrawlerService(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO promotionCrawlerDAO) {
-         Assert.notNull(promotionCrawlerDAO);
-         this.promotionCrawlerDAO = promotionCrawlerDAO;
+   @Autowired
+   public PromotionCrawlerService(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO promotionCrawlerDAO) {
+     Assert.notNull(promotionCrawlerDAO);
+     this.promotionCrawlerDAO = promotionCrawlerDAO;
+   }
+
+
+   @Override
+   public String insertBankPromotion(PromotionCrawlerModel moddel) {
+     String message = "FAILED";
+     boolean check = promotionCrawlerDAO.savePromotion(moddel);
+     if (check) {
+       message = "SUCCESS";
      }
+     return message;
+   }
 
-
-     @Override
-     public String insertBankPromotion(PromotionCrawlerModel moddel) {
-         String message = "FAILED";
-         boolean check = promotionCrawlerDAO.savePromotion(moddel);
-         if (check) {
-             message = "SUCCESS";
-         }
-         return message;
-     }
-
-     @Override
-     public List<PromotionPresenter> getPrmoTionByBankId(int bankID) {
-         return promotionCrawlerDAO.getPrmoTionByBankId(bankID);
-     }
+   @Override
+   public List<PromotionPresenter> getPrmoTionByBankId(int bankID, int cateID) {
+     return promotionCrawlerDAO.getPrmoTionByBankId(bankID, cateID);
+   }
  }

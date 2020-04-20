@@ -69,14 +69,10 @@ VALUES
   (2, 20000, ''Uber'', ''2017-06-12'', FALSE, 1)
 ;
 
-INSERT INTO fm_promotion_categories (name) VALUES (''Du Lịch'');
-INSERT INTO fm_promotion_categories (name) VALUES (''Nhà Hàng'');
-INSERT INTO fm_promotion_categories (name) VALUES (''Mua Sắm'');
-INSERT INTO fm_promotion_categories (name) VALUES (''Sức Khỏe'');
-INSERT INTO fm_promotion_categories (name) VALUES (''Giáo Dục'');
-INSERT INTO fm_promotion_categories (name) VALUES(''Điện tử Trả góp'');
-INSERT INTO fm_promotion_categories (name) VALUES(''Mua sắm Trả góp'');
-INSERT INTO fm_promotion_categories (name) VALUES(''Sức Khỏe Trả góp'');
-INSERT INTO fm_promotion_categories (name) VALUES(''Du lịch Trả góp'');
-INSERT INTO fm_promotion_categories (name) VALUES(''Giáo dục Trả góp'');
-INSERT INTO fm_promotion_categories (name) VALUES (''Khác'');
+INSERT INTO fm_promotion_categories (name) VALUES ('Travel');
+INSERT INTO fm_promotion_categories (name) VALUES ('Food');
+INSERT INTO fm_promotion_categories (name) VALUES ('Shopping');
+INSERT INTO fm_promotion_categories (name) VALUES ('Health');
+INSERT INTO fm_promotion_categories (name) VALUES ('Education');
+INSERT INTO fm_promotion_categories (name) VALUES('Electronics');
+INSERT INTO fm_promotion_categories (name) VALUES ('Khác');
