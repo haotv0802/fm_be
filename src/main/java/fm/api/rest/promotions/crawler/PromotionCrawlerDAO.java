@@ -41,43 +41,43 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         Locale.ENGLISH);
     final String sqlStatement =
         "INSERT INTO "
-            + "fm_promotions "
-            + "(title,"
-            + "content,"
-            + "discount,"
-            + "start_date,"
-            + "end_date,"
-            + "category_id,"
-            + "bank_id)"
-            + " VALUES "
-            + "(:title,:content,:discount,DATE_FORMAT(:start_date, '%Y-%m-%d'),DATE_FORMAT(:end_date, '%Y-%m-%d'),:category_id,:bank_id)";
-    try {
-      final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-      paramsMap.addValue("title", promoModel.getTitle());
-      paramsMap.addValue("content", promoModel.getContent());
-      paramsMap.addValue("discount", promoModel.getDiscount());
-      if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
-        paramsMap.addValue("start_date", "2000-02-10");
-      } else {
-        Date parsedDate = sdf.parse(promoModel.getStartDate());
-        SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
-        paramsMap.addValue("start_date", print.format(parsedDate));
-      }
-      if (promoModel.getEndDate().equals("")) {
-        SimpleDateFormat print = new SimpleDateFormat("yyyy-MM-dd");
-        Date endDate = print.parse(promoModel.getEndDate());
-        paramsMap.addValue("end_date", print.format(endDate));
-      } else {
-        paramsMap.addValue("end_date", "2000-02-10");
-      }
-
-      paramsMap.addValue("category_id", "1");
-      paramsMap.addValue("bank_id", "2");
-      DaoUtils.debugQuery(LOGGER, sqlStatement, paramsMap.getValues());
-      namedTemplate.update(sqlStatement, paramsMap);
-    } catch (ParseException e) {
-      e.printStackTrace();
+            + "fm_promotions                "
+            + "(title,                      "
+            + "content,                     "
+            + "discount,                    "
+            + "start_date,                  "
+            + "end_date,                    "
+            + "category_id,                 "
+            + "url ,                         "
+            + "bank_id)                     "
+            + " VALUES                      "
+            + "(:title,                     "
+            + ":content,                    "
+            + ":discount,                   "
+            + "STR_TO_DATE(:start_date, '%d-%m-%Y'),"
+            + "STR_TO_DATE(:end_date, '%d-%m-%Y'),"
+            + ":category_id,                "
+            + ":url,                        "
+            + ":bank_id)                    ";
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("title", promoModel.getTitle());
+    paramsMap.addValue("content", promoModel.getContent());
+    paramsMap.addValue("discount", promoModel.getDiscount());
+    if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
+      paramsMap.addValue("start_date", "02-10-2000");
+    } else {
+      paramsMap.addValue("start_date", promoModel.getStartDate());
     }
+    if (promoModel.getEndDate().equals("")) {
+      paramsMap.addValue("end_date", "02-10-2000");
+    } else {
+      paramsMap.addValue("end_date", promoModel.getEndDate());
+    }
+    paramsMap.addValue("url", promoModel.getLinkDetail());
+    paramsMap.addValue("category_id", promoModel.getCategoryId());
+    paramsMap.addValue("bank_id", promoModel.getBankId());
+    DaoUtils.debugQuery(LOGGER, sqlStatement, paramsMap.getValues());
+    namedTemplate.update(sqlStatement, paramsMap);
     return true;
   }
 
@@ -109,7 +109,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         "SELECT name, id FROM fm_promotion_categories  WHERE  name=:name            ";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name",name);
+    paramsMap.addValue("name", name);
     DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
 
     Map<String, Object> results = namedTemplate.queryForMap(sqlQuery, paramsMap);
@@ -117,7 +117,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
 //    Iterator<String> iterator = keys.iterator();
 
     Map<String, Integer> categoriesAndIdlist = new HashMap<>();
-    categoriesAndIdlist.put((String)results.get("name"), Math.toIntExact((Long) results.get("id")));
+    categoriesAndIdlist.put((String) results.get("name"), Math.toIntExact((Long) results.get("id")));
 //    while (iterator.hasNext()) {
 //      String key = iterator.next();
 //

@@ -37,8 +37,8 @@ public class VIBCrawler implements IBankPromotionCrawler {
   }
 
   @Override
-  public Map<String, List<PromotionCrawlerModel>> crawl() {
-
+  public Map<Integer, List<PromotionCrawlerModel>> crawl() {
+    Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
 //    List<String> listLinks = promotionUtils.getBankPromotionLinks("./properties/VIB.properties", "VIB");
 //    if (!listLinks.isEmpty()) {
 //      try {
@@ -87,12 +87,12 @@ public class VIBCrawler implements IBankPromotionCrawler {
 //    }
 //    return null;
     try {
-      travelPromotionCrawler();
+      ressult = travelPromotionCrawler();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
     listDetailPromoLink.clear();
-    return null;
+    return ressult;
   }
 
   private PromotionCrawlerModel getPromotionFromLink(String link, int categoryId) {
@@ -146,23 +146,23 @@ public class VIBCrawler implements IBankPromotionCrawler {
     return locationLists;
   }
 
-  private Map<Integer,List<PromotionCrawlerModel>> travelPromotionCrawler() throws InterruptedException {
+  private Map<Integer, List<PromotionCrawlerModel>> travelPromotionCrawler() throws InterruptedException {
 
     String url = "https://www.vib.com.vn/wps/portal/vn/VIBWorld/landing?cate=3&name=Du-lich";
 
-    Map<String,Integer>  categoriesDB= this.iPromotionCrawlerDAO.getCategoryAndId("Travel");
+    Map<String, Integer> categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId("Travel");
 
-    Map<Integer,List<PromotionCrawlerModel>>  travelPromotionCrawlinData = new HashMap<>();
+    Map<Integer, List<PromotionCrawlerModel>> travelPromotionCrawlinData = new HashMap<>();
 
     int cateID = categoriesDB.get("Travel");
 
-    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(2,cateID);
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(2, cateID);
 
-    List<String> linkPromotions= getAllListFromCateMainLink(url);
+    List<String> linkPromotions = getAllListFromCateMainLink(url);
 
     List<PromotionCrawlerModel> listModel = new ArrayList<>();
 
-    for(String link : linkPromotions){
+    for (String link : linkPromotions) {
       Thread.sleep(2000);
       PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
       if (model != null) {
@@ -173,11 +173,14 @@ public class VIBCrawler implements IBankPromotionCrawler {
         }
       }
     }
-    travelPromotionCrawlinData.put(cateID,listModel);
+    for (PromotionCrawlerModel model : listModel) {
+      this.iPromotionCrawlerDAO.savePromotion(model);
+    }
+    travelPromotionCrawlinData.put(cateID, listModel);
     return travelPromotionCrawlinData;
   }
 
-  private List<String> getAllListFromCateMainLink (String url){
+  private List<String> getAllListFromCateMainLink(String url) {
     List<String> listPromotionLinks = new ArrayList<>();
     Document pagePromoByCate = null;
     try {
@@ -187,8 +190,8 @@ public class VIBCrawler implements IBankPromotionCrawler {
       for (Element el : promotionbox) {
         String linkPromoDetail = mainLink + el.select("a").attr("href");
         if (!listDetailPromoLink.add(linkPromoDetail)) {
-          LOGGER.error("THe Link detail is Existed : " + linkPromoDetail );
-        }else{
+          LOGGER.error("THe Link detail is Existed : " + linkPromoDetail);
+        } else {
           listPromotionLinks.add(linkPromoDetail);
         }
       }
@@ -197,7 +200,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
     }
 
     return listPromotionLinks;
-}
+  }
 
 
 }

@@ -8,6 +8,6 @@
 
  public interface IBankPromotionCrawler {
 
-  Map<String, List<PromotionCrawlerModel>> crawl();
+  Map<Integer, List<PromotionCrawlerModel>> crawl();
 
  }

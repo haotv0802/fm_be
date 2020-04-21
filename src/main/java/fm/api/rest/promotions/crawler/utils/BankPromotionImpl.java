@@ -29,10 +29,10 @@
 
      @Override
      public void crawl(String bankName) {
-         Map<String, List<PromotionCrawlerModel>> map = this.bankCrawlerFactory.getBankCrawler(bankName).crawl();
+         Map<Integer, List<PromotionCrawlerModel>> map = this.bankCrawlerFactory.getBankCrawler(bankName).crawl();
          /// DAO check, ínert, updte
          // Get Each Infomation of promotion insert into DB
-         for(String category : map.keySet()){
+         for(Integer category : map.keySet()){
             for (PromotionCrawlerModel model : map.get(category)){
                 this.promotionCrawlerService.insertBankPromotion(model);
             }
