@@ -18,26 +18,25 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PromotionResource extends BaseResource {
-    private static final Logger LOGGER = LogManager.getLogger(PromotionResource.class);
-    private IBankPromotion bankPromotion;
+  private static final Logger LOGGER = LogManager.getLogger(PromotionResource.class);
+  private IBankPromotion bankPromotion;
 
-    @Autowired
-    public PromotionResource(@Qualifier("bankPromotion") IBankPromotion bankPromotion){
-        Assert.notNull(bankPromotion);
-        this.bankPromotion = bankPromotion;
-    }
+  @Autowired
+  public PromotionResource(@Qualifier("bankPromotion") IBankPromotion bankPromotion) {
+    Assert.notNull(bankPromotion);
+    this.bankPromotion = bankPromotion;
+  }
 
-    @GetMapping("/promotions/crawler/{bankID}")
-    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-    public String crawlingPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                                    @HeaderLang String lang,
-                                    @PathVariable String bankID) {
+  @GetMapping("/promotions/crawler/{bankID}")
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  public String crawlingPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                  @HeaderLang String lang,
+                                  @PathVariable String bankID) {
 
 
-        this.bankPromotion.crawl(bankID);
-        String message = "Success";
-        bankPromotion.crawl(bankID);
-        return message;
-    }
+    this.bankPromotion.crawl(bankID);
+    String message = "Success";
+    return message;
+  }
 
 }

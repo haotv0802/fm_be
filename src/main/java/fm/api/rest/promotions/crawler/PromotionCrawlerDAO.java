@@ -41,28 +41,31 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         Locale.ENGLISH);
     final String sqlStatement =
         "INSERT INTO "
-            + "fm_promotions                "
-            + "(title,                      "
-            + "content,                     "
-            + "discount,                    "
-            + "start_date,                  "
-            + "end_date,                    "
-            + "category_id,                 "
-            + "url ,                         "
-            + "bank_id)                     "
-            + " VALUES                      "
-            + "(:title,                     "
-            + ":content,                    "
-            + ":discount,                   "
-            + "STR_TO_DATE(:start_date, '%d-%m-%Y'),"
-            + "STR_TO_DATE(:end_date, '%d-%m-%Y'),"
-            + ":category_id,                "
-            + ":url,                        "
-            + ":bank_id)                    ";
+            + "fm_promotions                         "
+            + "(title,                               "
+            + "content,                              "
+            + "discount,                             "
+            + "installment,                          "
+            + "start_date,                           "
+            + "end_date,                             "
+            + "category_id,                          "
+            + "url ,                                 "
+            + "bank_id)                              "
+            + " VALUES                               "
+            + "(:title,                              "
+            + ":content,                             "
+            + ":discount,                            "
+            + ":installment ,                         "
+            + "STR_TO_DATE(:start_date, '%d-%m-%Y'), "
+            + "STR_TO_DATE(:end_date, '%d-%m-%Y'),   "
+            + ":category_id,                         "
+            + ":url,                                 "
+            + ":bank_id)                             ";
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("title", promoModel.getTitle());
     paramsMap.addValue("content", promoModel.getContent());
     paramsMap.addValue("discount", promoModel.getDiscount());
+    paramsMap.addValue("installment", promoModel.getInstallmentPeriod());
     if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
       paramsMap.addValue("start_date", "02-10-2000");
     } else {
@@ -85,10 +88,18 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
   public List<PromotionPresenter> getPrmoTionByBankId(int bankID, int category_id) {
     List<PromotionPresenter> result = new ArrayList<>();
     final String sqlQuery =
-        "SELECT *               " +
-            "FROM fm_promotions     " +
-            "WHERE bank_id=:bank_id " +
-            "AND category_id=:category_id   ";
+        "SELECT                                  "
+            + "title,                                  "
+            + "content,                                "
+            + "discount,                               "
+            + "installment,                            "
+            + " DATE_FORMAT(start_date, '%d-%m-%Y'),   "
+            + "DATE_FORMAT(end_date, '%d-%m-%Y'),      "
+            + "category_id,                            "
+            + "bank_id                                 "
+            + "FROM fm_promotions                      "
+            + "WHERE bank_id=:bank_id                  "
+            + "AND category_id=:category_id            ";
     try {
       final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
       paramsMap.addValue("bank_id", bankID);
@@ -134,6 +145,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     presenter.setTitle(rs.getString("title"));
     presenter.setContent(rs.getString("content"));
     presenter.setDiscount(rs.getString("discount"));
+    presenter.setInstallmentPeriod(rs.getString("installment"));
     presenter.setStartDate(rs.getDate("start_date").toString());
     presenter.setEndDate(rs.getDate("end_date").toString());
     presenter.setCategoryID(rs.getInt("category_id"));

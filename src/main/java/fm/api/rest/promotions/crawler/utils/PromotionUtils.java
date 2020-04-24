@@ -72,6 +72,18 @@ public class PromotionUtils {
     return null;
   }
 
+  public String getPeriod(String text) {
+    if (text != null) {
+      int beginPosition = text.indexOf("Kỳ hạn áp dụng:") + 15;
+      int endPosstion = text.indexOf("tháng");
+
+      String period = text.substring(beginPosition, endPosstion).trim();
+
+      return period;
+    }
+    return null;
+  }
+
   public List<String> getBankPromotionLinks(String fileName, String bankName) {
     List<String> listPromotionLinks = new ArrayList<>();
     try {
@@ -173,7 +185,9 @@ public class PromotionUtils {
               //do update
               LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
               return true;
-            } else {
+            }
+            if (!model.getInstallmentPeriod().equals(item.getInstallmentPeriod()) || !model.getEndDate().equals(item.getEndDate())) {
+              LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
               return true;
             }
           }

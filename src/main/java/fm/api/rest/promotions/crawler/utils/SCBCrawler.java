@@ -41,7 +41,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     }
 
     @Override
-    public Map<String, List<PromotionCrawlerModel>> crawl() {
+    public Map<Integer, List<PromotionCrawlerModel>> crawl() {
 //        Map<String, List<PromotionCrawlerModel>> listPromotion = new TreeMap<>();
 //        List<String> listLinks = promotionUtils.getBankPromotionLinks("./properties/SCB.properties", "SCB");
 //        if (!listLinks.isEmpty()) {
@@ -117,7 +117,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
                     startDate = date;
                 }
             }
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getDate(startDate), promotionUtils.getDate(endDate), 0, 3, htmlText, link, img, cardType, condition, location);
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0",null, promotionUtils.getDate(startDate), promotionUtils.getDate(endDate), 0, 3, htmlText, link, img, cardType, condition, location);
             return model;
         } catch (IOException e) {
             LOGGER.error(e.getMessage());
