@@ -1,0 +1,13 @@
+- Java version: 1.8.0_251
+    command: java -version
+
+- NodeJS version: v12.16.2
+    command: node -v
+
+- Maven version: apache-maven-3.6.3
+    command: mvn -v
+
+- MySQL Workbench version: 8.0.19
+
+- My SQL Community server version: 8.0.19 for macos10.15 on x86_64 (MySQL Community Server - GPL)
+    command: mysqld --version
