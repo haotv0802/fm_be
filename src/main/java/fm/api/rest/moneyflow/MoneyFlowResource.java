@@ -2,11 +2,9 @@ package fm.api.rest.moneyflow;
 
 import fm.api.rest.BaseResource;
 import fm.api.rest.moneyflow.interfaces.IMoneyFlowService;
-import fm.api.rest.moneyflow.validators.MoneyFlowAddValidator;
 import fm.api.rest.moneyflow.validators.MoneyFlowEditValidation;
 import fm.auth.UserDetailsImpl;
 import fm.common.Validator;
-import fm.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -48,7 +46,6 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity addExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @RequestBody Item itemCreation
   ) {
 
@@ -64,7 +61,6 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @RequestBody ItemPresenter item
   ) {
     MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
@@ -80,7 +76,6 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateItems(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @RequestBody List<ItemPresenter> items
   ) {
     for(ItemPresenter item : items) {
@@ -111,7 +106,6 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateAmount(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @PathVariable("expenseId") int expenseId,
       @PathVariable("amount") BigDecimal amount
   ) {
@@ -123,7 +117,6 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateAmount(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @PathVariable("expenseId") int expenseId
   ) {
     this.expensesService.updateAmount(expenseId);
@@ -134,7 +127,6 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity deleteExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @PathVariable("expenseId") int expenseId
   ) {
     MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
@@ -156,8 +148,8 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ItemDetailsPresenter getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestParam(value = "name", required = false) String name,
-      @HeaderLang String lang) {
+      @RequestParam(value = "name", required = false) String name
+    ) {
     return this.expensesService.getExpensesDetails(userDetails.getUserId(), name);
   }
 
@@ -170,8 +162,8 @@ public class MoneyFlowResource extends BaseResource {
   @GetMapping("/moneyflowyearlist")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<Integer> getYearsList(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang) {
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
       return this.expensesService.getYearsList(userDetails.getUserId());
   }
 
@@ -180,8 +172,8 @@ public class MoneyFlowResource extends BaseResource {
   public List<ItemDetailsPresenter> getExpensesByYear(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable("year") Integer year,
-      @RequestParam(value = "name", required = false) String name,
-      @HeaderLang String lang) {
+      @RequestParam(value = "name", required = false) String name
+  ) {
     return this.expensesService.getExpensesByYear(userDetails.getUserId(), year, name);
   }
 
@@ -190,8 +182,8 @@ public class MoneyFlowResource extends BaseResource {
   public ItemDetailsPresenter getExpensesByYearAndMonth(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable("year") Integer year,
-      @PathVariable("month") Integer month,
-      @HeaderLang String lang) {
+      @PathVariable("month") Integer month
+  ) {
     return this.expensesService.getExpenseByYearAndMonth(userDetails.getUserId(), year, month);
   }
 
@@ -199,10 +191,8 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestParam(value = "name", required = false) String name,
-      @HeaderLang String lang) {
+      @RequestParam(value = "name", required = false) String name
+  ) {
     return this.expensesService.getLastMonths(userDetails.getUserId(), name);
   }
-
-
 }

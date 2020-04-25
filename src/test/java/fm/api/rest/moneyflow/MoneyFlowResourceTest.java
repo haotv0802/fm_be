@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haoho on 4/25/20.
  */
-public class MoneyFlowResesourceTest extends BaseDocumentation {
+public class MoneyFlowResourceTest extends BaseDocumentation {
 
   /**
    * Normal case
@@ -102,7 +102,6 @@ public class MoneyFlowResesourceTest extends BaseDocumentation {
     Integer incidentId = Integer.parseInt(data.get("incidentId").toString());
     Assert.notNull(incidentId);
     Assert.isTrue(incidentId > 0);
-
   }
 
 }

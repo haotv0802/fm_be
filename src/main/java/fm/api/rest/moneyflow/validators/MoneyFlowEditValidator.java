@@ -35,7 +35,7 @@ public class MoneyFlowEditValidator implements Validator<MoneyFlowEditValidation
             expenseEditValidation.getExpenseId(),
             expenseEditValidation.getUserId())
         ) {
-      throw new ValidationException("expense.userId.invalid");
+      throw new ValidationException("moneyflow.userId.invalid");
     }
   }
 }
