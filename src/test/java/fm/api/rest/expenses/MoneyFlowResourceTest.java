@@ -178,17 +178,6 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
   }
 
   @Test
-  public void testGetExpenses() throws Exception {
-    mockMvc
-        .perform(get("/svc/expenses")
-            .header("Accept-Language", "en")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-        )
-        .andExpect(status().is(200))
-    ;
-  }
-
-  @Test
   public void getPreviousExpenses() throws Exception {
     mockMvc
         .perform(get("/svc/previousExpenses")

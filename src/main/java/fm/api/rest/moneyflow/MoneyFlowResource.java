@@ -2,6 +2,7 @@ package fm.api.rest.moneyflow;
 
 import fm.api.rest.BaseResource;
 import fm.api.rest.moneyflow.interfaces.IMoneyFlowService;
+import fm.api.rest.moneyflow.validators.MoneyFlowAddValidator;
 import fm.api.rest.moneyflow.validators.MoneyFlowEditValidation;
 import fm.auth.UserDetailsImpl;
 import fm.common.Validator;
@@ -26,17 +27,21 @@ public class MoneyFlowResource extends BaseResource {
 
   private final IMoneyFlowService expensesService;
   private final Validator<MoneyFlowEditValidation> expenseEditValidator;
+  private final Validator<Item> expenseAddValidator;
 
   @Autowired
   public MoneyFlowResource(
       @Qualifier("moneyFlowService") IMoneyFlowService expensesService,
-      @Qualifier("moneyFlowEditValidator") Validator<MoneyFlowEditValidation> expenseEditValidator
+      @Qualifier("moneyFlowEditValidator") Validator<MoneyFlowEditValidation> expenseEditValidator,
+      @Qualifier("moneyFlowAddValidator") Validator<Item> expenseAddValidator
   ) {
     Assert.notNull(expenseEditValidator);
     Assert.notNull(expensesService);
+    Assert.notNull(expenseAddValidator);
 
     this.expensesService = expensesService;
     this.expenseEditValidator = expenseEditValidator;
+    this.expenseAddValidator = expenseAddValidator;
   }
 
   @PostMapping("/moneyflow")
@@ -46,6 +51,9 @@ public class MoneyFlowResource extends BaseResource {
       @HeaderLang String lang,
       @RequestBody Item itemCreation
   ) {
+
+    this.expenseAddValidator.validate(itemCreation);
+
     Long id = this.expensesService.addExpense(itemCreation, userDetails.getUserId());
     return new ResponseEntity<>(new Object() {
       public final Long expenseId = id;
