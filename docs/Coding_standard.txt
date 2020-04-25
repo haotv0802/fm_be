@@ -1,0 +1,22 @@
+
+
+- Naming package, class, method, etc
+    - Package name should be noun and in lowercase.
+    - Class name should be a noun and with First letter of a word in uppercase.
+    - Method is an action, so name it like: getSomething, handleSomething, doSomething.
+
+
+- Write unit test
+    - Make the class under the package named the same with tested class.
+        for example: we make a test for MoneyFlowResource in package: fm.api.rest.moneyflow
+                    we should make a new test class: MoneyFlowResourceTest in package fm.api.rest.moneyflow in test section
+
+- Do validation at Resource layer
+
+- Do NOT do any business logic in Resource layer
+
+- Do business at Service layer
+
+- Do NOT do any business at DAO layer (or in case we have to do that, just minimize as much as possible by doing it in Service layer)
+
+
