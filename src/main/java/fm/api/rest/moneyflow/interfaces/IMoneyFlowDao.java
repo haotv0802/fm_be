@@ -13,7 +13,7 @@ import java.util.List;
 public interface IMoneyFlowDao {
   List<ItemPresenter> getExpenses(int userId);
 
-  ItemDetailsPresenter getExpenesDetails(int userId, String name);
+  ItemDetailsPresenter getExpensesDetails(int userId, String name);
 
   List<ItemDetailsPresenter> getExpensesByYear(int userId, int year, String name);
 

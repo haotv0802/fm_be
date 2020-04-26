@@ -54,6 +54,7 @@ public class MoneyFlowResource extends BaseResource {
       @RequestBody Item itemCreation
   ) {
 
+    // Validation
     this.expenseAddValidator.validate(itemCreation);
 
     Long id = this.expensesService.addExpense(itemCreation, userDetails.getUserId());
@@ -74,6 +75,7 @@ public class MoneyFlowResource extends BaseResource {
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @RequestBody List<ItemPresenter> items
   ) {
+    // Validation
     for(ItemPresenter item : items) {
       MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
       validation.setUserId(userDetails.getUserId());
@@ -101,6 +103,7 @@ public class MoneyFlowResource extends BaseResource {
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable("expenseId") int expenseId
   ) {
+    // Validation
     MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
     validation.setUserId(userDetails.getUserId());
     validation.setExpenseId(expenseId);

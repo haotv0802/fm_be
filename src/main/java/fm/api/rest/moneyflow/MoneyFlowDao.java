@@ -78,7 +78,11 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return expensesList;
   }
 
-
+  /**
+   * Get list of years in number. Ex: 2020, 2019.
+   * @param userId
+   * @return list of years.
+   */
   @Override
   public List<Integer> getYearsList(int userId) {
     final String sql =
@@ -100,6 +104,11 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return namedTemplate.queryForList(sql, paramsMap, Integer.class);
   }
 
+  /**
+   * Get list of months with format yyyy-mm, ex: 2020-04, 2020-03
+   * @param userId
+   * @return list of months.
+   */
   private List<String> getMonthsWithYear(int userId) {
     final String sql =
           "SELECT DISTINCT                                                    "
@@ -120,6 +129,11 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return namedTemplate.queryForList(sql, paramsMap, String.class);
   }
 
+  /**
+   * Get list of months of current year with format yyyy-mm, ex: 2020-04, 2020-03
+   * @param userId
+   * @return list of months.
+   */
   private List<String> getMonthsInCurrentYear(int userId) {
     final String sql =
               "SELECT DISTINCT                                                    "
@@ -146,7 +160,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
    * Get list of months with year, ex: 2020-02, 2020-01
    * @param userId
    * @param year
-   * @return
+   * @return list of months and years.
    */
   private List<String> getMonthsWithYear(int userId, int year) {
     final String sql =
@@ -192,8 +206,14 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return expense;
   }
 
+  /**
+   * Get list of expenses belonging to specific user.
+   * @param userId
+   * @param name
+   * @return list of expenses.
+   */
   @Override
-  public ItemDetailsPresenter getExpenesDetails(int userId, String name) {
+  public ItemDetailsPresenter getExpensesDetails(int userId, String name) {
     List<String> months = this.getMonthsWithYear(userId);
     if (CollectionUtils.isEmpty(months)) {
       throw new ValidationException("Data not found");
@@ -202,6 +222,13 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return this.getExpensesDetailsByMonth(userId, months.get(0), name);
   }
 
+  /**
+   * Get list of expenses including total of all expenses by year & month.
+   * @param userId
+   * @param year
+   * @param month
+   * @return list of expenses.
+   */
   @Override
   public ItemDetailsPresenter getExpensesDetailsByYearAndMonth(int userId, int year, int month) {
     final String sql =
@@ -243,6 +270,13 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return buildItemDetailsPresenter(sql, paramsMap);
   }
 
+  /**
+   * Get list of expenses including total of all expenses by month.
+   * @param userId
+   * @param month
+   * @param name
+   * @return list of expenses.
+   */
   private ItemDetailsPresenter getExpensesDetailsByMonth(int userId, String month, String name) {
     final String sql =
               "SELECT                                                   "
@@ -283,6 +317,12 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return buildItemDetailsPresenter(sql, paramsMap);
   }
 
+  /**
+   * Build expense item details to be returned to Front-end.
+   * @param sql
+   * @param paramsMap
+   * @return expense item.
+   */
   private ItemDetailsPresenter buildItemDetailsPresenter(String sql, MapSqlParameterSource paramsMap) {
     ItemDetailsPresenter itemDetailsPresenter = new ItemDetailsPresenter();
 
@@ -307,6 +347,13 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return itemDetailsPresenter;
   }
 
+  /**
+   * Get list expenses by year.
+   * @param userId
+   * @param year
+   * @param name
+   * @return list of expenses.
+   */
   @Override
   public List<ItemDetailsPresenter> getExpensesByYear(int userId, int year, String name) {
     List<String> months = this.getMonthsWithYear(userId, year);
@@ -343,6 +390,12 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return itemDetailsPresenterList;
   }
 
+  /**
+   * Add new expense.
+   * @param item
+   * @param userId
+   * @return Id of new expense as a number.
+   */
   @Override
   public Long addExpense(Item item, int userId) {
     final String sql =
@@ -370,6 +423,10 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return id;
   }
 
+  /**
+   * Update expense.
+   * @param item
+   */
   @Override
   public void updateExpense(Item item) {
     final String sql =
@@ -401,6 +458,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     namedTemplate.update(sql, paramsMap);
   }
 
+  @Deprecated
   @Override
   public void updateExpense(BigDecimal amount, int userId, int expenseId) {
     final String sql =
@@ -421,6 +479,10 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     namedTemplate.update(sql, paramsMap);
   }
 
+  /**
+   * Delete specific expense.
+   * @param expenseId
+   */
   @Override
   public void deleteExpense(int expenseId) {
     final String sql =

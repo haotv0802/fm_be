@@ -27,6 +27,12 @@ public class MoneyFlowAddValidator implements Validator<Item> {
     return "expense.id.invalid"; // TODO make it more sense
   }
 
+  /**
+   * Validate if the amount is null or not. Since amount value is the most important in every expense.
+   * @param item
+   * @param faultCode - custom fault code
+   * @param args      - custom context
+   */
   @Override
   public void validate(Item item, String faultCode, Object... args) {
     Assert.notNull(item);
