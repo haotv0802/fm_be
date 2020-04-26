@@ -14,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -64,27 +63,6 @@ public class MoneyFlowResource extends BaseResource {
   }
 
   /**
-   * The service is to update single Expense.
-   * @param userDetails
-   * @param item
-   * @return HTTP code 200 as NO_CONTENT.
-   */
-  @PatchMapping("/moneyflow")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateExpense(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestBody ItemPresenter item
-  ) {
-    MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
-    validation.setUserId(userDetails.getUserId());
-    validation.setExpenseId(item.getId());
-    expenseEditValidator.validate(validation);
-
-    this.expensesService.updateExpense(item);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-
-  /**
    * The service is to update list of items sent from Front-end side.
    * @param userDetails
    * @param items
@@ -108,41 +86,6 @@ public class MoneyFlowResource extends BaseResource {
         this.expensesService.updateExpense(item);
       }
     }
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-
-  /**
-   * The service is to update amount of Expense which is actually an event.
-   * Each time user perform an update or add action on EventExpenses, the total of event expenses will be updated to such expense.
-   * @param userDetails
-   * @param expenseId
-   * @param amount
-   * @return HTTP code 200 as NO_CONTENT.
-   */
-  @PatchMapping("/moneyflow/{expenseId}/{amount}/updateAmount")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateAmount(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable("expenseId") int expenseId,
-      @PathVariable("amount") BigDecimal amount
-  ) {
-    this.expensesService.updateExpense(amount, userDetails.getUserId(), expenseId);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-
-  /**
-   * The service is to update amount of specific Expense.
-   * @param userDetails
-   * @param expenseId
-   * @return HTTP code 200 as NO_CONTENT.
-   */
-  @PatchMapping("/moneyflow/{expenseId}/updateAmount")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateAmount(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @PathVariable("expenseId") int expenseId
-  ) {
-    this.expensesService.updateAmount(expenseId);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
@@ -234,6 +177,7 @@ public class MoneyFlowResource extends BaseResource {
    * @param name
    * @return list of expenses.
    */
+  @Deprecated
   @GetMapping("/moneyflow/lastmonths")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getPreviousExpenses(

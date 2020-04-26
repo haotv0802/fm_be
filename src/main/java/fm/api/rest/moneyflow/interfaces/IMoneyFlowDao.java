@@ -29,8 +29,6 @@ public interface IMoneyFlowDao {
 
   void updateExpense(BigDecimal amount, int userId, int expenseId);
 
-  void updateAmount(int expenseId);
-
   void deleteExpense(int expenseId);
 
   boolean checkIfLoginUserOwner(int expenseId, int userId);

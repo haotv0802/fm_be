@@ -29,7 +29,5 @@ public interface IMoneyFlowService {
 
   void updateExpense(BigDecimal amount, int userId, int expenseId);
 
-  void updateAmount(int expenseId);
-
   void deleteExpense(int expenseId);
 }

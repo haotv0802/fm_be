@@ -326,6 +326,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     return itemDetailsPresenterList;
   }
 
+  @Deprecated
   @Override
   public List<ItemDetailsPresenter> getLastMonths(int userId, String name) {
     List<String> months = this.getMonthsInCurrentYear(userId);
@@ -414,30 +415,6 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     paramsMap.addValue("amount", amount);
     paramsMap.addValue("userId", userId);
     paramsMap.addValue("expenseId", expenseId);
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    namedTemplate.update(sql, paramsMap);
-  }
-
-  @Override
-  public void updateAmount(int expenseId) {
-    final String sql =
-              "UPDATE fm_money_flow e       "
-            + "SET                          "
-            + "	amount = (SELECT            "
-            + "			SUM(ee.amount)          "
-            + "		FROM                      "
-            + "			fm_event_expenses ee    "
-            + "		WHERE                     "
-            + "			ee.expense_id = :id     "
-            + "			AND is_deleted = FALSE) "
-            + "WHERE                        "
-            + "	e.id = :id                  "
-        ;
-
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("id", expenseId);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

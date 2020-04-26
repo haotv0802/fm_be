@@ -42,6 +42,7 @@ public class MoneyFlowService implements IMoneyFlowService {
     return this.expensesDao.getExpensesDetailsByYearAndMonth(userId, year, month);
   }
 
+  @Deprecated
   @Override
   public List<ItemDetailsPresenter> getLastMonths(int userId, String name) {
     return this.expensesDao.getLastMonths(userId, name);
@@ -70,11 +71,6 @@ public class MoneyFlowService implements IMoneyFlowService {
   @Override
   public void updateExpense(BigDecimal amount, int userId, int expenseId) {
     this.expensesDao.updateExpense(amount, userId, expenseId);
-  }
-
-  @Override
-  public void updateAmount(int expenseId) {
-    this.expensesDao.updateAmount(expenseId);
   }
 
   @Override
