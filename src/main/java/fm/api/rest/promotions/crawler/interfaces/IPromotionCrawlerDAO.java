@@ -12,5 +12,5 @@ public interface IPromotionCrawlerDAO {
 
   List<PromotionPresenter> getPrmoTionByBankId(int bankID, int category_id);
 
-  Map<String, Integer> getCategoryAndId(String name);
+  Map<String, Integer> getCategoryAndId();
 }

@@ -73,7 +73,7 @@ public class PromotionUtils {
   }
 
   public String getPeriod(String text) {
-    if (text != null) {
+    if (text != null && text.contains("Kỳ hạn áp dụng")) {
       int beginPosition = text.indexOf("Kỳ hạn áp dụng:") + 15;
       int endPosstion = text.indexOf("tháng");
 

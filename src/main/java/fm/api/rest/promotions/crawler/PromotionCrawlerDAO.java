@@ -114,24 +114,26 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
   }
 
   @Override
-  public Map<String, Integer> getCategoryAndId(String name) {
+  public Map<String, Integer> getCategoryAndId() {
 
     final String sqlQuery =
-        "SELECT name, id FROM fm_promotion_categories  WHERE  name=:name            ";
+        "SELECT name, id FROM fm_promotion_categories";
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("name", name);
     DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
 
-    Map<String, Object> results = namedTemplate.queryForMap(sqlQuery, paramsMap);
-    Set keys = results.keySet();
-//    Iterator<String> iterator = keys.iterator();
+    List<Map<String,Object>> results = namedTemplate.queryForList(sqlQuery, paramsMap);
+
+
+//    Iterator<String> iterator = results.iterator();
 
     Map<String, Integer> categoriesAndIdlist = new HashMap<>();
-    categoriesAndIdlist.put((String) results.get("name"), Math.toIntExact((Long) results.get("id")));
+    for(Map row : results){
+        categoriesAndIdlist.put((String) row.get("name"),Math.toIntExact((Long)row.get("id")));
+    }
+//    categoriesAndIdlist.put((String) results.get("name"), Math.toIntExact((Long) results.get("id")));
 //    while (iterator.hasNext()) {
 //      String key = iterator.next();
-//
 //      categoriesAndIdlist.put(key, (Integer) results.get(key));
 //    }
 
