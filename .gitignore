@@ -1,3 +1,6 @@
 # Created by .ignore support plugin (hsz.mobi)
 .idea
 logs
+.idea/fm_be.iml
+**/*.iml
+*.iml

@@ -128,7 +128,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //    dataSource.setMaxActive(10);
 //    dataSource.setMaxIdle(5);
 //    dataSource.setInitialSize(5);
-//    dataSource.setValidationQuery("SELECT 1");
+//    dataSource.setVaKlidationQuery("SELECT 1");
 
 //     JdbcDataSource ds = new JdbcDataSource();
     MysqlDataSource ds = new MysqlDataSource();
