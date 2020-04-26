@@ -5,7 +5,6 @@ import fm.api.rest.moneyflow.interfaces.IMoneyFlowService;
 import fm.api.rest.moneyflow.validators.MoneyFlowEditValidation;
 import fm.auth.UserDetailsImpl;
 import fm.common.Validator;
-import fm.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -26,55 +24,58 @@ public class MoneyFlowResource extends BaseResource {
 
   private final IMoneyFlowService expensesService;
   private final Validator<MoneyFlowEditValidation> expenseEditValidator;
+  private final Validator<Item> expenseAddValidator;
 
   @Autowired
   public MoneyFlowResource(
       @Qualifier("moneyFlowService") IMoneyFlowService expensesService,
-      @Qualifier("moneyFlowEditValidator") Validator<MoneyFlowEditValidation> expenseEditValidator
+      @Qualifier("moneyFlowEditValidator") Validator<MoneyFlowEditValidation> expenseEditValidator,
+      @Qualifier("moneyFlowAddValidator") Validator<Item> expenseAddValidator
   ) {
     Assert.notNull(expenseEditValidator);
     Assert.notNull(expensesService);
+    Assert.notNull(expenseAddValidator);
 
     this.expensesService = expensesService;
     this.expenseEditValidator = expenseEditValidator;
+    this.expenseAddValidator = expenseAddValidator;
   }
 
+  /**
+   * The service is to Add single expense into DB.
+   * @param userDetails
+   * @param itemCreation
+   * @return HTTP code 201 as created.
+   */
   @PostMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity addExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @RequestBody Item itemCreation
   ) {
+
+    // Validation
+    this.expenseAddValidator.validate(itemCreation);
+
     Long id = this.expensesService.addExpense(itemCreation, userDetails.getUserId());
     return new ResponseEntity<>(new Object() {
       public final Long expenseId = id;
     }, HttpStatus.CREATED);
   }
 
-  @PatchMapping("/moneyflow")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateExpense(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
-      @RequestBody ItemPresenter item
-  ) {
-    MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
-    validation.setUserId(userDetails.getUserId());
-    validation.setExpenseId(item.getId());
-    expenseEditValidator.validate(validation);
-
-    this.expensesService.updateExpense(item);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-
+  /**
+   * The service is to update list of items sent from Front-end side.
+   * @param userDetails
+   * @param items
+   * @return HTTP code 200 as NO_CONTENT.
+   */
   @PatchMapping("/moneyflow/list")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateItems(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @RequestBody List<ItemPresenter> items
   ) {
+    // Validation
     for(ItemPresenter item : items) {
       MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
       validation.setUserId(userDetails.getUserId());
@@ -91,44 +92,18 @@ public class MoneyFlowResource extends BaseResource {
   }
 
   /**
-   * The service is to update amount of Expense which is actually an event.
-   * Each time user perform an update or add action on EventExpenses, the total of event expenses will be updated to such expense.
+   * The service is to delete single expense.
    * @param userDetails
-   * @param lang
    * @param expenseId
-   * @param amount
-   * @return ResponseEntity
+   * @return HTTP code 200 as NO_CONTENT.
    */
-  @PatchMapping("/moneyflow/{expenseId}/{amount}/updateAmount")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateAmount(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
-      @PathVariable("expenseId") int expenseId,
-      @PathVariable("amount") BigDecimal amount
-  ) {
-    this.expensesService.updateExpense(amount, userDetails.getUserId(), expenseId);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-
-  @PatchMapping("/moneyflow/{expenseId}/updateAmount")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateAmount(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
-      @PathVariable("expenseId") int expenseId
-  ) {
-    this.expensesService.updateAmount(expenseId);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
-
   @DeleteMapping("/moneyflow/{expenseId}/delete")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity deleteExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
       @PathVariable("expenseId") int expenseId
   ) {
+    // Validation
     MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
     validation.setUserId(userDetails.getUserId());
     validation.setExpenseId(expenseId);
@@ -141,60 +116,77 @@ public class MoneyFlowResource extends BaseResource {
   /**
    * The service is to get all expenses in current month.
    * @param userDetails
-   * @param lang
-   * @return
+   * @return list of expenses.
    */
   @GetMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ItemDetailsPresenter getExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestParam(value = "name", required = false) String name,
-      @HeaderLang String lang) {
+      @RequestParam(value = "name", required = false) String name
+    ) {
     return this.expensesService.getExpensesDetails(userDetails.getUserId(), name);
   }
 
   /**
    * Get list of years displayed on Money flow page. The purpose is to let user to decide which year details to be shown.
    * @param userDetails
-   * @param lang
-   * @return
+   * @return list of years in number.
    */
   @GetMapping("/moneyflowyearlist")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<Integer> getYearsList(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang) {
+      @AuthenticationPrincipal UserDetailsImpl userDetails
+  ) {
       return this.expensesService.getYearsList(userDetails.getUserId());
   }
 
+  /**
+   * The service is to get list of expenses by specific year.
+   * @param userDetails
+   * @param year
+   * @param name
+   * @return list of expenses.
+   */
   @GetMapping("/moneyflow/{year}")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getExpensesByYear(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable("year") Integer year,
-      @RequestParam(value = "name", required = false) String name,
-      @HeaderLang String lang) {
+      @RequestParam(value = "name", required = false) String name
+  ) {
     return this.expensesService.getExpensesByYear(userDetails.getUserId(), year, name);
   }
 
+  /**
+   * The service is to get list of expenses by year & month.
+   * @param userDetails
+   * @param year
+   * @param month
+   * @return list of expenses.
+   */
   @GetMapping("/moneyflow/{year}/{month}")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ItemDetailsPresenter getExpensesByYearAndMonth(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
       @PathVariable("year") Integer year,
-      @PathVariable("month") Integer month,
-      @HeaderLang String lang) {
+      @PathVariable("month") Integer month
+  ) {
     return this.expensesService.getExpenseByYearAndMonth(userDetails.getUserId(), year, month);
   }
 
+  /**
+   * The service is to get previous expenses. That means that there's no list of expenses in current month in this list.
+   * @param userDetails
+   * @param name
+   * @return list of expenses.
+   */
+  @Deprecated
   @GetMapping("/moneyflow/lastmonths")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getPreviousExpenses(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestParam(value = "name", required = false) String name,
-      @HeaderLang String lang) {
+      @RequestParam(value = "name", required = false) String name
+  ) {
     return this.expensesService.getLastMonths(userDetails.getUserId(), name);
   }
-
-
 }

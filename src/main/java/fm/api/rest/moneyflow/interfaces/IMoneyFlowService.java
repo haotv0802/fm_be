@@ -11,8 +11,6 @@ import java.util.List;
  * Created by haho on 6/22/2017.
  */
 public interface IMoneyFlowService {
-  List<ItemPresenter> getExpenses(int userId);
-
   ItemDetailsPresenter getExpensesDetails(int userId, String name);
 
   List<ItemDetailsPresenter> getExpensesByYear(int userId, int year, String name);
@@ -26,10 +24,6 @@ public interface IMoneyFlowService {
   Long addExpense(Item item, int userId);
 
   void updateExpense(ItemPresenter item);
-
-  void updateExpense(BigDecimal amount, int userId, int expenseId);
-
-  void updateAmount(int expenseId);
 
   void deleteExpense(int expenseId);
 }

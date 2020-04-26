@@ -243,7 +243,7 @@
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.11</version>
+            <version>8.0.12</version>
         </dependency>
         <!--Test dependencies group-->
         <dependency>
@@ -328,31 +328,22 @@
             <artifactId>commons-compress</artifactId>
             <version>1.1</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/aopalliance/aopalliance -->
-        <dependency>
-            <groupId>aopalliance</groupId>
-            <artifactId>aopalliance</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-
         <!--<dependency>-->
-        <!--<groupId>javax.media</groupId>-->
-        <!--<artifactId>jai-core</artifactId>-->
-        <!--<version>1.1.3</version>-->
+            <!--<groupId>javax.media</groupId>-->
+            <!--<artifactId>jai-core</artifactId>-->
+            <!--<version>1.1.3</version>-->
         <!--</dependency>-->
 
         <!--<dependency>-->
-        <!--<groupId>com.sun.media</groupId>-->
-        <!--<artifactId>jai-codec</artifactId>-->
-        <!--<version>1.1.3</version>-->
+            <!--<groupId>com.sun.media</groupId>-->
+            <!--<artifactId>jai-codec</artifactId>-->
+            <!--<version>1.1.3</version>-->
         <!--</dependency>-->
 
         <!--<dependency>-->
-        <!--<groupId>javax.media</groupId>-->
-        <!--<artifactId>jai_imageio</artifactId>-->
-        <!--<version>1.1</version>-->
+            <!--<groupId>javax.media</groupId>-->
+            <!--<artifactId>jai_imageio</artifactId>-->
+            <!--<version>1.1</version>-->
         <!--</dependency>-->
         <!--
         <dependency>
@@ -362,60 +353,28 @@
           <scope>provided</scope>
         </dependency>
         -->
-    <!-- Quy Add 13032020 -->
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.poi</groupId>
-            <artifactId>poi-ooxml</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jsoup</groupId>
-            <artifactId>jsoup</artifactId>
-            <version>1.7.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.10</version>
-        </dependency>
-        <dependency>
-            <groupId>org.json</groupId>
-            <artifactId>json</artifactId>
-            <version>20180813</version>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-        </dependency>
-        <!-- Quy Add 13032020 -->
 
     </dependencies>
 
     <!--<build>-->
-    <!--<finalName>app</finalName>-->
-    <!--<plugins>-->
-    <!--<plugin>-->
-    <!--<groupId>org.mortbay.jetty</groupId>-->
-    <!--<artifactId>jetty-maven-plugin</artifactId>-->
-    <!--<version>${jetty.version}</version>-->
-    <!--<configuration>-->
-    <!--<webApp>-->
-    <!--<contextPath>/app</contextPath>-->
-    <!--</webApp>-->
-    <!--<connectors>-->
-    <!--<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">-->
-    <!--<port>9999</port>-->
-    <!--</connector>-->
-    <!--</connectors>-->
-    <!--</configuration>-->
-    <!--</plugin>-->
-    <!--</plugins>-->
+        <!--<finalName>app</finalName>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.mortbay.jetty</groupId>-->
+                <!--<artifactId>jetty-maven-plugin</artifactId>-->
+                <!--<version>${jetty.version}</version>-->
+                <!--<configuration>-->
+                    <!--<webApp>-->
+                        <!--<contextPath>/app</contextPath>-->
+                    <!--</webApp>-->
+                    <!--<connectors>-->
+                        <!--<connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">-->
+                            <!--<port>9999</port>-->
+                        <!--</connector>-->
+                    <!--</connectors>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
     <!--</build>-->
     <build>
         <finalName>fm-be</finalName>
@@ -439,6 +398,9 @@
                     <port>8880</port>
                     <server>LocalTomcat8</server>
                     <path>/${project.build.finalName}</path>
+                    <systemProperties>
+                        <MAVEN_OPTS>-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8880</MAVEN_OPTS>
+                    </systemProperties>
                 </configuration>
             </plugin>
 

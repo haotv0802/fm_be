@@ -13,7 +13,7 @@ import java.util.List;
 public interface IMoneyFlowDao {
   List<ItemPresenter> getExpenses(int userId);
 
-  ItemDetailsPresenter getExpenesDetails(int userId, String name);
+  ItemDetailsPresenter getExpensesDetails(int userId, String name);
 
   List<ItemDetailsPresenter> getExpensesByYear(int userId, int year, String name);
 
@@ -28,8 +28,6 @@ public interface IMoneyFlowDao {
   void updateExpense(Item item);
 
   void updateExpense(BigDecimal amount, int userId, int expenseId);
-
-  void updateAmount(int expenseId);
 
   void deleteExpense(int expenseId);
 

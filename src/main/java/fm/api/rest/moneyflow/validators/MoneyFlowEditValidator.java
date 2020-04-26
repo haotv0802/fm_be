@@ -28,6 +28,12 @@ public class MoneyFlowEditValidator implements Validator<MoneyFlowEditValidation
     return "expense.id.invalid";
   }
 
+  /**
+   * Validate if specific expense belongs to a right user.
+   * @param expenseEditValidation
+   * @param faultCode - custom fault code
+   * @param args      - custom context
+   */
   @Override
   public void validate(MoneyFlowEditValidation expenseEditValidation, String faultCode, Object... args) {
     if (!expensesDao.
@@ -35,7 +41,7 @@ public class MoneyFlowEditValidator implements Validator<MoneyFlowEditValidation
             expenseEditValidation.getExpenseId(),
             expenseEditValidation.getUserId())
         ) {
-      throw new ValidationException("expense.userId.invalid");
+      throw new ValidationException("moneyflow.userId.invalid");
     }
   }
 }
