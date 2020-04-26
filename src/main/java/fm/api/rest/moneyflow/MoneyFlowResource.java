@@ -42,6 +42,12 @@ public class MoneyFlowResource extends BaseResource {
     this.expenseAddValidator = expenseAddValidator;
   }
 
+  /**
+   * The service is to Add single expense into DB.
+   * @param userDetails
+   * @param itemCreation
+   * @return HTTP code 201 as created.
+   */
   @PostMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity addExpense(
@@ -57,6 +63,12 @@ public class MoneyFlowResource extends BaseResource {
     }, HttpStatus.CREATED);
   }
 
+  /**
+   * The service is to update single Expense.
+   * @param userDetails
+   * @param item
+   * @return HTTP code 200 as NO_CONTENT.
+   */
   @PatchMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateExpense(
@@ -72,6 +84,12 @@ public class MoneyFlowResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
+  /**
+   * The service is to update list of items sent from Front-end side.
+   * @param userDetails
+   * @param items
+   * @return HTTP code 200 as NO_CONTENT.
+   */
   @PatchMapping("/moneyflow/list")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateItems(
@@ -97,10 +115,9 @@ public class MoneyFlowResource extends BaseResource {
    * The service is to update amount of Expense which is actually an event.
    * Each time user perform an update or add action on EventExpenses, the total of event expenses will be updated to such expense.
    * @param userDetails
-   * @param lang
    * @param expenseId
    * @param amount
-   * @return ResponseEntity
+   * @return HTTP code 200 as NO_CONTENT.
    */
   @PatchMapping("/moneyflow/{expenseId}/{amount}/updateAmount")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
@@ -113,6 +130,12 @@ public class MoneyFlowResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
+  /**
+   * The service is to update amount of specific Expense.
+   * @param userDetails
+   * @param expenseId
+   * @return HTTP code 200 as NO_CONTENT.
+   */
   @PatchMapping("/moneyflow/{expenseId}/updateAmount")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity updateAmount(
@@ -123,6 +146,12 @@ public class MoneyFlowResource extends BaseResource {
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 
+  /**
+   * The service is to delete single expense.
+   * @param userDetails
+   * @param expenseId
+   * @return HTTP code 200 as NO_CONTENT.
+   */
   @DeleteMapping("/moneyflow/{expenseId}/delete")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity deleteExpense(
@@ -141,8 +170,7 @@ public class MoneyFlowResource extends BaseResource {
   /**
    * The service is to get all expenses in current month.
    * @param userDetails
-   * @param lang
-   * @return
+   * @return list of expenses.
    */
   @GetMapping("/moneyflow")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
@@ -156,8 +184,7 @@ public class MoneyFlowResource extends BaseResource {
   /**
    * Get list of years displayed on Money flow page. The purpose is to let user to decide which year details to be shown.
    * @param userDetails
-   * @param lang
-   * @return
+   * @return list of years in number.
    */
   @GetMapping("/moneyflowyearlist")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
@@ -167,6 +194,13 @@ public class MoneyFlowResource extends BaseResource {
       return this.expensesService.getYearsList(userDetails.getUserId());
   }
 
+  /**
+   * The service is to get list of expenses by specific year.
+   * @param userDetails
+   * @param year
+   * @param name
+   * @return list of expenses.
+   */
   @GetMapping("/moneyflow/{year}")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getExpensesByYear(
@@ -177,6 +211,13 @@ public class MoneyFlowResource extends BaseResource {
     return this.expensesService.getExpensesByYear(userDetails.getUserId(), year, name);
   }
 
+  /**
+   * The service is to get list of expenses by year & month.
+   * @param userDetails
+   * @param year
+   * @param month
+   * @return list of expenses.
+   */
   @GetMapping("/moneyflow/{year}/{month}")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ItemDetailsPresenter getExpensesByYearAndMonth(
@@ -187,6 +228,12 @@ public class MoneyFlowResource extends BaseResource {
     return this.expensesService.getExpenseByYearAndMonth(userDetails.getUserId(), year, month);
   }
 
+  /**
+   * The service is to get previous expenses. That means that there's no list of expenses in current month in this list.
+   * @param userDetails
+   * @param name
+   * @return list of expenses.
+   */
   @GetMapping("/moneyflow/lastmonths")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public List<ItemDetailsPresenter> getPreviousExpenses(
