@@ -39,21 +39,4 @@
      }
    }
 
-//     @Override
-//     public Map<String, List<PromotionCrawlerModel>> SCBBankPromotion() {
-//         SCBCrawler bank = new SCBCrawler();
-//         return bank.getListPromotionInfo();
-//     }
-//
-//     @Override
-//     public Map<String, List<PromotionCrawlerModel>> VIBBankPromotion(List<PromotionPresenter> promotionPresenterList) {
-//         return bankPromotionCrawler.VIBBankPromotion(promotionPresenterList);
-//     }
-//
-//     @Override
-//     public boolean SHBankPromotion() {
-//         ShinHanBank bank = new ShinHanBank();
-//         return bank.doPostRequest("https://shinhan.com.vn/get_shinhan_promotion");
-//
-//     }
  }

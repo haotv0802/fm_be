@@ -2,13 +2,11 @@ package fm.api.rest.promotions.crawler.utils;
 /* Quy created on 3/11/2020  */
 
 import fm.api.rest.promotions.PromotionModel;
-import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import io.jsonwebtoken.lang.Assert;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;

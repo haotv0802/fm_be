@@ -73,7 +73,7 @@ public class PromotionUtils {
   }
 
   public String getPeriod(String text) {
-    if (text != null && text.contains("Kỳ hạn áp dụng")) {
+    if (text.contains("Kỳ hạn áp dụng:")) {
       int beginPosition = text.indexOf("Kỳ hạn áp dụng:") + 15;
       int endPosstion = text.indexOf("tháng");
 
@@ -181,14 +181,18 @@ public class PromotionUtils {
       for (PromotionPresenter item : list) {
         if (model.getTitle().equals(item.getTitle())) {
           if (model.getContent().equals(item.getContent())) {
-            if (!model.getDiscount().equals(item.getDiscount()) || !model.getEndDate().equals(item.getEndDate())) {
-              //do update
-              LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
-              return true;
+            if (model.getDiscount() != null && item.getDiscount() != null) {
+              if (!model.getDiscount().equals(item.getDiscount()) || !model.getEndDate().equals(item.getEndDate())) {
+                //do update
+                LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
+                return true;
+              }
             }
-            if (!model.getInstallmentPeriod().equals(item.getInstallmentPeriod()) || !model.getEndDate().equals(item.getEndDate())) {
-              LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
-              return true;
+            if (model.getInstallmentPeriod() != null && item.getInstallmentPeriod() != null) {
+              if (!model.getInstallmentPeriod().equals(item.getInstallmentPeriod()) || !model.getEndDate().equals(item.getEndDate())) {
+                LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
+                return true;
+              }
             }
           }
         }

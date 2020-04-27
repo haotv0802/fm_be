@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -88,12 +87,13 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
   public List<PromotionPresenter> getPrmoTionByBankId(int bankID, int category_id) {
     List<PromotionPresenter> result = new ArrayList<>();
     final String sqlQuery =
-        "SELECT                                  "
+              "SELECT    "
+            + "id,                              "
             + "title,                                  "
             + "content,                                "
             + "discount,                               "
             + "installment,                            "
-            + " DATE_FORMAT(start_date, '%d-%m-%Y'),   "
+            + "DATE_FORMAT(start_date, '%d-%m-%Y'),   "
             + "DATE_FORMAT(end_date, '%d-%m-%Y'),      "
             + "category_id,                            "
             + "bank_id                                 "
@@ -105,7 +105,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
       paramsMap.addValue("bank_id", bankID);
       paramsMap.addValue("category_id", category_id);
       DaoUtils.debugQuery(LOGGER, sqlQuery, paramsMap.getValues());
-      result = namedTemplate.query(sqlQuery, paramsMap, (rs, rowNum) -> buildExpense(rs));
+      result = namedTemplate.query(sqlQuery, paramsMap, (rs, rowNum) -> buildPromotionModel(rs));
       return result;
     } catch (Exception e) {
       e.printStackTrace();
@@ -141,15 +141,15 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
   }
 
 
-  private PromotionPresenter buildExpense(ResultSet rs) throws SQLException {
+  private PromotionPresenter buildPromotionModel(ResultSet rs) throws SQLException {
     PromotionPresenter presenter = new PromotionPresenter();
     presenter.setId(rs.getInt("id"));
     presenter.setTitle(rs.getString("title"));
     presenter.setContent(rs.getString("content"));
     presenter.setDiscount(rs.getString("discount"));
     presenter.setInstallmentPeriod(rs.getString("installment"));
-    presenter.setStartDate(rs.getDate("start_date").toString());
-    presenter.setEndDate(rs.getDate("end_date").toString());
+    presenter.setStartDate(rs.getString("DATE_FORMAT(start_date, '%d-%m-%Y')"));
+    presenter.setEndDate(rs.getString("DATE_FORMAT(end_date, '%d-%m-%Y')"));
     presenter.setCategoryID(rs.getInt("category_id"));
     presenter.setBankId(rs.getInt("bank_id"));
     return presenter;
