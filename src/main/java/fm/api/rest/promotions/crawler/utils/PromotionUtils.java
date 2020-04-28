@@ -33,6 +33,11 @@ public class PromotionUtils {
   }
 
 
+  /**
+   * This service to get type date from string
+   * @param text
+   * @return
+   */
   public String getDate(String text) {
     if (text != null) {
       String datePattern = "([0-9]+[/][0-9]+[/][0-9]{4}[.]{0,1})";
@@ -54,6 +59,11 @@ public class PromotionUtils {
     return "";
   }
 
+  /**
+   * This service is to get provision data from string
+   * @param text
+   * @return
+   */
   public String getProvision(String text) {
     if (text != null) {
       String moneyPattern1 = "(([0-9]+[,][0-9]*)[d||đ||vnd||vnđ])";
@@ -72,6 +82,11 @@ public class PromotionUtils {
     return null;
   }
 
+  /**
+   * This service is to get period installment from string
+   * @param text
+   * @return
+   */
   public String getPeriod(String text) {
     if (text.contains("Kỳ hạn áp dụng:")) {
       int beginPosition = text.indexOf("Kỳ hạn áp dụng:") + 15;
@@ -84,6 +99,12 @@ public class PromotionUtils {
     return null;
   }
 
+  /**
+   * This service is to get url from file properties
+   * @param fileName
+   * @param bankName
+   * @return
+   */
   public List<String> getBankPromotionLinks(String fileName, String bankName) {
     List<String> listPromotionLinks = new ArrayList<>();
     try {
@@ -107,6 +128,12 @@ public class PromotionUtils {
     return listPromotionLinks;
   }
 
+  /**
+   * This service is to export all data into file excel
+   * @param listProvision
+   * @param bankName
+   * @param header
+   */
   public void exportProvisionExcelFile(Map<String, List<PromotionCrawlerModel>> listProvision, String bankName, String[] header) {
     try {
       String SAMPLE_XLSX_FILE_PATH = bankName + ".xlsx";
@@ -131,30 +158,20 @@ public class PromotionUtils {
         int rowNum = 1;
         for (PromotionCrawlerModel item : listProvision.get(category)) {
           Row row = sheet.createRow(rowNum++);
+          row.createCell(0).setCellValue(item.getBankId());
+          row.createCell(1).setCellValue(item.getTitle());
+          row.createCell(2).setCellValue(item.getContent());
+          row.createCell(3).setCellValue(item.getDiscount());
+          row.createCell(4).setCellValue(item.getCategoryId());
+          row.createCell(5).setCellValue(item.getStartDate());
+          row.createCell(6).setCellValue(item.getEndDate());
+          row.createCell(7).setCellValue(item.getHtmlText());
+          row.createCell(8).setCellValue(item.getLinkDetail());
           if (header.length >= 13) {
-            row.createCell(0).setCellValue(item.getBankId());
-            row.createCell(1).setCellValue(item.getTitle());
-            row.createCell(2).setCellValue(item.getContent());
-            row.createCell(3).setCellValue(item.getDiscount());
-            row.createCell(4).setCellValue(item.getCategoryId());
-            row.createCell(5).setCellValue(item.getStartDate());
-            row.createCell(6).setCellValue(item.getEndDate());
-            row.createCell(7).setCellValue(item.getHtmlText());
-            row.createCell(8).setCellValue(item.getLinkDetail());
             row.createCell(9).setCellValue(item.getImgURL());
             row.createCell(10).setCellValue(item.getCardType());
             row.createCell(11).setCellValue(item.getCondition());
             row.createCell(12).setCellValue(item.getLocation());
-          } else {
-            row.createCell(0).setCellValue(item.getBankId());
-            row.createCell(1).setCellValue(item.getTitle());
-            row.createCell(2).setCellValue(item.getContent());
-            row.createCell(3).setCellValue(item.getDiscount());
-            row.createCell(4).setCellValue(item.getCategoryId());
-            row.createCell(5).setCellValue(item.getStartDate());
-            row.createCell(6).setCellValue(item.getEndDate());
-            row.createCell(7).setCellValue(item.getHtmlText());
-            row.createCell(8).setCellValue(item.getLinkDetail());
           }
 
         }
@@ -176,6 +193,12 @@ public class PromotionUtils {
   }
 
 
+  /**
+   * This service is to check existed data
+   * @param model
+   * @param list
+   * @return
+   */
   public boolean checkInfoExit(PromotionCrawlerModel model, List<PromotionPresenter> list) {
     if (!list.isEmpty()) {
       for (PromotionPresenter item : list) {
@@ -201,6 +224,12 @@ public class PromotionUtils {
     return false;
   }
 
+  /**
+   * This service is to get bank promotion  data from Database.
+   * @param bankId
+   * @param cateId
+   * @return
+   */
   public List<PromotionPresenter> initBankData(int bankId, int cateId) {
     List<PromotionPresenter> listBankDataInfo = new ArrayList<>();
     listBankDataInfo = iPromotionCrawlerDAO.getPrmoTionByBankId(bankId, cateId);

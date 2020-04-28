@@ -1,4 +1,4 @@
-package fm.api.rest.promotions.crawler.utils;
+package fm.api.rest.promotions.crawler;
 
 public interface PromotionConstants {
     String ENTERTAINMENT = "ENTERTAINMETN";

@@ -3,7 +3,6 @@ package fm.api.rest.promotions.crawler.interfaces;
 
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

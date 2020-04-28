@@ -1,5 +1,5 @@
  /* Quy created on 3/13/2020 */
- package fm.api.rest.promotions.crawler.utils;
+ package fm.api.rest.promotions.crawler;
 
  import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
  import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;

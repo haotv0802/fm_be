@@ -1,17 +1,9 @@
 package fm.api.rest.promotions.crawler;
 /* Quy created on 3/11/2020  */
 
-import java.sql.Date;
+
 
 public class PromotionCrawlerModel {
-//    private int id;
-//    private String title;
-//    private String content;
-//    private String discount;
-//    private Date start_date;
-//    private Date end_date;
-//    private int category_id;
-//    private int bank_id;
 
   private String title;
   private String content;

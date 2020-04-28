@@ -1,4 +1,4 @@
-package fm.api.rest.promotions.crawler.utils;
+package fm.api.rest.promotions.crawler;
 /* Quy created on 3/11/2020  */
 
 import fm.api.rest.promotions.PromotionModel;
@@ -6,6 +6,7 @@ import fm.api.rest.promotions.crawler.PromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
+import fm.api.rest.promotions.crawler.utils.PromotionUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
