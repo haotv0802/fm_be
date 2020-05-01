@@ -12,11 +12,9 @@ import org.springframework.util.Assert;
 
 /**
  * Property of CODIX Bulgaria EAD
- * Created by vtodorov
+ * Created by haoho
  * Date:  24/01/2017 Time: 2:08 PM
  * Service for handling errors
- *
- * @author vtodorov
  */
 @Service
 public class ErrorService implements IErrorService {
