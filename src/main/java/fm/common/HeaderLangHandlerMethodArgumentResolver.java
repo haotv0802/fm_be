@@ -44,7 +44,7 @@ public final class HeaderLangHandlerMethodArgumentResolver implements HandlerMet
       return defaultLang;
     }
 
-    //TODO: Vasko says this should be replaces with real parsing
+    //TODO: Vasko says this should be replaced with real parsing
     return acceptLang.toUpperCase();
   }
 }

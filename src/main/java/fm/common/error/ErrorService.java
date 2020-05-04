@@ -18,17 +18,17 @@ import org.springframework.util.Assert;
 @Service
 public class ErrorService implements IErrorService {
 
-  private final IErrorDao IErrorDao;
+  private final IErrorDao errorDao;
 
   private final TransactionTemplate transactionTemplate;
 
   @Autowired
   public ErrorService(
-      IErrorDao IErrorDao,
+      IErrorDao errorDao,
       PlatformTransactionManager transactionManager
   ) {
-    Assert.notNull(IErrorDao);
-    this.IErrorDao = IErrorDao;
+    Assert.notNull(errorDao);
+    this.errorDao = errorDao;
 
     Assert.notNull(transactionManager);
     transactionTemplate = new TransactionTemplate(transactionManager);
@@ -47,10 +47,9 @@ public class ErrorService implements IErrorService {
     return transactionTemplate.execute(new TransactionCallback<ServiceFault>() {
       @Override
       public ServiceFault doInTransaction(TransactionStatus status) {
-        sf.setIncidentId(IErrorDao.registerBackEndFault(sf, stack));
+        sf.setIncidentId(errorDao.registerBackEndFault(sf, stack));
         return sf;
       }
     });
   }
-
 }
