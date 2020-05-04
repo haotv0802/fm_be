@@ -14,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class MoneyFlowResource extends BaseResource {
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public ResponseEntity addExpense(
       @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @RequestBody Item itemCreation
+      @Valid @RequestBody Item itemCreation
   ) {
 
     // Validation
