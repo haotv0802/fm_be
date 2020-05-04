@@ -2,9 +2,11 @@ package fm.api.rest.moneyflow;
 
 import fm.api.rest.BaseResource;
 import fm.api.rest.moneyflow.interfaces.IMoneyFlowService;
+import fm.api.rest.moneyflow.validators.MoneyFlowDeleteValidation;
 import fm.api.rest.moneyflow.validators.MoneyFlowEditValidation;
 import fm.auth.UserDetailsImpl;
 import fm.common.Validator;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -12,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -25,21 +28,25 @@ public class MoneyFlowResource extends BaseResource {
 
   private final IMoneyFlowService expensesService;
   private final Validator<MoneyFlowEditValidation> expenseEditValidator;
+  private final Validator<MoneyFlowDeleteValidation> moneyFlowDeleteValidator;
   private final Validator<Item> expenseAddValidator;
 
   @Autowired
   public MoneyFlowResource(
       @Qualifier("moneyFlowService") IMoneyFlowService expensesService,
       @Qualifier("moneyFlowEditValidator") Validator<MoneyFlowEditValidation> expenseEditValidator,
+      @Qualifier("moneyFlowDeleteValidator") Validator<MoneyFlowDeleteValidation> moneyFlowDeleteValidator,
       @Qualifier("moneyFlowAddValidator") Validator<Item> expenseAddValidator
   ) {
     Assert.notNull(expenseEditValidator);
+    Assert.notNull(moneyFlowDeleteValidator);
     Assert.notNull(expensesService);
     Assert.notNull(expenseAddValidator);
 
     this.expensesService = expensesService;
     this.expenseEditValidator = expenseEditValidator;
     this.expenseAddValidator = expenseAddValidator;
+    this.moneyFlowDeleteValidator = moneyFlowDeleteValidator;
   }
 
   /**
@@ -68,7 +75,7 @@ public class MoneyFlowResource extends BaseResource {
    * The service is to update list of items sent from Front-end side.
    * @param userDetails
    * @param items
-   * @return HTTP code 200 as NO_CONTENT.
+   * @return HTTP code 204 as NO_CONTENT.
    */
   @PatchMapping("/moneyflow/list")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
@@ -80,7 +87,7 @@ public class MoneyFlowResource extends BaseResource {
     for(ItemPresenter item : items) {
       MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
       validation.setUserId(userDetails.getUserId());
-      validation.setExpenseId(item.getId());
+      validation.setExpense(item);
       expenseEditValidator.validate(validation);
     }
 
@@ -96,7 +103,7 @@ public class MoneyFlowResource extends BaseResource {
    * The service is to delete single expense.
    * @param userDetails
    * @param expenseId
-   * @return HTTP code 200 as NO_CONTENT.
+   * @return HTTP code 204 as NO_CONTENT.
    */
   @DeleteMapping("/moneyflow/{expenseId}/delete")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
@@ -105,10 +112,10 @@ public class MoneyFlowResource extends BaseResource {
       @PathVariable("expenseId") int expenseId
   ) {
     // Validation
-    MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
+    MoneyFlowDeleteValidation validation = new MoneyFlowDeleteValidation();
     validation.setUserId(userDetails.getUserId());
     validation.setExpenseId(expenseId);
-    expenseEditValidator.validate(validation);
+    moneyFlowDeleteValidator.validate(validation);
 
     this.expensesService.deleteExpense(expenseId);
     return new ResponseEntity(HttpStatus.NO_CONTENT);

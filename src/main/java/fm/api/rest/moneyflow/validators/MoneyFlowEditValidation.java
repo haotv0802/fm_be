@@ -1,11 +1,13 @@
 package fm.api.rest.moneyflow.validators;
 
+import fm.api.rest.moneyflow.ItemPresenter;
+
 /**
  * Created by haho on 7/4/2017.
  */
 public class MoneyFlowEditValidation {
   private int userId;
-  private int expenseId;
+  private ItemPresenter expense;
 
   public int getUserId() {
     return userId;
@@ -15,11 +17,11 @@ public class MoneyFlowEditValidation {
     this.userId = userId;
   }
 
-  public int getExpenseId() {
-    return expenseId;
+  public ItemPresenter getExpense() {
+    return expense;
   }
 
-  public void setExpenseId(int expenseId) {
-    this.expenseId = expenseId;
+  public void setExpense(ItemPresenter expense) {
+    this.expense = expense;
   }
 }

@@ -9,9 +9,9 @@ import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
@@ -104,4 +104,77 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
     Assert.isTrue(incidentId > 0);
   }
 
+  @Test
+  public void testUpdateExpense() throws Exception {
+
+    MvcResult result = mockMvc
+            .perform(get("/svc/moneyflow")
+                    .header("Accept-Language", "en")
+                    .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            )
+            .andExpect(status().is(200))
+            .andReturn()
+            ;
+
+    ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+            result.getResponse().getContentAsString(), ItemDetailsPresenter.class);
+
+    Assert.notNull(expensesDetailsPresenter);
+
+    List<ItemPresenter> items = expensesDetailsPresenter.getExpenses();
+
+    result =  mockMvc
+            .perform(patch("/svc/moneyflow/list")
+                    .header("Accept-Language", "en")
+                    .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(items))
+            )
+            .andExpect(status().is(204))
+            .andReturn()
+            ;
+  }
+
+
+  @Test
+  public void testUpdateExpenseWithWrongValues() throws Exception {
+
+    MvcResult result = mockMvc
+            .perform(get("/svc/moneyflow")
+                    .header("Accept-Language", "en")
+                    .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            )
+            .andExpect(status().is(200))
+            .andReturn()
+            ;
+
+    ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
+            result.getResponse().getContentAsString(), ItemDetailsPresenter.class);
+
+    Assert.notNull(expensesDetailsPresenter);
+
+    List<ItemPresenter> items = expensesDetailsPresenter.getExpenses();
+    ItemPresenter item = items.get(0);
+    item.setAmount(null);
+
+    result =  mockMvc
+            .perform(patch("/svc/moneyflow/list")
+                    .header("Accept-Language", "en")
+                    .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(items))
+            )
+            .andExpect(status().is(400))
+            .andReturn()
+    ;
+
+    // result example: {"faultCode":"moneyflow.edit.wrong.input","faultMessage":"[amount] property gets error, message: Amount cannot be null","incidentId":"30"}
+    Assert.notNull(result.getResponse().getContentAsString());
+    JSONObject data = new JSONObject(result.getResponse().getContentAsString());
+    Assert.isTrue(data.get("faultCode").equals("moneyflow.edit.wrong.input"));
+    Assert.isTrue(data.get("faultMessage").equals("[amount] property gets error, message: Amount cannot be null."));
+    Integer incidentId = Integer.parseInt(data.get("incidentId").toString());
+    Assert.notNull(incidentId);
+    Assert.isTrue(incidentId > 0);
+  }
 }
