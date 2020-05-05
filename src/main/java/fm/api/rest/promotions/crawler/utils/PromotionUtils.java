@@ -35,6 +35,7 @@ public class PromotionUtils {
 
   /**
    * This service to get type date from string
+   *
    * @param text
    * @return
    */
@@ -61,6 +62,7 @@ public class PromotionUtils {
 
   /**
    * This service to get type date from string
+   *
    * @param text
    * @return
    */
@@ -84,6 +86,7 @@ public class PromotionUtils {
 
   /**
    * This service is to get provision data from string
+   *
    * @param text
    * @return
    */
@@ -107,6 +110,7 @@ public class PromotionUtils {
 
   /**
    * This service is to get period installment from string
+   *
    * @param text
    * @return
    */
@@ -124,6 +128,7 @@ public class PromotionUtils {
 
   /**
    * This service is to get url from file properties
+   *
    * @param fileName
    * @param bankName
    * @return
@@ -153,6 +158,7 @@ public class PromotionUtils {
 
   /**
    * This service is to export all data into file excel
+   *
    * @param listProvision
    * @param bankName
    * @param header
@@ -218,6 +224,7 @@ public class PromotionUtils {
 
   /**
    * This service is to check existed data
+   *
    * @param model
    * @param list
    * @return
@@ -249,6 +256,7 @@ public class PromotionUtils {
 
   /**
    * This service is to get bank promotion  data from Database.
+   *
    * @param bankId
    * @param cateId
    * @return
@@ -257,6 +265,27 @@ public class PromotionUtils {
     List<PromotionPresenter> listBankDataInfo = new ArrayList<>();
     listBankDataInfo = iPromotionCrawlerDAO.getPrmoTionByBankId(bankId, cateId);
     return listBankDataInfo;
+  }
+
+  /**
+   * This service is to add list promotion from bank into Map because there are has the same Key value from map.
+   *
+   * @param promotionMap      : current Map value
+   * @param listBankPromotion
+   * @return
+   */
+  public Map<Integer, List<PromotionCrawlerModel>> addPromotionDataIntoMap(Map<Integer, List<PromotionCrawlerModel>> promotionMap, List<PromotionCrawlerModel> listBankPromotion, int cateId) {
+    if (!listBankPromotion.isEmpty()) {
+      if (promotionMap.get(cateId) != null) {
+        for (PromotionCrawlerModel model : listBankPromotion) {
+          promotionMap.get(cateId).add(model);
+        }
+        return promotionMap;
+      } else {
+        promotionMap.put(cateId, listBankPromotion);
+      }
+    }
+    return promotionMap;
   }
 
 }

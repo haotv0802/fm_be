@@ -48,25 +48,25 @@ public class VIBCrawler implements IBankPromotionCrawler {
     Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
     categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
     try {
-      ressult = addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
 
-      ressult = addPromotionDataIntoMap(ressult, getEducationPromotion(), categoriesDB.get("Education"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationPromotion(), categoriesDB.get("Education"));
 
-      ressult = addPromotionDataIntoMap(ressult, getShoppingPromotion(), categoriesDB.get("Shopping"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingPromotion(), categoriesDB.get("Shopping"));
 
-      ressult = addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
 
-      ressult = addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
 
-      ressult = addPromotionDataIntoMap(ressult, getTravelInstallment(), categoriesDB.get("Travel"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelInstallment(), categoriesDB.get("Travel"));
 
-      ressult = addPromotionDataIntoMap(ressult, getEducationInstallment(), categoriesDB.get("Education"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstallment(), categoriesDB.get("Education"));
 
-      ressult = addPromotionDataIntoMap(ressult, getHealthInstallment(), categoriesDB.get("Health"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthInstallment(), categoriesDB.get("Health"));
 
-      ressult = addPromotionDataIntoMap(ressult, getElectricateInstallment(), categoriesDB.get("Electronics"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getElectricateInstallment(), categoriesDB.get("Electronics"));
 
-      ressult = addPromotionDataIntoMap(ressult, getShoppingInstallment(), categoriesDB.get("Shopping"));
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstallment(), categoriesDB.get("Shopping"));
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -74,26 +74,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
     return ressult;
   }
 
-  /**
-   * This service is to add list promotion from bank into Map because there are has the same Key value from map.
-   *
-   * @param promotionMap      : current Map value
-   * @param listBankPromotion
-   * @return
-   */
-  private Map<Integer, List<PromotionCrawlerModel>> addPromotionDataIntoMap(Map<Integer, List<PromotionCrawlerModel>> promotionMap, List<PromotionCrawlerModel> listBankPromotion, int cateId) {
-    if (!listBankPromotion.isEmpty()) {
-      if (promotionMap.get(cateId) != null) {
-        for (PromotionCrawlerModel model : listBankPromotion) {
-          promotionMap.get(cateId).add(model);
-        }
-        return promotionMap;
-      } else {
-        promotionMap.put(cateId, listBankPromotion);
-      }
-    }
-    return promotionMap;
-  }
+
 
   /**
    * This service is to get neccessary infomation from detail link

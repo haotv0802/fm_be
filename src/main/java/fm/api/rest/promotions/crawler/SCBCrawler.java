@@ -43,19 +43,39 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   @Override
   public Map<Integer, List<PromotionCrawlerModel>> crawl() {
-    categoriesDB = iPromotionCrawlerDAO.getCategoryAndId();
+    Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
+    categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
     try {
-      getTravelPromotion();
+      // Test all function
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getPrivilegeGoodwillPromotion(), categoriesDB.get("Privilege Goodwill"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherPromotion(), categoriesDB.get("Other"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstalment(), categoriesDB.get("Shopping"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstalment(), categoriesDB.get("Education"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getJewelryInstalment(), categoriesDB.get("Jewelry"));
+
+      ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherInstalment(), categoriesDB.get("Other"));
+
     } catch (IOException e) {
       e.printStackTrace();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-    return null;
+    return ressult;
   }
 
   /**
    * This service os to get Promtion detail data .
+   *
    * @param link
    * @return
    * @throws IOException
@@ -84,8 +104,10 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   }
 
+
   /**
    * This service is to get infomation base on tag name.
+   *
    * @param container
    * @param selector
    * @param tagName
@@ -96,7 +118,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
     for (Element promoDetail : promotionDetailEls) {
       if (promoDetail.text().contains(tagName)) {
-        if(promoDetail.nextElementSibling().outerHtml().contains("<ul>")){
+        if (promoDetail.nextElementSibling().outerHtml().contains("<ul>")) {
           return promoDetail.nextElementSibling().text();
         }
         return promoDetail.text();
@@ -107,6 +129,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get max number of cataegoriees page.
+   *
    * @param els
    * @return
    */
@@ -117,6 +140,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get title of Promotion
+   *
    * @param container
    * @param selector
    * @return
@@ -131,6 +155,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get all link promotion in from category
+   *
    * @param url
    * @return
    * @throws IOException
@@ -143,11 +168,11 @@ public class SCBCrawler implements IBankPromotionCrawler {
       String pageLinkPromo = StringUtils.substring(url, 0, url.length() - 1) + i;
       promoDoc = Jsoup.connect(pageLinkPromo).get();
       Elements promoDivEls = promoDoc.select(".small-plus-item > a");
-      for(Element promoDivEl : promoDivEls){
+      for (Element promoDivEl : promoDivEls) {
         String linkDetail = promoDivEl.attr("href").toString();
-        if(listDetailPromoLinks.add(linkDetail)){
+        if (listDetailPromoLinks.add(linkDetail)) {
           listLinkInCate.add(linkDetail);
-        }else{
+        } else {
           LOGGER.error("The link promotion SCB is already Exists in List " + linkDetail);
         }
       }
@@ -157,14 +182,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Travel promotion
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getTravelPromotion () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getTravelPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Travel");
 
-    List <PromotionCrawlerModel> travelPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL);
+    List<PromotionCrawlerModel> travelPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL);
 
 
     return travelPromotionData;
@@ -172,14 +198,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Food promotion
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getFoodPromotion () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getFoodPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Food");
 
-    List <PromotionCrawlerModel> foodPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD);
+    List<PromotionCrawlerModel> foodPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD);
 
 
     return foodPromotionData;
@@ -187,14 +214,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Health promotion
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getHealthPromotion () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getHealthPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Health");
 
-    List <PromotionCrawlerModel> healthPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH);
+    List<PromotionCrawlerModel> healthPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH);
 
 
     return healthPromotionData;
@@ -202,14 +230,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Privilge Goodwill promotion
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Privilege Goodwill");
 
-    List <PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL);
+    List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL);
 
 
     return privilegeGoodwillPromotionData;
@@ -217,14 +246,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Other promotion
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getOtherPromotion () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getOtherPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Other");
 
-    List <PromotionCrawlerModel> otherPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER);
+    List<PromotionCrawlerModel> otherPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER);
 
 
     return otherPromotionData;
@@ -232,14 +262,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Shopping Instalment
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getShoppingInstalment () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getShoppingInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Shopping");
 
-    List <PromotionCrawlerModel> shoppingInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_SHOPPING_ELECTRIC);
+    List<PromotionCrawlerModel> shoppingInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_SHOPPING_ELECTRIC);
 
 
     return shoppingInstalmnetData;
@@ -247,14 +278,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Education Instalment
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getEducationInstalment () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getEducationInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Education");
 
-    List <PromotionCrawlerModel> educationInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION);
+    List<PromotionCrawlerModel> educationInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION);
 
 
     return educationInstalmnetData;
@@ -262,14 +294,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Jewelry Instalment
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getJewelryInstalment () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getJewelryInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Jewelry");
 
-    List <PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION);
+    List<PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION);
 
 
     return jewelryInstalmnetData;
@@ -277,14 +310,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to get Other Instalment
+   *
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> getOtherInstalment () throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> getOtherInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Other");
 
-    List <PromotionCrawlerModel> otherInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER);
+    List<PromotionCrawlerModel> otherInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER);
 
 
     return otherInstalmnetData;
@@ -293,27 +327,28 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   /**
    * This service is to do crwaling detail data from link
+   *
    * @param cateID
    * @param url
    * @return
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> doCrawlingDetaiData (int cateID , String url) throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> doCrawlingDetaiData(int cateID, String url) throws IOException, InterruptedException {
 
     List<PromotionCrawlerModel> listPromotionCrawling = new ArrayList<>();
 
-    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3,cateID);
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateID);
 
     List<String> listPromotionLinks = getAllPromotionLinks(url);
 
-    for(String link : listPromotionLinks){
+    for (String link : listPromotionLinks) {
       Thread.sleep(2000);
       PromotionCrawlerModel model = getPromotionFromLink(link);
-      if(model!=null){
-        if(promotionUtils.checkInfoExit(model,listPromoBankData)){
+      if (model != null) {
+        if (promotionUtils.checkInfoExit(model, listPromoBankData)) {
           LOGGER.info("SCB Bank Promotion Date is Existed");
-        }else{
+        } else {
           listPromotionCrawling.add(model);
         }
       }
