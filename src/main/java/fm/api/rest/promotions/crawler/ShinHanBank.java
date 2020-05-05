@@ -1,7 +1,6 @@
  /* Quy created on 3/13/2020 */
  package fm.api.rest.promotions.crawler;
 
- import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
  import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
  import org.apache.http.NameValuePair;
  import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -16,7 +15,6 @@
  import org.springframework.stereotype.Service;
 
  import java.io.IOException;
- import java.net.URL;
  import java.util.ArrayList;
  import java.util.List;
  import java.util.Map;

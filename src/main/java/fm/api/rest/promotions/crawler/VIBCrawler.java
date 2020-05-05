@@ -1,9 +1,9 @@
 package fm.api.rest.promotions.crawler;
 
 import fm.api.rest.promotions.PromotionPresenter;
+import fm.api.rest.promotions.crawler.interfaces.BankLinkPromotion;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
-import fm.api.rest.promotions.crawler.interfaces.VIBLink;
 import fm.api.rest.promotions.crawler.utils.PromotionUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
@@ -48,25 +48,25 @@ public class VIBCrawler implements IBankPromotionCrawler {
     Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
     categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
     try {
-      ressult = addPromotionDataIntoMap(ressult, travelPromotionCrawler(), categoriesDB.get("Travel"));
+      ressult = addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
 
-      ressult = addPromotionDataIntoMap(ressult, educationPromotionCrawler(), categoriesDB.get("Education"));
+      ressult = addPromotionDataIntoMap(ressult, getEducationPromotion(), categoriesDB.get("Education"));
 
-      ressult = addPromotionDataIntoMap(ressult, shoppingPromotionCrawler(), categoriesDB.get("Shopping"));
+      ressult = addPromotionDataIntoMap(ressult, getShoppingPromotion(), categoriesDB.get("Shopping"));
 
-      ressult = addPromotionDataIntoMap(ressult, foodPromotionCrawler(), categoriesDB.get("Food"));
+      ressult = addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
 
-      ressult = addPromotionDataIntoMap(ressult, healthPromotionCrawler(), categoriesDB.get("Health"));
+      ressult = addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
 
-      ressult = addPromotionDataIntoMap(ressult, travelInstallmentCrawler(), categoriesDB.get("Travel"));
+      ressult = addPromotionDataIntoMap(ressult, getTravelInstallment(), categoriesDB.get("Travel"));
 
-      ressult = addPromotionDataIntoMap(ressult, educationInstallmentCrawler(), categoriesDB.get("Education"));
+      ressult = addPromotionDataIntoMap(ressult, getEducationInstallment(), categoriesDB.get("Education"));
 
-      ressult = addPromotionDataIntoMap(ressult, healthInstallmentCrawler(), categoriesDB.get("Health"));
+      ressult = addPromotionDataIntoMap(ressult, getHealthInstallment(), categoriesDB.get("Health"));
 
-      ressult = addPromotionDataIntoMap(ressult, electricateInstallmentCrawler(), categoriesDB.get("Electronics"));
+      ressult = addPromotionDataIntoMap(ressult, getElectricateInstallment(), categoriesDB.get("Electronics"));
 
-      ressult = addPromotionDataIntoMap(ressult, shoppingInstallmentCrawler(), categoriesDB.get("Shopping"));
+      ressult = addPromotionDataIntoMap(ressult, getShoppingInstallment(), categoriesDB.get("Shopping"));
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
@@ -135,7 +135,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
         String result = item.select(selector).text();
         if (!result.equals("")) {
           if (tagName.equals("End Date")) {
-            return promotionUtils.getDate(result);
+            return promotionUtils.getDateVIBData(result);
           } else if (tagName.equals("HTML")) {
             return item.select(selector).outerHtml();
           } else {
@@ -169,10 +169,10 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @throws InterruptedException
    */
 
-  private List<PromotionCrawlerModel> educationPromotionCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getEducationPromotion() throws InterruptedException {
     int cateID = categoriesDB.get("Education");
 
-    List<PromotionCrawlerModel> educationPromotionCrawlinData = doCrawling(cateID, VIBLink.PROMOTION_EDUCATION);
+    List<PromotionCrawlerModel> educationPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_EDUCATION);
 
     return educationPromotionCrawlinData;
 
@@ -184,10 +184,10 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> travelPromotionCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getTravelPromotion() throws InterruptedException {
     int cateID = categoriesDB.get("Travel");
 
-    List<PromotionCrawlerModel> travelPromotionCrawlinData = doCrawling(cateID, VIBLink.PROMOTION_TRAVEL);
+    List<PromotionCrawlerModel> travelPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_TRAVEL);
 
     return travelPromotionCrawlinData;
 
@@ -200,10 +200,10 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> foodPromotionCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getFoodPromotion() throws InterruptedException {
     int cateID = categoriesDB.get("Food");
 
-    List<PromotionCrawlerModel> foodPromotionCrawlinData = doCrawling(cateID, VIBLink.PROMOTION_FOOD);
+    List<PromotionCrawlerModel> foodPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_FOOD);
 
     return foodPromotionCrawlinData;
 
@@ -216,10 +216,10 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> healthPromotionCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getHealthPromotion() throws InterruptedException {
     int cateID = categoriesDB.get("Health");
 
-    List<PromotionCrawlerModel> healthPromotionCrawlinData = doCrawling(cateID, VIBLink.PROMOTION_HEALTHCARE);
+    List<PromotionCrawlerModel> healthPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_HEALTHCARE);
 
     return healthPromotionCrawlinData;
 
@@ -232,11 +232,11 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> shoppingPromotionCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getShoppingPromotion() throws InterruptedException {
 
     int cateID = categoriesDB.get("Shopping");
 
-    List<PromotionCrawlerModel> shoppingPromotionCrawlinData = doCrawling(cateID, VIBLink.PROMOTION_SHOPPING);
+    List<PromotionCrawlerModel> shoppingPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_SHOPPING);
 
     return shoppingPromotionCrawlinData;
 
@@ -249,12 +249,12 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> shoppingInstallmentCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getShoppingInstallment() throws InterruptedException {
 
 
     int cateID = categoriesDB.get("Shopping");
 
-    List<PromotionCrawlerModel> shoppingInstallmentCrawlinData = doCrawling(cateID, VIBLink.INSTALLMENT_SHOPPING);
+    List<PromotionCrawlerModel> shoppingInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_SHOPPING);
 
     return shoppingInstallmentCrawlinData;
 
@@ -267,12 +267,12 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> healthInstallmentCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getHealthInstallment() throws InterruptedException {
 
 
     int cateID = categoriesDB.get("Health");
 
-    List<PromotionCrawlerModel> heanlthInstallmentCrawlinData = doCrawling(cateID, VIBLink.INSTALLMENT_HEALTHCARE);
+    List<PromotionCrawlerModel> heanlthInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_HEALTHCARE);
 
     return heanlthInstallmentCrawlinData;
 
@@ -285,12 +285,12 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> electricateInstallmentCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getElectricateInstallment() throws InterruptedException {
 
 
     int cateID = categoriesDB.get("Electronics");
 
-    List<PromotionCrawlerModel> electricateInstallmentCrawlinData = doCrawling(cateID, VIBLink.INSTALLMENT_ELECTRICATE);
+    List<PromotionCrawlerModel> electricateInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE);
 
     return electricateInstallmentCrawlinData;
 
@@ -303,11 +303,11 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> educationInstallmentCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getEducationInstallment() throws InterruptedException {
 
     int cateID = categoriesDB.get("Education");
 
-    List<PromotionCrawlerModel> educationInstallmentCrawlinData = doCrawling(cateID, VIBLink.INSTALLMENT_EDUCATION);
+    List<PromotionCrawlerModel> educationInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION);
 
     return educationInstallmentCrawlinData;
 
@@ -320,11 +320,11 @@ public class VIBCrawler implements IBankPromotionCrawler {
    * @return List<PromotionCrawlerModel>
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> travelInstallmentCrawler() throws InterruptedException {
+  private List<PromotionCrawlerModel> getTravelInstallment() throws InterruptedException {
 
     int cateID = categoriesDB.get("Travel");
 
-    List<PromotionCrawlerModel> travelInstallmentCrawlinData = doCrawling(cateID, VIBLink.INSTALLMENT_TRAVEL);
+    List<PromotionCrawlerModel> travelInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL);
 
     return travelInstallmentCrawlinData;
   }
@@ -371,10 +371,10 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
     List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(2, cateID);
 
-    List<String> linkPromotions = getAllListFromCateMainLink(url);
+    List<String> linkPromotionsLinks = getAllListFromCateMainLink(url);
 
 
-    for (String link : linkPromotions) {
+    for (String link : linkPromotionsLinks) {
       Thread.sleep(2000);
       PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
       if (model != null) {

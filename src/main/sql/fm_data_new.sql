@@ -75,4 +75,5 @@ INSERT INTO fm_promotion_categories (name) VALUES ('Shopping');
 INSERT INTO fm_promotion_categories (name) VALUES ('Health');
 INSERT INTO fm_promotion_categories (name) VALUES ('Education');
 INSERT INTO fm_promotion_categories (name) VALUES('Electronics');
-INSERT INTO fm_promotion_categories (name) VALUES ('Khác');
+INSERT INTO fm_promotion_categories (name) VALUES('Privilege Goodwill');
+INSERT INTO fm_promotion_categories (name) VALUES('Other');

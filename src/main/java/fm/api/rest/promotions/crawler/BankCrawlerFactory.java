@@ -10,18 +10,18 @@
  public class BankCrawlerFactory {
 
      private IBankPromotionCrawler vibCrawler;
-     private IBankPromotionCrawler scbCrawler;
+     private IBankPromotionCrawler scbCrawler2;
      private IBankPromotionCrawler shinhanCrawler;
 
      public BankCrawlerFactory(@Qualifier("vibCrawler") IBankPromotionCrawler vibCrawler,
-                               @Qualifier("scbCrawler") IBankPromotionCrawler scbCrawler,
+                               @Qualifier("scbCrawler2") IBankPromotionCrawler scbCrawler2,
                                @Qualifier("shinhanCrawler") IBankPromotionCrawler shinhanCrawler) {
 
 
          Assert.notNull(vibCrawler);
 
          this.vibCrawler = vibCrawler;
-         this.scbCrawler = scbCrawler;
+         this.scbCrawler2 = scbCrawler2;
          this.shinhanCrawler = shinhanCrawler;
 
      }
@@ -32,7 +32,7 @@
              case "vib":
                  return this.vibCrawler;
              case "scb":
-                 return this.scbCrawler;
+                 return this.scbCrawler2;
              case "shinhan":
                  return this.shinhanCrawler;
              default:

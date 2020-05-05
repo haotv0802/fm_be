@@ -38,9 +38,9 @@ public class PromotionUtils {
    * @param text
    * @return
    */
-  public String getDate(String text) {
+  public String getDateVIBData(String text) {
     if (text != null) {
-      String datePattern = "([0-9]+[/][0-9]+[/][0-9]{4}[.]{0,1})";
+      String datePattern = "([0-9]+[/||-][0-9]+[/||-][0-9]{4}[.]{0,1})";
       Pattern r = Pattern.compile(datePattern);
       Matcher m = r.matcher(text);
       StringBuilder sb = new StringBuilder();
@@ -49,6 +49,29 @@ public class PromotionUtils {
           sb.append(m.group(0));
         } else {
           sb.append("-");
+          sb.append(m.group(0));
+        }
+      }
+      if (!sb.toString().equals("")) {
+        return sb.toString();
+      }
+    }
+    return "";
+  }
+
+  /**
+   * This service to get type date from string
+   * @param text
+   * @return
+   */
+  public String getDateSCBData(String text) {
+    if (text != null) {
+      String datePattern = "([0-9]+[/||-][0-9]+[/||-][0-9]{4}[.]{0,1})";
+      Pattern r = Pattern.compile(datePattern);
+      Matcher m = r.matcher(text);
+      StringBuilder sb = new StringBuilder();
+      while (m.find()) {
+        if (sb.toString().equals("")) {
           sb.append(m.group(0));
         }
       }
