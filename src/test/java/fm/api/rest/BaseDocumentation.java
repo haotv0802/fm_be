@@ -11,6 +11,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.restdocs.ManualRestDocumentation;
 import org.springframework.restdocs.constraints.ConstraintDescriptions;
 import org.springframework.restdocs.constraints.ResourceBundleConstraintDescriptionResolver;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
 import org.springframework.session.ExpiringSession;
@@ -37,7 +38,9 @@ import static java.util.ResourceBundle.getBundle;
 import static org.springframework.restdocs.cli.CliDocumentation.curlRequest;
 import static org.springframework.restdocs.http.HttpDocumentation.httpRequest;
 import static org.springframework.restdocs.http.HttpDocumentation.httpResponse;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.snippet.Attributes.attributes;
 import static org.springframework.restdocs.snippet.Attributes.key;
@@ -145,14 +148,15 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
   }
 
 
-//  protected RestDocumentationResultHandler documentPrettyPrintReqResp(String useCase) {
-//    return document(useCase,
-//                    preprocessRequest(prettyPrint()),
-//                    preprocessResponse(prettyPrint()));
-//    }
-//  protected RestDocumentationResultHandler documentPrettyPrintReqResp() {
-//    return documentPrettyPrintReqResp(SNIPPET_NAME_PATTERN);
-//  }
+  protected RestDocumentationResultHandler documentPrettyPrintReqResp(String useCase) {
+    return document(useCase,
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()));
+  }
+
+  protected RestDocumentationResultHandler documentPrettyPrintReqResp() {
+    return documentPrettyPrintReqResp(SNIPPET_NAME_PATTERN);
+  }
 
   //  protected Snippet getRequestHeaders() {
 //    return requestHeaders(

@@ -122,3 +122,21 @@ include::{snippets}/menu-resource-test/test-get-all/http-request.adoc[]
 
 //Example HTTP response
 include::{snippets}/menu-resource-test/test-get-all/http-response.adoc[]
+
+[[resources-get-case-menu]]
+== Listing case menu items
+
+A `GET` request will list all of the case menu items.
+
+=== Request structure
+
+include::{snippets}/money-flow-resource-test/test-get-expenses/request-headers.adoc[]
+
+=== Response structure
+include::{snippets}/money-flow-resource-test/test-get-expenses/response-headers.adoc[]
+
+=== Example request
+include::{snippets}/money-flow-resource-test/test-get-expenses/curl-request.adoc[]
+
+=== Example response
+include::{snippets}/money-flow-resource-test/test-get-expenses/http-response.adoc[]

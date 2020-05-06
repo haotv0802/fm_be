@@ -3,14 +3,16 @@ package fm.api.rest.moneyflow;
 import fm.api.rest.BaseDocumentation;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Assert;
 import org.testng.annotations.Test;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
-
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -25,14 +27,19 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
    */
   @Test
   public void testGetExpenses() throws Exception {
+    RestDocumentationResultHandler document = documentPrettyPrintReqResp("getCaseMenuItems");
+    document.snippets(requestHeaders(
+            headerWithName("X-AUTH-TOKEN").description(
+                    "Authentication for USER")));
+
     MvcResult result = mockMvc
-        .perform(get("/svc/moneyflow")
-            .header("Accept-Language", "en")
-            .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-        )
-        .andExpect(status().is(200))
-        .andReturn()
-    ;
+            .perform(get("/svc/moneyflow")
+                    .header("Accept-Language", "en")
+                    .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+            )
+            .andExpect(status().is(200))
+            .andDo(document)
+            .andReturn();
 
     ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(
         result.getResponse().getContentAsString(), ItemDetailsPresenter.class);
