@@ -4,3 +4,5 @@ logs
 .idea/fm_be.iml
 **/*.iml
 *.iml
+target
+.bash_profile
