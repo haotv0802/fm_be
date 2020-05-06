@@ -10,9 +10,16 @@ import org.testng.annotations.Test;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,10 +34,31 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
    */
   @Test
   public void testGetExpenses() throws Exception {
-    RestDocumentationResultHandler document = documentPrettyPrintReqResp("getCaseMenuItems");
-    document.snippets(requestHeaders(
-            headerWithName("X-AUTH-TOKEN").description(
-                    "Authentication for USER")));
+//    RestDocumentationResultHandler restDocs = documentPrettyPrintReqResp("getExpenses");
+    RestDocumentationResultHandler restDocs = document(
+            SNIPPET_NAME_PATTERN
+            ,preprocessResponse(prettyPrint())
+            ,getRequestHeaderByAuthentication()
+//            ,responseFields(
+//                    getResponseFieldsAttributes(),
+//                    fieldWithPath("id").description(getMessage("Id")).type("String"),
+//                    fieldWithPath("userId").description(getMessage("User Id")).type("String"),
+//                    fieldWithPath("amount").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("date").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("name").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("moneySourceId").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("moneySourceName").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("paymentMethod").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("cardNumber").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("cardInfo").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("updated").description(getMessage("Amount")).type("Big Decimal"),
+//                    fieldWithPath("spending").description(getMessage("Amount")).type("Big Decimal")
+//            )
+    );
+
+//    restDocs.snippets(requestHeaders(
+//            headerWithName("X-AUTH-TOKEN").description(
+//                    "Authentication for USER")));
 
     MvcResult result = mockMvc
             .perform(get("/svc/moneyflow")
@@ -38,7 +66,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
                     .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
             )
             .andExpect(status().is(200))
-            .andDo(document)
+            .andDo(restDocs)
             .andReturn();
 
     ItemDetailsPresenter expensesDetailsPresenter = objectMapper.readValue(

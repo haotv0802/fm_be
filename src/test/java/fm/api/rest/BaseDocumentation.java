@@ -14,6 +14,7 @@ import org.springframework.restdocs.constraints.ResourceBundleConstraintDescript
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.restdocs.payload.FieldDescriptor;
 import org.springframework.restdocs.payload.PayloadDocumentation;
+import org.springframework.restdocs.snippet.Snippet;
 import org.springframework.session.ExpiringSession;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.test.context.ContextConfiguration;
@@ -47,6 +48,10 @@ import static org.springframework.restdocs.snippet.Attributes.key;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.util.StringUtils.collectionToDelimitedString;
+import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
+import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+
 
 /**
  * Created by haho
@@ -158,24 +163,27 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
     return documentPrettyPrintReqResp(SNIPPET_NAME_PATTERN);
   }
 
-  //  protected Snippet getRequestHeaders() {
+  protected String getMessage(String property) {
+    return messageSource.getMessage(property, null, locale);
+  }
+
+//    protected Snippet getRequestHeaders() {
 //    return requestHeaders(
 //        getRequestHeadersAttributes()
 //        ,headerWithName("X-AUTH-TOKEN").description(msgI18n(MessageProperties.X_AUTH_TOKEN))
 //        ,headerWithName("Accept-Language").description(msgI18n(MessageProperties.ACCEPT_LANGUAGE)).optional());
 //  }
-//
 //  protected Snippet getRequestHeaderByLanguage() {
 //    return requestHeaders(
 //        getRequestHeadersAttributes()
 //        ,headerWithName("Accept-Language").description(msgI18n(MessageProperties.ACCEPT_LANGUAGE)).optional());
 //  }
 //
-//  protected Snippet getRequestHeaderByAuthentication() {
-//    return requestHeaders(
-//        getRequestHeadersAttributes()
-//        ,headerWithName("X-AUTH-TOKEN").description(msgI18n(MessageProperties.X_AUTH_TOKEN)));
-//  }
+  protected Snippet getRequestHeaderByAuthentication() {
+    return requestHeaders(
+        getRequestHeadersAttributes()
+        ,headerWithName("X-AUTH-TOKEN").description(msgI18n(MessageProperties.X_AUTH_TOKEN)));
+  }
 //
 //  protected Snippet getRequestHeadersWithTransaction() {
 //    return requestHeaders(
@@ -185,11 +193,11 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
 //        ,headerWithName("txId").description(msgI18n(MessageProperties.TRANSACT_ID)).optional());
 //  }
 //
-//  protected Snippet getResponseHeaderByAuthentication() {
-//    return responseHeaders(
-//        getResponseHeadersAttributes()
-//        ,headerWithName("X-AUTH-TOKEN").description(msgI18n(MessageProperties.X_AUTH_TOKEN)));
-//  }
+  protected Snippet getResponseHeaderByAuthentication() {
+    return responseHeaders(
+        getResponseHeadersAttributes()
+        ,headerWithName("X-AUTH-TOKEN").description(msgI18n(MessageProperties.X_AUTH_TOKEN)));
+  }
 //
 //  protected Map<String, Object> getRequestFieldsAttributes() {
 //    return attributes(
@@ -203,31 +211,31 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
 //        ,key("tableConstraints").value(msgI18n(MessageProperties.REQUEST_FIELD_CONSTRAINTS))
 //    );
 //  }
-//
-//  protected Map<String, Object> getRequestParamsAttributes() {
-//    return attributes(
-//        key("title"            ).value(msgI18n(MessageProperties.REQUEST_PARAM_TITLE))
-//        ,key("option"          ).value(msgI18n(MessageProperties.OPTIONAL))
-//        ,key("required"        ).value(msgI18n(MessageProperties.REQUIRED))
-//        ,key("tableParam"      ).value(msgI18n(MessageProperties.REQUEST_PARAM_PARAMETER))
-//        ,key("tableDescription").value(msgI18n(MessageProperties.REQUEST_PARAM_DESCRIPTION))
-//        ,key("tableCondition"  ).value(msgI18n(MessageProperties.REQUEST_PARAM_CONDITION))
-//        ,key("tableConstraints").value(msgI18n(MessageProperties.REQUEST_PARAM_CONSTRAINTS))
-//    );
-//  }
-//
-//  protected Map<String, Object> getRequestPartsAttributes() {
-//    return attributes(
-//      key("title"            ).value(msgI18n(MessageProperties.REQUEST_PARAM_TITLE))
-//      ,key("option"          ).value(msgI18n(MessageProperties.OPTIONAL))
-//      ,key("required"        ).value(msgI18n(MessageProperties.REQUIRED))
-//      ,key("tableParam"      ).value(msgI18n(MessageProperties.REQUEST_PARAM_PARAMETER))
-//      ,key("tableDescription").value(msgI18n(MessageProperties.REQUEST_PARAM_DESCRIPTION))
-//      ,key("tableCondition"  ).value(msgI18n(MessageProperties.REQUEST_PARAM_CONDITION))
-//      ,key("tableConstraints").value(msgI18n(MessageProperties.REQUEST_PARAM_CONSTRAINTS))
-//    );
-//  }
-//
+
+  protected Map<String, Object> getRequestParamsAttributes() {
+    return attributes(
+        key("title"            ).value(msgI18n(MessageProperties.REQUEST_PARAM_TITLE))
+        ,key("option"          ).value(msgI18n(MessageProperties.OPTIONAL))
+        ,key("required"        ).value(msgI18n(MessageProperties.REQUIRED))
+        ,key("tableParam"      ).value(msgI18n(MessageProperties.REQUEST_PARAM_PARAMETER))
+        ,key("tableDescription").value(msgI18n(MessageProperties.REQUEST_PARAM_DESCRIPTION))
+        ,key("tableCondition"  ).value(msgI18n(MessageProperties.REQUEST_PARAM_CONDITION))
+        ,key("tableConstraints").value(msgI18n(MessageProperties.REQUEST_PARAM_CONSTRAINTS))
+    );
+  }
+
+  protected Map<String, Object> getRequestPartsAttributes() {
+    return attributes(
+      key("title"            ).value(msgI18n(MessageProperties.REQUEST_PARAM_TITLE))
+      ,key("option"          ).value(msgI18n(MessageProperties.OPTIONAL))
+      ,key("required"        ).value(msgI18n(MessageProperties.REQUIRED))
+      ,key("tableParam"      ).value(msgI18n(MessageProperties.REQUEST_PARAM_PARAMETER))
+      ,key("tableDescription").value(msgI18n(MessageProperties.REQUEST_PARAM_DESCRIPTION))
+      ,key("tableCondition"  ).value(msgI18n(MessageProperties.REQUEST_PARAM_CONDITION))
+      ,key("tableConstraints").value(msgI18n(MessageProperties.REQUEST_PARAM_CONSTRAINTS))
+    );
+  }
+
   private Map<String, Object> getCurlRequestAttributes() {
     return attributes(
         key("title").value(msgI18n(MessageProperties.CURL_REQUEST_TITLE)));
@@ -243,39 +251,39 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
         key("title").value(msgI18n(MessageProperties.HTTP_RESPONSE_TITLE)));
   }
 
-//  protected Map<String, Object> getRequestHeadersAttributes() {
-//    return attributes(
-//        key("option"           ).value(msgI18n(MessageProperties.OPTIONAL))
-//        ,key("required"        ).value(msgI18n(MessageProperties.REQUIRED))
-//        ,key("title"           ).value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_TITLE))
-//        ,key("tableName"       ).value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_NAME))
-//        ,key("tableDescription").value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_DESCRIPTION))
-//        ,key("tableCondition"  ).value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_CONDITION)));
-//  }
-//
-//  protected Map<String, Object> getResponseFieldsAttributes() {
-//    return attributes(
-//        key("title"            ).value(msgI18n(MessageProperties.RESPONSE_FIELD_TITLE))
-//        ,key("tablePath"       ).value(msgI18n(MessageProperties.RESPONSE_FIELD_PATH))
-//        ,key("tableType"       ).value(msgI18n(MessageProperties.RESPONSE_FIELD_TYPE))
-//        ,key("tableDescription").value(msgI18n(MessageProperties.RESPONSE_FIELD_DESCRIPTION)));
-//  }
-//
-//  protected Map<String, Object> getPathParamsAttributes() {
-//    return attributes(
-//        key("title"            ).value(msgI18n(MessageProperties.PATH_PARAM_TITLE))
-//        ,key("tableParam"      ).value(msgI18n(MessageProperties.PATH_PARAM_PARAMETER))
-//        ,key("tableDescription").value(msgI18n(MessageProperties.PATH_PARAM_DESCRIPTION))
-//        ,key("tableConstraints").value(msgI18n(MessageProperties.PATH_PARAM_CONSTRAINTS))
-//    );
-//  }
-//
-//  protected Map<String, Object> getResponseHeadersAttributes() {
-//    return attributes(
-//        key("title"            ).value(msgI18n(MessageProperties.HTTP_RESPONSE_HEADER_TITLE))
-//        ,key("tableName"       ).value(msgI18n(MessageProperties.HTTP_RESPONSE_HEADER_NAME))
-//        ,key("tableDescription").value(msgI18n(MessageProperties.HTTP_RESPONSE_HEADER_DESCRIPTION)));
-//  }
+  protected Map<String, Object> getRequestHeadersAttributes() {
+    return attributes(
+        key("option"           ).value(msgI18n(MessageProperties.OPTIONAL))
+        ,key("required"        ).value(msgI18n(MessageProperties.REQUIRED))
+        ,key("title"           ).value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_TITLE))
+        ,key("tableName"       ).value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_NAME))
+        ,key("tableDescription").value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_DESCRIPTION))
+        ,key("tableCondition"  ).value(msgI18n(MessageProperties.HTTP_REQUEST_HEADER_CONDITION)));
+  }
+
+  protected Map<String, Object> getResponseFieldsAttributes() {
+    return attributes(
+        key("title"            ).value(msgI18n(MessageProperties.RESPONSE_FIELD_TITLE))
+        ,key("tablePath"       ).value(msgI18n(MessageProperties.RESPONSE_FIELD_PATH))
+        ,key("tableType"       ).value(msgI18n(MessageProperties.RESPONSE_FIELD_TYPE))
+        ,key("tableDescription").value(msgI18n(MessageProperties.RESPONSE_FIELD_DESCRIPTION)));
+  }
+
+  protected Map<String, Object> getPathParamsAttributes() {
+    return attributes(
+        key("title"            ).value(msgI18n(MessageProperties.PATH_PARAM_TITLE))
+        ,key("tableParam"      ).value(msgI18n(MessageProperties.PATH_PARAM_PARAMETER))
+        ,key("tableDescription").value(msgI18n(MessageProperties.PATH_PARAM_DESCRIPTION))
+        ,key("tableConstraints").value(msgI18n(MessageProperties.PATH_PARAM_CONSTRAINTS))
+    );
+  }
+
+  protected Map<String, Object> getResponseHeadersAttributes() {
+    return attributes(
+        key("title"            ).value(msgI18n(MessageProperties.HTTP_RESPONSE_HEADER_TITLE))
+        ,key("tableName"       ).value(msgI18n(MessageProperties.HTTP_RESPONSE_HEADER_NAME))
+        ,key("tableDescription").value(msgI18n(MessageProperties.HTTP_RESPONSE_HEADER_DESCRIPTION)));
+  }
 
   protected static class ConstrainedFields {
 
