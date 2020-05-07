@@ -76,11 +76,10 @@ use of HTTP status codes.
 A `GET` request will list all of the case menu items.
 
 === Request structure
-
 include::{snippets}/money-flow-resource-test/test-get-expenses/request-headers.adoc[]
 
 === Response structure
-include::{snippets}/money-flow-resource-test/test-get-expenses/response-headers.adoc[]
+include::{snippets}/money-flow-resource-test/test-get-expenses/response-fields.adoc[]
 
 === Example request
 include::{snippets}/money-flow-resource-test/test-get-expenses/curl-request.adoc[]

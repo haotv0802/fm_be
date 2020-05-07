@@ -1,5 +1,6 @@
 package fm.api.rest.moneyflow;
 
+import fm.api.constants.Types;
 import fm.api.rest.BaseDocumentation;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
@@ -34,31 +35,29 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
    */
   @Test
   public void testGetExpenses() throws Exception {
-//    RestDocumentationResultHandler restDocs = documentPrettyPrintReqResp("getExpenses");
     RestDocumentationResultHandler restDocs = document(
             SNIPPET_NAME_PATTERN
             ,preprocessResponse(prettyPrint())
             ,getRequestHeaderByAuthentication()
-//            ,responseFields(
-//                    getResponseFieldsAttributes(),
-//                    fieldWithPath("id").description(getMessage("Id")).type("String"),
-//                    fieldWithPath("userId").description(getMessage("User Id")).type("String"),
-//                    fieldWithPath("amount").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("date").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("name").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("moneySourceId").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("moneySourceName").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("paymentMethod").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("cardNumber").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("cardInfo").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("updated").description(getMessage("Amount")).type("Big Decimal"),
-//                    fieldWithPath("spending").description(getMessage("Amount")).type("Big Decimal")
-//            )
+            ,responseFields(
+                    getResponseFieldsAttributes(),
+                    fieldWithPath("expenses[].id").description(getMessage("Id")).type(Types.LONG),
+                    fieldWithPath("expenses[].userId").description(getMessage("User Id")).type(Types.LONG),
+                    fieldWithPath("expenses[].amount").description(getMessage("Amount")).type(Types.BIG_DECIMAL),
+                    fieldWithPath("expenses[].date").description(getMessage("Date")).type(Types.DATE),
+                    fieldWithPath("expenses[].name").description(getMessage("Name")).type(Types.STRING),
+                    fieldWithPath("expenses[].moneySourceId").description(getMessage("Mouney source Id")).type(Types.LONG),
+                    fieldWithPath("expenses[].moneySourceName").description(getMessage("Money source Name")).type(Types.STRING),
+                    fieldWithPath("expenses[].paymentMethod").description(getMessage("Payment method")).type(Types.STRING),
+                    fieldWithPath("expenses[].cardNumber").description(getMessage("Card number")).type(Types.STRING),
+                    fieldWithPath("expenses[].cardInfo").description(getMessage("Card info")).type(Types.STRING),
+                    fieldWithPath("expenses[].updated").description(getMessage("Updated date")).type(Types.DATE),
+                    fieldWithPath("expenses[].spending").description(getMessage("Is spent")).type(Types.BOOLEAN),
+                    fieldWithPath("total").description(getMessage("Total")).type(Types.BIG_DECIMAL),
+                    fieldWithPath("month").description(getMessage("Month")).type(Types.INTEGER),
+                    fieldWithPath("year").description(getMessage("Year")).type(Types.INTEGER)
+            )
     );
-
-//    restDocs.snippets(requestHeaders(
-//            headerWithName("X-AUTH-TOKEN").description(
-//                    "Authentication for USER")));
 
     MvcResult result = mockMvc
             .perform(get("/svc/moneyflow")
@@ -74,7 +73,6 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
 
     Assert.notNull(expensesDetailsPresenter);
   }
-
 
   /**
    * Normal case
