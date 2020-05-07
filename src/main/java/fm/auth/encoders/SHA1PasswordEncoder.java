@@ -6,7 +6,7 @@ import java.security.NoSuchAlgorithmException;
 /**
  * Created by glengarski on 04/11/2016.
  */
-public class SHA1PasswordEncoder extends AbstractImxPasswordEncoder {
+public class SHA1PasswordEncoder extends AbstractFmPasswordEncoder {
 
   @Override
   public String encode(CharSequence rawPassword) {

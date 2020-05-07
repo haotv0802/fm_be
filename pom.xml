@@ -441,10 +441,8 @@
                             <doctype>book</doctype>
                             <sourceDocumentName>index.adoc</sourceDocumentName>
                             <attributes>
-                                <stylesheet>${basedir}/src/main/asciidoc/css/imx-theme.css</stylesheet>
+                                <stylesheet>${basedir}/src/main/asciidoc/css/fm-theme.css</stylesheet>
                                 <snippets>${snippetsDirectory}</snippets>
-                                <imxClient>DONT_USE</imxClient>
-                                <imxFE>whatever</imxFE>
                             </attributes>
                         </configuration>
                     </execution>

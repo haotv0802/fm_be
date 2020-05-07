@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
  * Created by haoho
  * Date:  21/12/2016  Time: 10:50
  */
-public interface ImxTransactionCommit {
+public interface FmTransactionCommit {
 
   String commitAttribute = "isPossibleToCommit";
 

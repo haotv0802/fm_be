@@ -26,7 +26,7 @@
 
   <!--
   <listener>
-    <listener-class>codix.transaction.ApplicationLifeCycleListener</listener-class>
+    <listener-class>transaction.ApplicationLifeCycleListener</listener-class>
   </listener>
   -->
 
