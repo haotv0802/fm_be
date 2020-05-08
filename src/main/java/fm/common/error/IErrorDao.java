@@ -11,9 +11,9 @@ import fm.common.ServiceFault;
 public interface IErrorDao {
   String registerBackEndFault(ServiceFault fault);
 
-  String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack);
+  String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack, Exception ex);
 
-  String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack, String dump);
+  String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack, Exception ex, String dump);
 
   ErrorReference registerFrontEndError(FrontEndFault errorMessage);
 }

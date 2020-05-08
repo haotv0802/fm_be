@@ -171,7 +171,6 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         ;
     }
 
-
     @Test
     public void testUpdateExpenseWithWrongValues() throws Exception {
 

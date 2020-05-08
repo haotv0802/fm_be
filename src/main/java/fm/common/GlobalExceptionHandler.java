@@ -22,14 +22,14 @@ import java.util.regex.Pattern;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private Logger log = LogManager.getLogger(getClass());
+    private final Logger LOGGER = LogManager.getLogger(getClass());
     private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_END = 20999;
     private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_START = 20000;
     private static final Pattern NEW_LINE = Pattern.compile("\\R");
 
     private final ResourceBundleMessageSource messageSource;
 
-    // TODO log error code into database
+    // log error code into database
     private final IErrorService errorService;
 
     @Autowired
@@ -48,27 +48,26 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST) //400
     @ResponseBody
     public ServiceFault handleConflict(ValidationException e) {
-        log.error(e.getMessage(), e);
+        LOGGER.error(e.getMessage(), e);
         String faultCode = e.getFaultCode();
         Object[] context = e.getContext();
 
         ServiceFault fault = new ServiceFault(faultCode, messageSource.getMessage(faultCode, context, LocaleContextHolder.getLocale()));
-        return errorService.registerBackEndFault(fault, e.getStackTrace());
+        return errorService.registerBackEndFault(fault, e.getStackTrace(), e);
     }
-
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // 404
     public ServiceFault handleConflict(EmptyResultDataAccessException e) {
-        log.info("Info: ", e);
-        return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace());
+        LOGGER.info("Info: ", e);
+        return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace(), e);
     }
 
     @ExceptionHandler(CannotAcquireLockException.class)
     @ResponseStatus(HttpStatus.LOCKED) // 423
     public ServiceFault handleConflict(CannotAcquireLockException e) {
-        log.info("Info:", e);
-        return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace());
+        LOGGER.info("Info:", e);
+        return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace(), e);
     }
 
 }
