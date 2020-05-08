@@ -8,6 +8,6 @@ import fm.common.ServiceFault;
  * Interface defining the contract for registering BE errors
  */
 public interface IErrorService {
-  ServiceFault registerBackEndFault(ServiceFault sf, StackTraceElement[] stack, Exception ex);
+  ServiceFault registerBackEndFault(ServiceFault sf, StackTraceElement[] stack, Exception ex, String username);
 }
 

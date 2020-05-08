@@ -42,12 +42,12 @@ public class ErrorService implements IErrorService {
    * @return a service fault with incidend id
    */
   @Override
-  public ServiceFault registerBackEndFault(ServiceFault sf, StackTraceElement[] stack, Exception ex) {
+  public ServiceFault registerBackEndFault(ServiceFault sf, StackTraceElement[] stack, Exception ex, String username) {
     Assert.notNull(sf);
     return transactionTemplate.execute(new TransactionCallback<ServiceFault>() {
       @Override
       public ServiceFault doInTransaction(TransactionStatus status) {
-        sf.setIncidentId(errorDao.registerBackEndFault(sf, stack, ex));
+        sf.setIncidentId(errorDao.registerBackEndFault(sf, stack, ex, username));
         return sf;
       }
     });
