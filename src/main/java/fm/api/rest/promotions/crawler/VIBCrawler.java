@@ -75,7 +75,6 @@ public class VIBCrawler implements IBankPromotionCrawler {
   }
 
 
-
   /**
    * This service is to get neccessary infomation from detail link
    *
@@ -92,8 +91,12 @@ public class VIBCrawler implements IBankPromotionCrawler {
       String content = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "Content");
       List<String> location = getLocations(promotionPageEls);
       String htmlText = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "HTML");
-      PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content), "", endDate, categoryId, 2, htmlText, link, "IMG", "CARD TYPE", "CONDITION", "LOCATION");
-      return model;
+      PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content) + " tháng", "", endDate, categoryId, 2, htmlText, link, "IMG", "CARD TYPE", "CONDITION", "LOCATION");
+      if (content != null) {
+        return model;
+      } else {
+        LOGGER.info("ERROR LINK PROMTION : " + link);
+      }
     } catch (Exception e) {
 //            e.printStackTrace();
       LOGGER.info("Bank Promotion Read time out - Link  : " + link);

@@ -9,7 +9,6 @@ import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.interfaces.BankLinkPromotion;
 import fm.api.rest.promotions.crawler.utils.PromotionUtils;
 import io.jsonwebtoken.lang.Assert;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -23,7 +22,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 
-@Service("scbCrawler2")
+@Service("scbCrawler")
 public class SCBCrawler implements IBankPromotionCrawler {
   private static final Logger LOGGER = LogManager.getLogger(PromotionCrawlerDAO.class);
   private final String mainLink = "htstps://www.scb.com.vn/";
@@ -43,7 +42,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
   @Override
   public Map<Integer, List<PromotionCrawlerModel>> crawl() {
-    Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
+    Map<Integer, List<PromotionCrawlerModel>> ressult = new TreeMap<>();
     categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
     try {
       // Test all function
@@ -80,16 +79,20 @@ public class SCBCrawler implements IBankPromotionCrawler {
    * @return
    * @throws IOException
    */
-  private PromotionCrawlerModel getPromotionFromLink(String link) throws IOException {
+  private PromotionCrawlerModel getPromotionFromLink(String link, int cateId) throws IOException {
     String end_Date = "";
     String start_Date = "";
     Document docPromotionDetailInfo = Jsoup.connect(link).timeout(3 * 1000).get();
     Elements elPromoDetailInfo = docPromotionDetailInfo.getElementsByClass("content-1");
-    String tilte = getTitle(docPromotionDetailInfo.select(".sale-detail-wrap"), ".title-d-1");
+    String tilte = getTitle(docPromotionDetailInfo.select(".sale-detail-wrap"), ".title-d-1") != null ? getTitle(docPromotionDetailInfo.select(".sale-detail-wrap"), ".title-d-1") : "";
     String content = getDetail(elPromoDetailInfo, "p", "Ưu đãi");
     String date = getDetail(elPromoDetailInfo, "p", "Thời gian");
     String cardType = getDetail(elPromoDetailInfo, "p", "Áp dụng");
     String condition = getDetail(elPromoDetailInfo, "p", "Điều kiện điều khoản");
+    if (condition == null) {
+      condition = getDetail(elPromoDetailInfo, "p", "Điều kiện và điều khoản");
+    }
+
     String htmlText = elPromoDetailInfo.text();
     if (date != null) {
       if (date.split("đến").length > 1) {
@@ -99,8 +102,14 @@ public class SCBCrawler implements IBankPromotionCrawler {
         start_Date = date;
       }
     }
-    PromotionCrawlerModel model = new PromotionCrawlerModel(tilte, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content), promotionUtils.getDateSCBData(start_Date), promotionUtils.getDateSCBData(end_Date), 0, 3, htmlText, link, "", cardType, condition, "");
-    return model;
+    if (content != null) {
+      PromotionCrawlerModel model = new PromotionCrawlerModel(tilte, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content), promotionUtils.getDateSCBData(start_Date), promotionUtils.getDateSCBData(end_Date), cateId, 3, htmlText, link, "", cardType, condition, "");
+      return model;
+    } else {
+      LOGGER.info("ERROR LINK PROMOTION : " + link);
+      return null;
+    }
+
 
   }
 
@@ -115,16 +124,21 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private String getDetail(Elements container, String selector, String tagName) {
     Elements promotionDetailEls = container.select(selector);
-
+    if (promotionDetailEls.size() <= 2) {
+      promotionDetailEls = container.select("li");
+    }
     for (Element promoDetail : promotionDetailEls) {
-      if (promoDetail.text().contains(tagName)) {
-        if (promoDetail.nextElementSibling().outerHtml().contains("<ul>")) {
-          return promoDetail.nextElementSibling().text();
+      if (promoDetail.text().contains(tagName) || promoDetail.text().contains(tagName.toLowerCase())) {
+        if (promoDetail.nextElementSibling() != null) {
+          if (promoDetail.nextElementSibling().outerHtml().contains("<ul>")) {
+            return promoDetail.nextElementSibling().text();
+          }
         }
         return promoDetail.text();
       }
+
     }
-    return null;
+    return "";
   }
 
   /**
@@ -133,9 +147,14 @@ public class SCBCrawler implements IBankPromotionCrawler {
    * @param els
    * @return
    */
-  private int getLimitPagePromoCate(Elements els) {
+  private List<String> getLimitPagePromoCate(Elements els) {
     Elements numbPage = els.select("li");
-    return numbPage.size();
+    List<String> listAllPage = new ArrayList<>();
+    for (Element item : numbPage) {
+      String link = item.select("a").first().attr("href");
+      listAllPage.add(link);
+    }
+    return listAllPage;
   }
 
   /**
@@ -163,10 +182,9 @@ public class SCBCrawler implements IBankPromotionCrawler {
   private List<String> getAllPromotionLinks(String url) throws IOException {
     List<String> listLinkInCate = new ArrayList<>();
     Document promoDoc = Jsoup.connect(url).get();
-    int pageLimit = getLimitPagePromoCate(promoDoc.getElementsByClass("page-num"));
-    for (int i = 0; i < pageLimit; i++) {
-      String pageLinkPromo = StringUtils.substring(url, 0, url.length() - 1) + i;
-      promoDoc = Jsoup.connect(pageLinkPromo).get();
+    List<String> listAllPage = getLimitPagePromoCate(promoDoc.getElementsByClass("page-num"));
+    for (String link : listAllPage) {
+      promoDoc = Jsoup.connect(link).timeout(3 * 1000).get();
       Elements promoDivEls = promoDoc.select(".small-plus-item > a");
       for (Element promoDivEl : promoDivEls) {
         String linkDetail = promoDivEl.attr("href").toString();
@@ -190,7 +208,9 @@ public class SCBCrawler implements IBankPromotionCrawler {
   private List<PromotionCrawlerModel> getTravelPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Travel");
 
-    List<PromotionCrawlerModel> travelPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL);
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+
+    List<PromotionCrawlerModel> travelPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL, listPromoBankData);
 
 
     return travelPromotionData;
@@ -205,8 +225,9 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getFoodPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Food");
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-    List<PromotionCrawlerModel> foodPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD);
+    List<PromotionCrawlerModel> foodPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD, listPromoBankData);
 
 
     return foodPromotionData;
@@ -221,8 +242,9 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getHealthPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Health");
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-    List<PromotionCrawlerModel> healthPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH);
+    List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
 
 
     return healthPromotionData;
@@ -237,8 +259,8 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Privilege Goodwill");
-
-    List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL);
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
 
 
     return privilegeGoodwillPromotionData;
@@ -253,8 +275,8 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getOtherPromotion() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Other");
-
-    List<PromotionCrawlerModel> otherPromotionData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER);
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    List<PromotionCrawlerModel> otherPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER, listPromoBankData);
 
 
     return otherPromotionData;
@@ -269,8 +291,8 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getShoppingInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Shopping");
-
-    List<PromotionCrawlerModel> shoppingInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_SHOPPING_ELECTRIC);
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    List<PromotionCrawlerModel> shoppingInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_SHOPPING_ELECTRIC, listPromoBankData);
 
 
     return shoppingInstalmnetData;
@@ -285,8 +307,8 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getEducationInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Education");
-
-    List<PromotionCrawlerModel> educationInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION);
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    List<PromotionCrawlerModel> educationInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION, listPromoBankData);
 
 
     return educationInstalmnetData;
@@ -301,8 +323,9 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getJewelryInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Jewelry");
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-    List<PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION);
+    List<PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_JEWELRY, listPromoBankData);
 
 
     return jewelryInstalmnetData;
@@ -317,8 +340,9 @@ public class SCBCrawler implements IBankPromotionCrawler {
    */
   private List<PromotionCrawlerModel> getOtherInstalment() throws IOException, InterruptedException {
     int cateId = categoriesDB.get("Other");
+    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-    List<PromotionCrawlerModel> otherInstalmnetData = doCrawlingDetaiData(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER);
+    List<PromotionCrawlerModel> otherInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER, listPromoBankData);
 
 
     return otherInstalmnetData;
@@ -326,7 +350,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
 
   /**
-   * This service is to do crwaling detail data from link
+   * This service is to do crawling promtion detail data from link
    *
    * @param cateID
    * @param url
@@ -334,17 +358,16 @@ public class SCBCrawler implements IBankPromotionCrawler {
    * @throws IOException
    * @throws InterruptedException
    */
-  private List<PromotionCrawlerModel> doCrawlingDetaiData(int cateID, String url) throws IOException, InterruptedException {
+  private List<PromotionCrawlerModel> doCrawlingPromotionDetaiData(int cateID, String url, List<PromotionPresenter> listPromoBankData) throws IOException, InterruptedException {
 
     List<PromotionCrawlerModel> listPromotionCrawling = new ArrayList<>();
 
-    List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateID);
 
     List<String> listPromotionLinks = getAllPromotionLinks(url);
 
     for (String link : listPromotionLinks) {
       Thread.sleep(2000);
-      PromotionCrawlerModel model = getPromotionFromLink(link);
+      PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
       if (model != null) {
         if (promotionUtils.checkInfoExit(model, listPromoBankData)) {
           LOGGER.info("SCB Bank Promotion Date is Existed");
@@ -355,6 +378,106 @@ public class SCBCrawler implements IBankPromotionCrawler {
     }
     listPromotionLinks.clear();
     return listPromotionCrawling;
+  }
+
+  /**
+   * This service is to get Instalment
+   *
+   * @param cateID
+   * @param url
+   * @param listPromoBankData
+   * @return
+   * @throws IOException
+   */
+  private List<PromotionCrawlerModel> doCrawlingInstalment(int cateID, String url, List<PromotionPresenter> listPromoBankData) throws IOException {
+    List<PromotionCrawlerModel> listPromotionCrawling = new ArrayList<>();
+    Document promoDoc = Jsoup.connect(url).get();
+
+    List<String> listPageLimit = getLimitPagePromoCate(promoDoc.getElementsByClass("page-num"));
+
+    for (String link : listPageLimit) {
+      if (listPromotionCrawling.isEmpty()) {
+        listPromotionCrawling = doCrwalingInstallmentData(link, cateID);
+      } else {
+        listPromotionCrawling.addAll(doCrwalingInstallmentData(link, cateID));
+      }
+
+    }
+    return listPromotionCrawling;
+  }
+
+  /**
+   * this service is to get Instalment Promtion detail
+   *
+   * @param link
+   * @param cateID
+   * @return
+   * @throws IOException
+   */
+  private List<PromotionCrawlerModel> doCrwalingInstallmentData(String link, int cateID) throws IOException {
+
+    List<PromotionCrawlerModel> listResult = new ArrayList<>();
+
+    Document docInstalmentPage = Jsoup.connect(link).timeout(3 * 1000).get();
+
+    Elements elsInstalmentContainer = docInstalmentPage.select(".item-partner");
+
+    for (Element elInstalment : elsInstalmentContainer) {
+      String startDate = "";
+      String endDatae = "";
+      Elements elinstalmentTxtPartner = elInstalment.select(".txt-partner");
+      String title = elinstalmentTxtPartner.first().getElementsByTag("h3").text() != null ? elinstalmentTxtPartner.first().getElementsByTag("h3").text() : "";
+      String content = getDetail(elinstalmentTxtPartner, "p", "Trả góp");
+      String codition = getDetail(elinstalmentTxtPartner, "p", "Kênh áp dụng");
+      String location = getDetail(elinstalmentTxtPartner, "p", "Địa chỉ");
+      String date = getDetail(elinstalmentTxtPartner, "p", "Thời gian");
+      String detailLink = getLinkDetail(elinstalmentTxtPartner, link);
+      String htmlText = elinstalmentTxtPartner.outerHtml();
+      if (date != null) {
+        startDate = promotionUtils.getDateSCBData(date.split("đến")[0]);
+        endDatae = promotionUtils.getDateSCBData(date.split("đến")[1]);
+      }
+
+      PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, "", getPeriod(content) + " tháng", startDate, endDatae, cateID, 3, htmlText, link, detailLink, "", codition, location);
+      listResult.add(model);
+    }
+
+    return listResult;
+  }
+
+  /**
+   * This service is to get period data fro Instalment
+   *
+   * @param text
+   * @return
+   */
+  private String getPeriod(String text) {
+    if (text.contains("trong")) {
+      int beginPosition = text.indexOf("trong") + 5;
+      int endPosstion = text.indexOf("tháng");
+
+      String period = text.substring(beginPosition, endPosstion).trim();
+
+      return period;
+    }
+    return null;
+  }
+
+  /**
+   * This service is to get link detail of Instalment from each element
+   *
+   * @param els
+   * @param link
+   * @return
+   */
+  private String getLinkDetail(Elements els, String link) {
+    Elements elsContent = els.select("p");
+    for (Element el : elsContent) {
+      if (el.text().contains("Website:")) {
+        return el.select("a").first().attr("href");
+      }
+    }
+    return link;
   }
 
 }

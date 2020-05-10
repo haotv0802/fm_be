@@ -68,7 +68,7 @@ public class PromotionUtils {
    */
   public String getDateSCBData(String text) {
     if (text != null) {
-      String datePattern = "([0-9]+[/||-][0-9]+[/||-][0-9]{4}[.]{0,1})";
+      String datePattern = "([0-9]+[/||-][0-9]+[/||-][0-9]{4})";
       Pattern r = Pattern.compile(datePattern);
       Matcher m = r.matcher(text);
       StringBuilder sb = new StringBuilder();
@@ -92,9 +92,8 @@ public class PromotionUtils {
    */
   public String getProvision(String text) {
     if (text != null) {
-      String moneyPattern1 = "(([0-9]+[,][0-9]*)[d||đ||vnd||vnđ])";
+      String moneyPattern1 = "(\\b([0-9]+[,||.][0-9]*)\\S\\W)";
       String moneyPattern2 = "(([0-9]+)[%])";
-      LOGGER.info("Utils : " + text);
       Pattern p1 = Pattern.compile(moneyPattern1);
       Matcher m = p1.matcher(text);
       Pattern p2 = Pattern.compile(moneyPattern2);

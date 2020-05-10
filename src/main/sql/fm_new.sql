@@ -139,7 +139,7 @@ DROP
 CREATE TABLE `fm_promotions`
 (
     `id`          BIGINT AUTO_INCREMENT,
-    `title`       VARCHAR(45)    NOT NULL,
+    `title`       VARCHAR(100)    NOT NULL,
     `content`     NVARCHAR(9000) NOT NULL,
     `discount`    VARCHAR(45)    NULL, # Could be % or specific amount
     `installment` VARCHAR(45)    NULL, # Could be % or specific amount

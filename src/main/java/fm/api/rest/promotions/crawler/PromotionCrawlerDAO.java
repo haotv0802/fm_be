@@ -68,12 +68,12 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
       paramsMap.addValue("start_date", "02-10-2000");
     } else {
-      paramsMap.addValue("start_date", promoModel.getStartDate());
+      paramsMap.addValue("start_date", promoModel.getStartDate().replaceAll("/","-"));
     }
     if (promoModel.getEndDate().equals("")) {
       paramsMap.addValue("end_date", "02-10-2000");
     } else {
-      paramsMap.addValue("end_date", promoModel.getEndDate());
+      paramsMap.addValue("end_date", promoModel.getEndDate().replaceAll("/","-"));
     }
     paramsMap.addValue("url", promoModel.getLinkDetail());
     paramsMap.addValue("category_id", promoModel.getCategoryId());

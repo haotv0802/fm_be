@@ -14,7 +14,7 @@
      private IBankPromotionCrawler shinhanCrawler;
 
      public BankCrawlerFactory(@Qualifier("vibCrawler") IBankPromotionCrawler vibCrawler,
-                               @Qualifier("scbCrawler2") IBankPromotionCrawler scbCrawler2,
+                               @Qualifier("scbCrawler") IBankPromotionCrawler scbCrawler2,
                                @Qualifier("shinhanCrawler") IBankPromotionCrawler shinhanCrawler) {
 
 
