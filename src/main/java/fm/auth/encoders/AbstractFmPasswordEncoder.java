@@ -2,10 +2,7 @@ package fm.auth.encoders;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-/**
- * Created by glengarski on 04/11/2016.
- */
-public abstract class AbstractImxPasswordEncoder implements PasswordEncoder {
+public abstract class AbstractFmPasswordEncoder implements PasswordEncoder {
 
   abstract public String encode(CharSequence rawPassword);
 

@@ -1,6 +1,5 @@
 
-= iMX RESTful API User Guide
-Codix's iMX RESTful API user manual;
+= fm RESTful API User Guide
 :doctype: book
 :icons: font
 :iconfont-remote!:
@@ -11,12 +10,9 @@ Codix's iMX RESTful API user manual;
 :toclevels: 4
 :sectlinks:
 :docinfo1:
-:imxClient:
-:imxFE:
 
 [[overview]]
 = Overview
-{imxClient}
 [[overview-http-verbs]]
 == HTTP verbs
 
@@ -71,54 +67,22 @@ use of HTTP status codes.
 | The requested resource did not exist
 |===
 
-== Third parties messaging
-This API provides messaging services (over http) in order to facilitate integration with third party (from this API perspective) software.
-
-The basic flow follows:
-[NOTE]
-====
-[arabic]
-. Obtain data for opening and working with external software. Usually speicific service(s) for the context of a particular resource
-. Show to end user link for opening of the external software.
-. Once the end-user opens the link, prevent further input while starting a backgraund loop which queries the status service.
-. Once the status object is recieved and it is in a desired state, store this object, break the loop and restore end-user input.
-. Continue with rest of the service(s) and provide the required data as present in the stored object.
-====
-
-WARNING: Make sure to break the loop if the user navigates away prior of receiving editor state object.
-
-=== Description of services for working with JavaEd(C)
-
-. Optional service for registering a status object. Usually provided as a specific, dedicated service for a particular resource.
-. Contextual service for openning the editor
-. Contextual service for pushing status updated. Used by the third party software such as JavaEd(C).
-. Contextual service for reciving status updates. Used by the clients of this API such as iMX(C).
-. Otional, contextual service for removal of the state object. Usualy not present as this step is performed automaticaly as a final step by this API.
-
-=== Description of services for working with Imagerie(C)
-TBD:
-
 [[resources]]
-= iMX Resources
+= fm Resources
 '''
-== Menu resources
-TIP: Resource for building the navigation menus in iMX
+[[resources-get-expenses]]
+== Listing expenses
 
-[[resources-get-menu]]
-=== Menu items resource
-NOTE: A `GET` request will list all of the menu items.
+A `GET` request will list all of the case menu items.
 
-//Request headers
-include::{snippets}/menu-resource-test/test-get-all/request-headers.adoc[]
+=== Request structure
+include::{snippets}/money-flow-resource-test/test-get-expenses/request-headers.adoc[]
 
-//Response fields
-include::{snippets}/menu-resource-test/test-get-all/response-fields.adoc[]
+=== Response structure
+include::{snippets}/money-flow-resource-test/test-get-expenses/response-fields.adoc[]
 
-//Example Curl request
-include::{snippets}/menu-resource-test/test-get-all/curl-request.adoc[]
+=== Example request
+include::{snippets}/money-flow-resource-test/test-get-expenses/curl-request.adoc[]
 
-//Example HTTP request
-include::{snippets}/menu-resource-test/test-get-all/http-request.adoc[]
-
-//Example HTTP response
-include::{snippets}/menu-resource-test/test-get-all/http-response.adoc[]
+=== Example response
+include::{snippets}/money-flow-resource-test/test-get-expenses/http-response.adoc[]

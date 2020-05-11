@@ -225,6 +225,7 @@ CREATE TABLE `fm_error_tracking`
     `id`            BIGINT       NOT NULL AUTO_INCREMENT,
     `error_message` VARCHAR(100) NOT NULL,
     `stack_trace`   TEXT         NOT NULL,
+    `exception`     VARCHAR(100) NOT NULL,
     `user`          VARCHAR(50),
     `error_date`    DATETIME     NOT NULL DEFAULT now(),
     PRIMARY KEY (`id`),

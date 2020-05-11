@@ -39,7 +39,7 @@ public class PasswordEncoderImpl extends BasePasswordEncoder
   }
 
   /**
-   * Hashes a string using the default imx algorithm
+   * Hashes a string using the default algorithm
    *
    * @param plain - the plain string to hash
    * @return hash of the plain string

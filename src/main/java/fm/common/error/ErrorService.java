@@ -11,27 +11,24 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.util.Assert;
 
 /**
- * Property of CODIX Bulgaria EAD
- * Created by vtodorov
+ * Created by haoho
  * Date:  24/01/2017 Time: 2:08 PM
  * Service for handling errors
- *
- * @author vtodorov
  */
 @Service
 public class ErrorService implements IErrorService {
 
-  private final IErrorDao IErrorDao;
+  private final IErrorDao errorDao;
 
   private final TransactionTemplate transactionTemplate;
 
   @Autowired
   public ErrorService(
-      IErrorDao IErrorDao,
+      IErrorDao errorDao,
       PlatformTransactionManager transactionManager
   ) {
-    Assert.notNull(IErrorDao);
-    this.IErrorDao = IErrorDao;
+    Assert.notNull(errorDao);
+    this.errorDao = errorDao;
 
     Assert.notNull(transactionManager);
     transactionTemplate = new TransactionTemplate(transactionManager);
@@ -45,15 +42,14 @@ public class ErrorService implements IErrorService {
    * @return a service fault with incidend id
    */
   @Override
-  public ServiceFault registerBackEndFault(ServiceFault sf, StackTraceElement[] stack) {
+  public ServiceFault registerBackEndFault(ServiceFault sf, StackTraceElement[] stack, Exception ex, String username) {
     Assert.notNull(sf);
     return transactionTemplate.execute(new TransactionCallback<ServiceFault>() {
       @Override
       public ServiceFault doInTransaction(TransactionStatus status) {
-        sf.setIncidentId(IErrorDao.registerBackEndFault(sf, stack));
+        sf.setIncidentId(errorDao.registerBackEndFault(sf, stack, ex, username));
         return sf;
       }
     });
   }
-
 }

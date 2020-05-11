@@ -17,13 +17,13 @@ import java.util.Set;
 /**
  * Created by haho on 7/4/2017.
  */
-@Service("moneyFlowEditValidator")
-public class MoneyFlowEditValidator implements Validator<MoneyFlowEditValidation> {
+@Service("moneyFlowDeleteValidator")
+public class MoneyFlowDeleteValidator implements Validator<MoneyFlowDeleteValidation> {
 
   private final IMoneyFlowDao expensesDao;
 
   @Autowired
-  public MoneyFlowEditValidator(@Qualifier("moneyFlowDao") IMoneyFlowDao expensesDao) {
+  public MoneyFlowDeleteValidator(@Qualifier("moneyFlowDao") IMoneyFlowDao expensesDao) {
     Assert.notNull(expensesDao);
 
     this.expensesDao = expensesDao;
@@ -41,27 +41,18 @@ public class MoneyFlowEditValidator implements Validator<MoneyFlowEditValidation
    * @param args      - custom context
    */
   @Override
-  public void validate(MoneyFlowEditValidation expenseEditValidation, String faultCode, Object... args) {
+  public void validate(MoneyFlowDeleteValidation expenseEditValidation, String faultCode, Object... args) {
 
     Assert.notNull(expenseEditValidation);
     Assert.notNull(expenseEditValidation.getUserId());
-    Assert.notNull(expenseEditValidation.getExpense());
+    Assert.notNull(expenseEditValidation.getExpenseId());
 
     ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     javax.validation.Validator validator = factory.getValidator();
 
-    Set<ConstraintViolation<ItemPresenter>> violations = validator.validate(expenseEditValidation.getExpense());
-    if (!violations.isEmpty()) {
-      for (ConstraintViolation<ItemPresenter> violation : violations) {
-        String propertyPath = violation.getPropertyPath().toString();
-        String message = violation.getMessage();
-        throw new ValidationException("moneyflow.edit.wrong.input", new String[]{propertyPath, message});
-      }
-    }
-
     if (!expensesDao.
         checkIfLoginUserOwner(
-            expenseEditValidation.getExpense().getId(),
+            expenseEditValidation.getExpenseId(),
             expenseEditValidation.getUserId())
         ) {
       throw new ValidationException("moneyflow.userId.invalid");
