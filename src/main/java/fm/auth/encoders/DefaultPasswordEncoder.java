@@ -1,9 +1,6 @@
 package fm.auth.encoders;
 
-/**
- * Created by glengarski on 04/11/2016.
- */
-public class DefaultPasswordEncoder extends AbstractImxPasswordEncoder {
+public class DefaultPasswordEncoder extends AbstractFmPasswordEncoder {
   @Override
   public String encode(CharSequence rawPassword) {
     String ret = "";

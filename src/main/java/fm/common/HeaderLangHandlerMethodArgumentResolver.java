@@ -37,14 +37,14 @@ public final class HeaderLangHandlerMethodArgumentResolver implements HandlerMet
    * For the moment en->AN, all others capitalised version.
    *
    * @param acceptLang
-   * @return language as used by iMX
+   * @return language as used by system
    */
   private String parseAcceptLang(String acceptLang) {
     if ("en".equals(acceptLang)) {
       return defaultLang;
     }
 
-    //TODO: Vasko says this should be replaces with real parsing
+    //TODO: Vasko says this should be replaced with real parsing
     return acceptLang.toUpperCase();
   }
 }

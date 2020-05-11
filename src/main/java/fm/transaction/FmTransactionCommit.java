@@ -3,11 +3,10 @@ package fm.transaction;
 import javax.servlet.http.HttpSession;
 
 /**
- * Property of CODIX Bulgaria EAD
- * Created by zalexiev
+ * Created by haoho
  * Date:  21/12/2016  Time: 10:50
  */
-public interface ImxTransactionCommit {
+public interface FmTransactionCommit {
 
   String commitAttribute = "isPossibleToCommit";
 

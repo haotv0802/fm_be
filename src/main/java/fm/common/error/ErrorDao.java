@@ -94,20 +94,20 @@ public class ErrorDao implements IErrorDao {
 
   @Override
   public String registerBackEndFault(ServiceFault fault) {
-    return registerBackEndFault(fault, null, null);
+    return registerBackEndFault(fault, null, null, null, null);
   }
 
   @Override
-  public String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack) {
-    return registerBackEndFault(fault, stack, null);
+  public String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack, Exception ex, String username) {
+    return registerBackEndFault(fault, stack, ex, username, null);
   }
 
   @Override
-  public String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack, String dump) {
+  public String registerBackEndFault(ServiceFault fault, StackTraceElement[] stack, Exception ex, String username, String dump) {
     StringBuilder stackStr = prepareStack(stack);
     String errorMsg = prepErrMsg(fault.getFaultCode() + " : " + fault.getFaultMessage());
 
-    return insertError(errorMsg, dump, BE_ERROR_PROC, stackStr.toString());
+    return insertError(errorMsg, ex.getClass().getName(), username, dump, BE_ERROR_PROC, stackStr.toString());
   }
 
   /**
@@ -121,20 +121,7 @@ public class ErrorDao implements IErrorDao {
     String dump = prepareDump(errorMessage);
     String errorMsg = prepErrMsg(errorMessage.getFaultCode() + " : " + errorMessage.getFaultMessage());
 
-    return new ErrorReference(insertError(errorMsg, dump, FE_ERROR_PROC, errorMessage.getStack()));
-  }
-
-
-  /**
-   * Getting a new unique indication reference
-   *
-   * @return new referece
-   */
-  private String getErrorRefID() {
-    final String sql = "SELECT newref.f_get_new_reference('texte') FROM dual";
-
-    DaoUtils.debugQuery(logger, sql);
-    return jdbcTemplate.queryForObject(sql, String.class);
+    return new ErrorReference(insertError(errorMsg, "FRONT-END Exception", "FRONT-END", dump, FE_ERROR_PROC, errorMessage.getStack()));
   }
 
   /**
@@ -145,15 +132,16 @@ public class ErrorDao implements IErrorDao {
    * @param stack
    * @return
    */
-  private String insertError(String errMsg, String dump, String process, String stack) {
+  private String insertError(String errMsg, String exception, String username, String dump, String process, String stack) {
     final String sql =
-          "INSERT INTO fm_error_tracking (error_message, stack_trace, user)"
-        + "  VALUES (:errorMessage, :stackTrace, :user)                    ";
+          "INSERT INTO fm_error_tracking (error_message, stack_trace, user, exception)"
+        + "  VALUES (:errorMessage, :stackTrace, :user, :exception)                    ";
 
     MapSqlParameterSource paramsMap = new MapSqlParameterSource()
         .addValue("errorMessage", errMsg)
         .addValue("stackTrace", stack)
-        .addValue("user", "haho");
+        .addValue("user", username)
+        .addValue("exception", exception);
 
     KeyHolder keyHolder = new GeneratedKeyHolder();
     namedTemplate.update(sql, paramsMap, keyHolder, new String[]{"user"});

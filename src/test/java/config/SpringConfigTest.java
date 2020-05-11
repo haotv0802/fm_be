@@ -27,14 +27,5 @@ public class SpringConfigTest {
   @Bean(name = "testObjectMapper")
   public ObjectMapper testObjectMapper() {
     return new ObjectMapper();
-//    return new ObjectMapper().setFilterProvider(new SimpleFilterProvider().addFilter("iMXClients", imxClientsBeanPropertyFilter));
   }
-
-  /*
-  @Bean
-  public Map<String, String> imxInstanceParam() throws SQLException
-  {
-    return new ImxTestInstanceParametersDao(this.namedTemplate).getImxInstanceParameters();
-  }
-  */
 }

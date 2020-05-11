@@ -380,5 +380,4 @@ public class TrackingConnectionWrapper extends ConnectionWrapper implements Seri
     markAccessTime();
     return super.getNetworkTimeout();
   }
-
 }

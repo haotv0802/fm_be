@@ -131,14 +131,4 @@ public class HTStringUtils {
 
     return columnClause.toString();
   }
-
-  /**
-   * Converts what is considered true in various iMX places to boolean
-   *
-   * @param imxBool imx boolean representation
-   * @return {@code true}, when the imxBool is one of: (O, TRUE, Y), {@code false} otherwise
-   */
-  public static boolean toBoolean(String imxBool) {
-    return "O".equalsIgnoreCase(imxBool) || "TRUE".equalsIgnoreCase(imxBool) || "Y".equalsIgnoreCase(imxBool);
-  }
 }

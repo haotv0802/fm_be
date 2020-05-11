@@ -7,7 +7,7 @@ public class UserTokenDetails implements Serializable {
 
   private final String remoteAddress;
 
-  private final String imxAddressStr;
+  private final String addressStr;
 
   public UserTokenDetails(HttpServletRequest request) {
 
@@ -20,22 +20,22 @@ public class UserTokenDetails implements Serializable {
     /*
     * TODO in the original init_maint the ip is actuuly modified to somethnig else
     * */
-    imxAddressStr = "IMX_TCP_ADR_STR";
+    addressStr = "TCP_ADR_STR";
   }
 
   public String getRemoteAddress() {
     return remoteAddress;
   }
 
-  public String getImxAddressStr() {
-    return imxAddressStr;
+  public String getAddressStr() {
+    return addressStr;
   }
 
   @Override
   public String toString() {
-    return "ImxUsernameTokenDetails{" +
+    return "usernameTokenDetails{" +
         "remoteAddress='" + remoteAddress + '\'' +
-        ", imxAddressStr='" + imxAddressStr + '\'' +
+        ", addressStr='" + addressStr + '\'' +
         '}';
   }
 }

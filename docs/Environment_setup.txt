@@ -2,6 +2,7 @@
     command: java -version
 
 - NodeJS version: v12.16.2
+https://nodejs.org/dist/latest-v12.x/
     command: node -v
 
 - Maven version: apache-maven-3.6.3

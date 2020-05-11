@@ -108,14 +108,9 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
-
-//    final String databaseUrl = "jdbc:oracle:thin:@BULL.codixfr.private:22630/BULL";
-//    final String usr = "imxdb";
-//    final String pass = "manager";
-
-    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
+    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
     final String usr = "root";
-    final String pass = "123456789";
+    final String pass = "fmsystem123";
 
     log.debug("databaseUrl=={}", databaseUrl);
 
@@ -128,7 +123,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //    dataSource.setMaxActive(10);
 //    dataSource.setMaxIdle(5);
 //    dataSource.setInitialSize(5);
-//    dataSource.setVaKlidationQuery("SELECT 1");
+//    dataSource.setValidationQuery("SELECT 1");
 
 //     JdbcDataSource ds = new JdbcDataSource();
     MysqlDataSource ds = new MysqlDataSource();

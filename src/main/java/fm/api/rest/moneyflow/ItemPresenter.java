@@ -1,5 +1,6 @@
 package fm.api.rest.moneyflow;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -10,9 +11,11 @@ import java.util.Date;
 public class ItemPresenter {
   private Integer id;
   private Integer userId;
+  @NotNull(message = "Amount cannot be null")
   private BigDecimal amount;
   private Date date;
   private String name;
+  @NotNull(message = "Money source cannot be null")
   private Integer moneySourceId;
   private String moneySourceName;
   private String paymentMethod;
