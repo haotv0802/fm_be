@@ -158,6 +158,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         Assert.notNull(expensesDetailsPresenter);
 
         List<ItemPresenter> items = expensesDetailsPresenter.getExpenses();
+        items.get(0).setUpdated(true);
 
         result = mockMvc
                 .perform(patch("/svc/moneyflow/list")
