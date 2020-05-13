@@ -17,7 +17,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
   public void commence(final HttpServletRequest request, final HttpServletResponse response, final AuthenticationException authException) throws IOException {
     response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
     response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
-    response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "ImxAuth realm=\"imx\"");
+    response.setHeader(HttpHeaders.WWW_AUTHENTICATE, "Auth realm=\"fm\"");
   }
 
 }

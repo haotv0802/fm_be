@@ -15,7 +15,7 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_SE
  * Date:  21/12/2016  Time: 10:54
  */
 @Service
-public class ImxTransactionCommitImpl implements ImxTransactionCommit {
+public class FmTransactionCommitImpl implements FmTransactionCommit {
 
   private Logger logger = LogManager.getLogger(getClass());
 

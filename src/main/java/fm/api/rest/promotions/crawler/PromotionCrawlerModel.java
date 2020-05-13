@@ -1,36 +1,32 @@
-package fm.api.rest.promotions;
+package fm.api.rest.promotions.crawler;
+/* Quy created on 3/11/2020  */
 
-/**
- * Created by haoho on 2/27/20 10:03.
- */
-public class PromotionPresenter {
-  int id;
+
+
+public class PromotionCrawlerModel {
+
   private String title;
   private String content;
   private String discount;
   private String startDate;
   private String endDate;
-  private int categoryID;
+  private int categoryId;
   private int bankId;
-  private String installmentPeriod;
   private String htmlText;
   private String linkDetail;
+  private String installmentPeriod;
   private String imgURL;
   private String cardType;
   private String condition;
   private String location;
 
-  public PromotionPresenter() {
-  }
-
-  public PromotionPresenter(String title, String content, String discount, String installmentPeriod, String startDate, String endDate, int categoryID, int bankId, String htmlText, String linkDetail, String imgURL, String cardType, String condition, String location) {
+  public PromotionCrawlerModel(String title, String content, String discount, String installmentPeriod, String startDate, String endDate, int categoryId, int bankId, String htmlText, String linkDetail, String imgURL, String cardType, String condition, String location) {
     this.title = title;
     this.content = content;
     this.discount = discount;
-    this.installmentPeriod = installmentPeriod;
     this.startDate = startDate;
     this.endDate = endDate;
-    this.categoryID = categoryID;
+    this.categoryId = categoryId;
     this.bankId = bankId;
     this.htmlText = htmlText;
     this.linkDetail = linkDetail;
@@ -38,6 +34,7 @@ public class PromotionPresenter {
     this.cardType = cardType;
     this.condition = condition;
     this.location = location;
+    this.installmentPeriod = installmentPeriod;
   }
 
   public String getTitle() {
@@ -80,20 +77,12 @@ public class PromotionPresenter {
     this.endDate = endDate;
   }
 
-  public int getId() {
-    return id;
+  public int getCategoryId() {
+    return categoryId;
   }
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getCategoryID() {
-    return categoryID;
-  }
-
-  public void setCategoryID(int categoryID) {
-    this.categoryID = categoryID;
+  public void setCategoryId(int categoryId) {
+    this.categoryId = categoryId;
   }
 
   public int getBankId() {

@@ -18,7 +18,7 @@ public class TransactionFilter implements Filter {
   private TransactionsList transactions = TransactionsList.getInstance();
 
   @Autowired
-  private ImxTransactionCommit imxTransactionCommit;
+  private FmTransactionCommit fmTransactionCommit;
 
   public TransactionFilter() {
   }
@@ -39,7 +39,7 @@ public class TransactionFilter implements Filter {
       attachTransaction(transactionId, request);
 
       if (!"/svc/transactions".contains(request.getRequestURI())) {
-        imxTransactionCommit.forbidCommit(request.getSession());
+        fmTransactionCommit.forbidCommit(request.getSession());
       }
     } else {
       detachTransaction();
