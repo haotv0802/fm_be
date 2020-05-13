@@ -29,6 +29,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
@@ -82,7 +83,10 @@ import java.util.concurrent.TimeUnit;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
-  private Logger log = LogManager.getLogger(getClass());
+  private final Logger LOGGER = LogManager.getLogger(getClass());
+
+  @Autowired
+  private Environment env;
 
   private static final long sessionTimeoutInSec = 1800L;
 
@@ -109,10 +113,12 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
     final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
+//    final String databaseUrl = env.getProperty("databaseUrl");
+//    final String databaseUrl =  env.getProperty("databaseUrl");
     final String usr = "root";
     final String pass = "fmsystem123";
 
-    log.debug("databaseUrl=={}", databaseUrl);
+    LOGGER.debug("databaseUrl=={}", databaseUrl);
 
 //    BasicDataSource dataSource = new BasicDataSource();
 //
@@ -150,28 +156,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
     configurer.defaultContentType(MediaType.APPLICATION_JSON);
-    // configurer.favorPathExtension(true);
-    // configurer.mediaType("html", MediaType.APPLICATION_JSON);
   }
-
- /*
- @Bean
-  public GlobalExceptionHandler createGlobalExceptionHandler() {
-    return new GlobalExceptionHandler(message);
-  }
-  */
-
-
-  /* This doesn't play well, yet, with spring security, fallback to filter solution
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    //registry.addMapping("*//*").allowedOrigins("http://localhost:8383");
-    registry.addMapping("*/
-
-  /**
-   * ").allowCredentials(true).exposedHeaders("Location");
-   * }
-   */
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
@@ -279,19 +264,11 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
 
-//    @Autowired
-//    @Qualifier("authenticationProvider")
-//    DaoAuthenticationProvider authenticationProvider;
-//
-//    @Override
-//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//      auth.authenticationProvider(authenticationProvider);
-//    }
-
     @Bean(name = "messageSource")
     public MessageSource messageSource() {
       ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
       messageSource.setBasenames(
+          "config.application",
           "i18n.LoginResource",
           "i18n.admin_image",
           "i18n.admin_messages",

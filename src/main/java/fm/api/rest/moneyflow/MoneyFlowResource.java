@@ -6,6 +6,8 @@ import fm.api.rest.moneyflow.validators.MoneyFlowDeleteValidation;
 import fm.api.rest.moneyflow.validators.MoneyFlowEditValidation;
 import fm.auth.UserDetailsImpl;
 import fm.common.Validator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,6 +27,7 @@ import java.util.List;
  */
 @RestController
 public class MoneyFlowResource extends BaseResource {
+  private static final Logger LOGGER = LogManager.getLogger(MoneyFlowResource.class);
 
   private final IMoneyFlowService expensesService;
   private final Validator<MoneyFlowEditValidation> expenseEditValidator;
@@ -103,7 +106,7 @@ public class MoneyFlowResource extends BaseResource {
    * The service is to delete single expense.
    * @param userDetails
    * @param expenseId
-   * @return HTTP code 204 as NO_CONTENT.
+   * @return HTTP code 204 as NO_CONTENT.+
    */
   @DeleteMapping("/moneyflow/{expenseId}/delete")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")

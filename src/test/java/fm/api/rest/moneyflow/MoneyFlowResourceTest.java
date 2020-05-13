@@ -2,13 +2,17 @@ package fm.api.rest.moneyflow;
 
 import fm.api.constants.Types;
 import fm.api.rest.BaseDocumentation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -29,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by haoho on 4/25/20.
  */
 public class MoneyFlowResourceTest extends BaseDocumentation {
+    private final Logger LOGGER = LogManager.getLogger(getClass());
 
     /**
      * Normal case
