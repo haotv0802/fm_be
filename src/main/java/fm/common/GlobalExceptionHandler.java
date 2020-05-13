@@ -15,17 +15,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-import java.util.regex.Pattern;
-
 /**
  * Will make sure to translate some exceptions to a meaningful response to the client.
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private Logger log = LogManager.getLogger(getClass());
-    private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_END = 20999;
-    private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_START = 20000;
-    private static final Pattern NEW_LINE = Pattern.compile("\\R");
+    private final Logger LOGGER = LogManager.getLogger(getClass());
 
     private final ResourceBundleMessageSource messageSource;
 
@@ -48,7 +43,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST) //400
     @ResponseBody
     public ServiceFault handleConflict(ValidationException e) {
-        log.error(e.getMessage(), e);
+        LOGGER.error(e.getMessage(), e);
         String faultCode = e.getFaultCode();
         Object[] context = e.getContext();
 
@@ -56,18 +51,17 @@ public class GlobalExceptionHandler {
         return errorService.registerBackEndFault(fault, e.getStackTrace());
     }
 
-
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // 404
     public ServiceFault handleConflict(EmptyResultDataAccessException e) {
-        log.info("Info: ", e);
+        LOGGER.info("Info: ", e);
         return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace());
     }
 
     @ExceptionHandler(CannotAcquireLockException.class)
     @ResponseStatus(HttpStatus.LOCKED) // 423
     public ServiceFault handleConflict(CannotAcquireLockException e) {
-        log.info("Info:", e);
+        LOGGER.info("Info:", e);
         return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace());
     }
 

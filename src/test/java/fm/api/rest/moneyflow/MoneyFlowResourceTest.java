@@ -3,6 +3,7 @@ package fm.api.rest.moneyflow;
 import fm.api.rest.BaseDocumentation;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Assert;
 import org.testng.annotations.Test;
@@ -46,6 +47,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
    * @throws Exception
    */
   @Test
+  @Rollback(false)
   public void testAddExpense() throws Exception {
     Item creation = new Item();
     creation.setName("new name");
