@@ -164,28 +164,27 @@ public final class DaoUtils {
    * @param logger   to be used
    */
 // ex: f.a.LoginDao SELECT TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM FM_AUTH_TOKEN WHERE ID = ?; bv:[259]
-//  public static void debugQuery(Logger logger, String sql, Map<String, Object> bindVars) {
-//    if (null != logger && logger.isDebugEnabled()) {
-//      logger.debug(StringUtils.normalizeSpace(sql) + "; bv:" + bindVars);
-//    }
-//  }
   public static void debugQuery(Logger logger, String sql, Map<String, Object> bindVars) {
     if (null != logger && logger.isDebugEnabled()) {
-      sql = StringUtils.normalizeSpace(sql);
-      Set<String> keys = bindVars.keySet();
-      Iterator<String> iterator = keys.iterator();
-      while (iterator.hasNext()) {
-        String key = iterator.next();
-        String value = bindVars.get(key).toString();
-        if (bindVars.get(key) instanceof Boolean) {
-          value = Boolean.valueOf(value) ? "1" : "0";
-        }
-        sql = sql.replace(":" + key, "\'" + value + "\'");
-      }
-      logger.debug(sql);
+      logger.debug(StringUtils.normalizeSpace(sql) + "; bv:" + bindVars);
     }
   }
-
+//  public static void debugQuery(Logger logger, String sql, Map<String, Object> bindVars) {
+//    if (null != logger && logger.isDebugEnabled()) {
+//      sql = StringUtils.normalizeSpace(sql);
+//      Set<String> keys = bindVars.keySet();
+//      Iterator<String> iterator = keys.iterator();
+//      while (iterator.hasNext()) {
+//        String key = iterator.next();
+//        String value = bindVars.get(key).toString();
+//        if (bindVars.get(key) instanceof Boolean) {
+//          value = Boolean.valueOf(value) ? "1" : "0";
+//        }
+//        sql = sql.replace(":" + key, "\'" + value + "\'");
+//      }
+//      logger.debug(sql);
+//    }
+//  }
   /**
    * Logs a query in DEBUG level.
    * For the logging purposes removes multiple spaces in the query string, so, the result might not be correct if the
