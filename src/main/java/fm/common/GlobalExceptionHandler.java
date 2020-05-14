@@ -65,14 +65,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // 404
     public ServiceFault handleConflict(EmptyResultDataAccessException e) {
-        LOGGER.info("Info: ", e);
+        LOGGER.error(e.getMessage(), e);
         return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace(), e, getCurrentUserName());
     }
 
     @ExceptionHandler(CannotAcquireLockException.class)
     @ResponseStatus(HttpStatus.LOCKED) // 423
     public ServiceFault handleConflict(CannotAcquireLockException e) {
-        LOGGER.info("Info:", e);
+        LOGGER.error(e.getMessage(), e);
         return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace(), e, getCurrentUserName());
     }
 

@@ -112,8 +112,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
-//    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
-    final String databaseUrl = env.getProperty("database.url");
+    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
+//    final String databaseUrl = env.getProperty("database.url");
     final String usr = "root";
     final String pass = "fmsystem123";
 
@@ -254,7 +254,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     public MessageSource messageSource() {
       ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
       messageSource.setBasenames(
-          "config.application",
           "i18n.LoginResource",
           "i18n.admin_image",
           "i18n.admin_messages",

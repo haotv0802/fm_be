@@ -13,7 +13,7 @@
     <bean class="config.SpringConfig"/>
     <!--<bean class="config.EditorConfigurer"/>-->
 
-    <context:property-placeholder location="classpath:application.properties" />
+<!--    <context:property-placeholder location="classpath:application.properties" />-->
 
     <!-- the transactional advice (what 'happens'; see the <aop:advisor/> bean below) -->
     <tx:advice id="txAdvice" transaction-manager="txManager">
