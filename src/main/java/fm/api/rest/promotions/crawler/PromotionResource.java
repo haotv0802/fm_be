@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PromotionResource extends BaseResource {
-  private static final Logger LOGGER = LogManager.getLogger(PromotionResource.class);
+
   private IBankPromotion bankPromotion;
 
   @Autowired

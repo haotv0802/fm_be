@@ -19,67 +19,66 @@ import org.springframework.stereotype.Service;
 @Service("individualDao")
 public class IndividualDao implements IIndividualDao {
 
-  private static final Logger LOGGER = LogManager.getLogger(IndividualDao.class);
+    private static final Logger logger = LogManager.getLogger(IndividualDao.class);
 
-  private final NamedParameterJdbcTemplate namedTemplate;
+    private final NamedParameterJdbcTemplate namedTemplate;
 
-  private IMoneySourceDao moneySourceDao;
+    private IMoneySourceDao moneySourceDao;
 
-  @Autowired
-  public IndividualDao(
-      NamedParameterJdbcTemplate namedTemplate,
-      @Qualifier("moneySourceDao") IMoneySourceDao moneySourceDao
-  ) {
-    Assert.notNull(namedTemplate);
-    Assert.notNull(moneySourceDao);
+    @Autowired
+    public IndividualDao(
+            NamedParameterJdbcTemplate namedTemplate,
+            @Qualifier("moneySourceDao") IMoneySourceDao moneySourceDao
+    ) {
+        Assert.notNull(namedTemplate);
+        Assert.notNull(moneySourceDao);
 
-    this.namedTemplate = namedTemplate;
-    this.moneySourceDao = moneySourceDao;
-  }
+        this.namedTemplate = namedTemplate;
+        this.moneySourceDao = moneySourceDao;
+    }
 
-  @Override
-  public IndividualPresenter getIndividual(int userId) {
-    final String sql =
-          " SELECT                                                "
-        + "     i.id,                                             "
-        + "     i.first_name,                                     "
-        + "     i.last_name,                                      "
-        + "     i.middle_name,                                    "
-        + "     i.birthday,                                       "
-        + "     i.gender,                                         "
-        + "     i.email,                                          "
-        + "     i.phone_number,                                   "
-        + "     i.income,                                         "
-        + "     i.user_id                                         "
-        + "    FROM                                               "
-        + "     fm_individuals i                                  "
-        + "    WHERE                                              "
-        + "    i.user_id = :userId                                "
-    ;
+    @Override
+    public IndividualPresenter getIndividual(int userId) {
+        final String sql =
+                          " SELECT                "
+                        + "     i.id,             "
+                        + "     i.first_name,     "
+                        + "     i.last_name,      "
+                        + "     i.middle_name,    "
+                        + "     i.birthday,       "
+                        + "     i.gender,         "
+                        + "     i.email,          "
+                        + "     i.phone_number,   "
+                        + "     i.income,         "
+                        + "     i.user_id         "
+                        + "    FROM               "
+                        + "     fm_individuals i  "
+                        + "    WHERE              "
+                        + "    i.user_id = :userId";
 
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("userId", userId);
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("userId", userId);
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-    IndividualPresenter expensesList = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
-          IndividualPresenter individualPresenter = new IndividualPresenter();
-          individualPresenter.setId(rs.getLong("id"));
-          individualPresenter.setFirstName(rs.getString("first_name"));
-          individualPresenter.setLastName(rs.getString("last_name"));
-          individualPresenter.setMiddleName(rs.getString("middle_name"));
-          individualPresenter.setBirthday(JdbcUtils.toUtilDate(rs.getDate("birthday")));
-          individualPresenter.setGender(rs.getString("gender"));
-          individualPresenter.setEmail(rs.getString("email"));
-          individualPresenter.setPhoneNumber(rs.getString("phone_number"));
-          individualPresenter.setIncome(rs.getBigDecimal("income"));
+        IndividualPresenter expensesList = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
+                    IndividualPresenter individualPresenter = new IndividualPresenter();
+                    individualPresenter.setId(rs.getLong("id"));
+                    individualPresenter.setFirstName(rs.getString("first_name"));
+                    individualPresenter.setLastName(rs.getString("last_name"));
+                    individualPresenter.setMiddleName(rs.getString("middle_name"));
+                    individualPresenter.setBirthday(JdbcUtils.toUtilDate(rs.getDate("birthday")));
+                    individualPresenter.setGender(rs.getString("gender"));
+                    individualPresenter.setEmail(rs.getString("email"));
+                    individualPresenter.setPhoneNumber(rs.getString("phone_number"));
+                    individualPresenter.setIncome(rs.getBigDecimal("income"));
 
-          individualPresenter.setMoneySourcePresenters(this.moneySourceDao.getMoneySources(userId));
+                    individualPresenter.setMoneySourcePresenters(this.moneySourceDao.getMoneySources(userId));
 
-          return individualPresenter;
-        }
-    );
+                    return individualPresenter;
+                }
+        );
 
-    return expensesList;
-  }
+        return expensesList;
+    }
 }

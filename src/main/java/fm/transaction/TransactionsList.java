@@ -17,7 +17,7 @@ import java.util.List;
  *
  */
 public class TransactionsList {
-  private final static Logger log = LogManager.getLogger(TransactionsList.class);
+  private static final Logger logger = LogManager.getLogger(TransactionsList.class);
 
   private final List<TrackingConnectionWrapper> transactions = new ArrayList<TrackingConnectionWrapper>();
 
@@ -38,8 +38,8 @@ public class TransactionsList {
       for (int i = 0; i < transactions.size(); i++) {
         TrackingConnectionWrapper conn = transactions.get(i);
 
-        if (log.isTraceEnabled()) {
-          log.trace(conn.getTransactionId());
+        if (logger.isTraceEnabled()) {
+          logger.trace(conn.getTransactionId());
         }
 
         if (StringUtils.equals(conn.getTransactionId(), id)) {
@@ -56,7 +56,7 @@ public class TransactionsList {
     synchronized (transactions) {
       // check that there is not already a connection with that transaction id
       if (findTransaction(transactionId) != null) {
-        log.warn("There is already existing transaction with id '" + transactionId + "'");
+        logger.warn("There is already existing transaction with id '" + transactionId + "'");
         throw new DuplicateKeyException("There is already existing transaction with id '" + transactionId + "'");
       }
       connection.setTransactionId(transactionId);
@@ -96,13 +96,13 @@ public class TransactionsList {
             tryClose(holder);
           }
           catch (Exception e) {
-            log.warn("Error: ", e);
+            logger.warn("Error: ", e);
           }
         }
       }
     }
     catch (Exception e) {
-      log.warn("Error: ", e);
+      logger.warn("Error: ", e);
     }
   }
 
@@ -111,7 +111,7 @@ public class TransactionsList {
       conn.getConnection().rollback();
     }
     catch (Exception e) {
-      log.warn("Error: ", e);
+      logger.warn("Error: ", e);
     }
   }
 
@@ -120,7 +120,7 @@ public class TransactionsList {
       conn.getConnection().close();
     }
     catch (Exception e) {
-      log.warn("Error: ", e);
+      logger.warn("Error: ", e);
     }
   }
 

@@ -17,82 +17,82 @@ import static org.springframework.web.context.request.RequestAttributes.SCOPE_SE
 @Service
 public class FmTransactionCommitImpl implements FmTransactionCommit {
 
-  private Logger logger = LogManager.getLogger(getClass());
+    private static final Logger logger = LogManager.getLogger(FmTransactionCommitImpl.class);
 
-  @Override
-  public void permitCommit() {
+    @Override
+    public void permitCommit() {
 
-    RequestContextHolder
-        .currentRequestAttributes()
-        .setAttribute(commitAttribute, true, SCOPE_SESSION);
+        RequestContextHolder
+                .currentRequestAttributes()
+                .setAttribute(commitAttribute, true, SCOPE_SESSION);
 
-    logger.debug("Commit is set to permitted for session {}", RequestContextHolder.currentRequestAttributes().getSessionId());
-  }
+        logger.debug("Commit is set to permitted for session {}", RequestContextHolder.currentRequestAttributes().getSessionId());
+    }
 
-  @Override
-  public void forbidCommit() {
-    RequestContextHolder
-        .currentRequestAttributes()
-        .setAttribute(commitAttribute, false, SCOPE_SESSION);
+    @Override
+    public void forbidCommit() {
+        RequestContextHolder
+                .currentRequestAttributes()
+                .setAttribute(commitAttribute, false, SCOPE_SESSION);
 
-    logger.debug("Commit is set to forbidden for session {}", RequestContextHolder.currentRequestAttributes().getSessionId());
-  }
+        logger.debug("Commit is set to forbidden for session {}", RequestContextHolder.currentRequestAttributes().getSessionId());
+    }
 
-  @Override
-  public boolean isCommitPermitted() {
+    @Override
+    public boolean isCommitPermitted() {
 
-    String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
+        String sessionID = RequestContextHolder.currentRequestAttributes().getSessionId();
 
-    Object attr = RequestContextHolder
-        .currentRequestAttributes()
-        .getAttribute(commitAttribute, SCOPE_SESSION);
+        Object attr = RequestContextHolder
+                .currentRequestAttributes()
+                .getAttribute(commitAttribute, SCOPE_SESSION);
 
-    Assert.notNull(attr, commitAttribute + "not set!");
-    Assert.isInstanceOf(Boolean.class, attr, commitAttribute + "is not boolean!");
+        Assert.notNull(attr, commitAttribute + "not set!");
+        Assert.isInstanceOf(Boolean.class, attr, commitAttribute + "is not boolean!");
 
-    boolean isPermitted = (boolean) attr;
+        boolean isPermitted = (boolean) attr;
 
-    if (isPermitted)
-      logger.debug("Commit is permitted for session {}", sessionID);
-    else
-      logger.debug("Commit is forbidden for session {}", sessionID);
+        if (isPermitted)
+            logger.debug("Commit is permitted for session {}", sessionID);
+        else
+            logger.debug("Commit is forbidden for session {}", sessionID);
 
-    return isPermitted;
-  }
+        return isPermitted;
+    }
 
-  @Override
-  public void permitCommit(HttpSession session) {
-    Assert.notNull(session);
+    @Override
+    public void permitCommit(HttpSession session) {
+        Assert.notNull(session);
 
-    session.setAttribute(commitAttribute, true);
+        session.setAttribute(commitAttribute, true);
 
-    logger.debug("Commit is set to permitted for session {}", session.getId());
-  }
+        logger.debug("Commit is set to permitted for session {}", session.getId());
+    }
 
-  @Override
-  public void forbidCommit(HttpSession session) {
-    Assert.notNull(session);
+    @Override
+    public void forbidCommit(HttpSession session) {
+        Assert.notNull(session);
 
-    session.setAttribute(commitAttribute, false);
+        session.setAttribute(commitAttribute, false);
 
-    logger.debug("Commit is set to forbidden for session {}", session.getId());
-  }
+        logger.debug("Commit is set to forbidden for session {}", session.getId());
+    }
 
-  @Override
-  public boolean isCommitPermitted(HttpSession session) {
-    Assert.notNull(session);
+    @Override
+    public boolean isCommitPermitted(HttpSession session) {
+        Assert.notNull(session);
 
-    Object attr = session.getAttribute(commitAttribute);
+        Object attr = session.getAttribute(commitAttribute);
 
-    Assert.notNull(attr, commitAttribute + "not set!");
+        Assert.notNull(attr, commitAttribute + "not set!");
 
-    boolean isCommitPermited = (boolean) attr;
+        boolean isCommitPermited = (boolean) attr;
 
-    if (isCommitPermited)
-      logger.debug("Commit is set to permitted for session {}", session.getId());
-    else
-      logger.debug("Commit is set to forbidden for session {}", session.getId());
+        if (isCommitPermited)
+            logger.debug("Commit is set to permitted for session {}", session.getId());
+        else
+            logger.debug("Commit is set to forbidden for session {}", session.getId());
 
-    return isCommitPermited;
-  }
+        return isCommitPermited;
+    }
 }

@@ -83,7 +83,7 @@ import java.util.concurrent.TimeUnit;
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
-  private final Logger LOGGER = LogManager.getLogger(getClass());
+  private static final Logger logger = LogManager.getLogger(SpringConfig.class);
 
   @Autowired
   private Environment env;
@@ -117,7 +117,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     final String usr = "root";
     final String pass = "fmsystem123";
 
-    LOGGER.debug("databaseUrl=={}", databaseUrl);
+    logger.debug("databaseUrl=={}", databaseUrl);
 
     MysqlDataSource ds = new MysqlDataSource();
     ds.setURL(databaseUrl);

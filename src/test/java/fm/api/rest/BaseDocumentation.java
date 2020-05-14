@@ -64,7 +64,8 @@ import static org.springframework.restdocs.headers.HeaderDocumentation.requestHe
                 "/config/spring-mvc-test.xml"
         })
 public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests {
-    protected final Logger logger = LogManager.getLogger(getClass());
+
+    private static final Logger logger = LogManager.getLogger(BaseDocumentation.class);
 
     @Autowired
     @Qualifier("authTokenService")

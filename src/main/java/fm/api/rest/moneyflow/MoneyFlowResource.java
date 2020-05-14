@@ -27,7 +27,7 @@ import java.util.List;
  */
 @RestController
 public class MoneyFlowResource extends BaseResource {
-  private static final Logger LOGGER = LogManager.getLogger(MoneyFlowResource.class);
+  private static final Logger logger = LogManager.getLogger(MoneyFlowResource.class);
 
   private final IMoneyFlowService expensesService;
   private final Validator<MoneyFlowEditValidation> expenseEditValidator;

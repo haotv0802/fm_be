@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Repository("userDao")
 public class UserDao implements IUserDao {
-  private static final Logger LOGGER = LogManager.getLogger(UserDao.class);
+  private static final Logger logger = LogManager.getLogger(UserDao.class);
 
   private final NamedParameterJdbcTemplate namedTemplate;
 
@@ -41,7 +41,7 @@ public class UserDao implements IUserDao {
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
     List<UserBean> users = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
       UserBean user = new UserBean();
@@ -67,7 +67,7 @@ public class UserDao implements IUserDao {
     paramsMap.addValue("userId", user.getId());
     paramsMap.addValue("roleId", user.getRoleId());
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+    DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
     namedTemplate.update(sql, paramsMap);
   }

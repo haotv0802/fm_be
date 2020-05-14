@@ -1,5 +1,8 @@
 package fm.transaction;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.io.Serializable;
 import java.sql.*;
 import java.util.Map;
@@ -11,6 +14,8 @@ import java.util.concurrent.Executor;
  *
  */
 public class TrackingConnectionWrapper extends ConnectionWrapper implements Serializable {
+
+  private static final Logger logger = LogManager.getLogger(TrackingConnectionWrapper.class);
 
   private static final long serialVersionUID = 1L;
   // FIXME: update it with AOP on every call of the wrapped object methods
@@ -24,7 +29,7 @@ public class TrackingConnectionWrapper extends ConnectionWrapper implements Seri
       markAccessTime();
     }
     catch (SQLException e) {
-      log.warn("Error: ", e);
+      logger.warn("Error: ", e);
     }
   }
 
@@ -55,21 +60,21 @@ public class TrackingConnectionWrapper extends ConnectionWrapper implements Seri
   @Override
   public void commit() throws SQLException {
     markAccessTime();
-    log.debug("fake commit()");
+    logger.debug("fake commit()");
     // do nothing it will be called by transaction manager on the wrapped object
   }
 
   @Override
   public void close() throws SQLException {
     markAccessTime();
-    log.debug("fake close()");
+    logger.debug("fake close()");
     // do nothing it will be called by transaction manager on the wrapped object
   }
 
   @Override
   public void rollback() throws SQLException {
     markAccessTime();
-    log.debug("fake rollback()");
+    logger.debug("fake rollback()");
     // super.rollback();
   }
 
@@ -239,7 +244,7 @@ public class TrackingConnectionWrapper extends ConnectionWrapper implements Seri
   @Override
   public void rollback(Savepoint savepoint) throws SQLException {
     markAccessTime();
-    log.debug("fake rollback with savepoint");
+    logger.debug("fake rollback with savepoint");
     // super.rollback(savepoint);
   }
 

@@ -15,7 +15,7 @@ import org.springframework.util.StopWatch;
 @Aspect
 @Component
 public class LoggingAspect {
-    private static final Logger LOGGER = LogManager.getLogger(LoggingAspect.class);
+    private static final Logger logger = LogManager.getLogger(LoggingAspect.class);
 
     //AOP expression for which methods shall be intercepted
     @Around("execution(* fm.api.rest..*(..)))")
@@ -35,7 +35,7 @@ public class LoggingAspect {
         stopWatch.stop();
 
         //Log method execution time
-        LOGGER.info("Execution time of " + className + "." + methodName + " :: " + stopWatch.getTotalTimeMillis() + " ms");
+        logger.info("Execution time of " + className + "." + methodName + " :: " + stopWatch.getTotalTimeMillis() + " ms");
 
         return result;
     }

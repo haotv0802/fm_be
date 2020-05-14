@@ -19,24 +19,24 @@ import java.util.Map;
 @RestController("messagesResource")
 public class MessagesResource extends BaseResource {
 
-  private final Logger logger = LogManager.getLogger(getClass());
+    private static final Logger logger = LogManager.getLogger(MessagesResource.class);
 
-  private final MessagesService messagesService;
+    private final MessagesService messagesService;
 
-  public MessagesResource(@Qualifier("messagesService") MessagesService messagesService) {
-    Assert.notNull(messagesService);
+    public MessagesResource(@Qualifier("messagesService") MessagesService messagesService) {
+        Assert.notNull(messagesService);
 
-    this.messagesService = messagesService;
-  }
+        this.messagesService = messagesService;
+    }
 
-  @GetMapping("/messages")
-  public Map<String, Map<String, String>> getMessages(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang
-  ) {
-    Map<String, Map<String, String>> maps = messagesService.getMessages(lang);
-    logger.info("maps: " + maps);
-    return maps;
-  }
+    @GetMapping("/messages")
+    public Map<String, Map<String, String>> getMessages(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @HeaderLang String lang
+    ) {
+        Map<String, Map<String, String>> maps = messagesService.getMessages(lang);
+        logger.info("maps: " + maps);
+        return maps;
+    }
 
 }

@@ -17,7 +17,7 @@ import java.util.List;
 @Service("moneyFlowService")
 public class MoneyFlowService implements IMoneyFlowService {
 
-  private static final Logger LOGGER = LogManager.getLogger(MoneyFlowService.class);
+  private static final Logger logger = LogManager.getLogger(MoneyFlowService.class);
 
   private final IMoneyFlowDao expensesDao;
 
