@@ -81,311 +81,311 @@ import java.util.concurrent.TimeUnit;
 @PropertySource("classpath:config/application.properties") // in order to do this: env.getProperty("database.url"). Also, private Environment env can be used any where with @Autowired
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
-  private static final Logger logger = LogManager.getLogger(SpringConfig.class);
+    private static final Logger logger = LogManager.getLogger(SpringConfig.class);
 
-  @Autowired
-  private Environment env;
+    @Autowired
+    private Environment env;
 
-  private static final long sessionTimeoutInSec = 1800L;
+    private static final long sessionTimeoutInSec = 1800L;
 
-  public SpringConfig() {
-  }
-
-  @Bean
-  public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter() {
-    MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
-
-    ObjectMapper objectMapper = new ObjectMapper();
-    objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
-    objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-    jsonConverter.setObjectMapper(objectMapper);
-    return jsonConverter;
-  }
-
-  @Override
-  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-    converters.add(customJackson2HttpMessageConverter());
-  }
-
-  @Bean(name = "dataSource")
-  public DataSource dataSource() {
-    final String databaseUrl = env.getProperty("database.url");
-    final String username = env.getProperty("database.username");
-    final String password = env.getProperty("database.password");
-
-    logger.debug("databaseUrl=={}", databaseUrl);
-
-    MysqlDataSource datasource = new MysqlDataSource();
-    datasource.setURL(databaseUrl);
-    datasource.setUser(username);
-    datasource.setPassword(password);
-
-    return datasource;
-  }
-
-  @Bean(name = "txManager")
-  public PlatformTransactionManager txManager() {
-    return new DataSourceTransactionManager(dataSource());
-  }
-
-  @Bean(name = "transactionTemplate")
-  public TransactionTemplate transactionTemplate() {
-    return new TransactionTemplate(txManager());
-  }
-
-
-  @Override
-  public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
-    configurer.defaultContentType(MediaType.APPLICATION_JSON);
-  }
-
-  @Override
-  public void addInterceptors(InterceptorRegistry registry) {
-    super.addInterceptors(registry);
-  }
-
-
-  @Bean(name = "multipartResolver")
-  public CommonsMultipartResolver createMultipartResolver() {
-    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-    resolver.setDefaultEncoding("utf-8");
-    resolver.setMaxUploadSize(1000000);
-    return resolver;
-  }
-
-  /**
-   * RestControllers argument injections
-   * 1) Paging and Sorting arguments
-   * 2) HTLang arguments
-   *
-   * @param argumentResolvers list af argumentResolvers
-   */
-  @Override
-  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-    PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
-    resolver.setOneIndexedParameters(true);
-    resolver.setFallbackPageable(new PageRequest(0, 25));
-    argumentResolvers.add(resolver);
-
-    argumentResolvers.add(new SortHandlerMethodArgumentResolver());
-    argumentResolvers.add(new HeaderLangHandlerMethodArgumentResolver());
-
-    super.addArgumentResolvers(argumentResolvers);
-  }
-
-  @Configuration
-  @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = (int) sessionTimeoutInSec, sessionMapName = "spring:session:sessions")
-  protected static class SessionConfig {
-    @Bean
-    public HazelcastInstance embeddedHazelcast() {
-      Config cfg = new Config();
-      cfg.setProperty("hazelcast.logging.type", "slf4j");
-      final NetworkConfig netConfig = cfg.getNetworkConfig();
-      netConfig.getJoin().getTcpIpConfig().setEnabled(false);
-      netConfig.getJoin().getMulticastConfig().setEnabled(false);
-
-      return Hazelcast.newHazelcastInstance(cfg);
+    public SpringConfig() {
     }
 
     @Bean
-    public HttpSessionStrategy httpSessionStrategy() {
-      return new HeaderHttpSessionStrategy();
-    }
+    public MappingJackson2HttpMessageConverter customJackson2HttpMessageConverter() {
+        MappingJackson2HttpMessageConverter jsonConverter = new MappingJackson2HttpMessageConverter();
 
-  }
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, true);
+        objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
-  @Bean
-  public TransactionFilter txFilter() {
-    return new TransactionFilter();
-  }
-
-  @Bean(destroyMethod = "stop")
-  public ConnectionsWatchdog connectionsWatchdog() {
-    TransactionsList transactions = TransactionsList.getInstance();
-    ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(60), transactions);
-    Thread watcherThread = new Thread(watcher);
-    watcherThread.setDaemon(true);
-    watcherThread.start();
-
-    return watcher;
-  }
-
-  @Bean(name = "jdbcTemplate")
-  public JdbcTemplate jdbcTemplate()
-      throws SQLException {
-    return new JdbcTemplate(dataSource());
-  }
-
-  @Bean(name = "namedTemplate")
-  public NamedParameterJdbcTemplate namedTemplate()
-      throws SQLException {
-    return new NamedParameterJdbcTemplate(dataSource());
-  }
-
-  @Configuration
-  @EnableWebSecurity
-  @EnableGlobalMethodSecurity(prePostEnabled = true) // ENABLE @PreAuthorize & @PostAuthorize annotations
-                                                     // <security:global-method-security pre-post-annotations="enabled" />
-  protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Autowired
-    PlatformTransactionManager txManager;
-
-    @Resource(name = "authService")
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
-
-    @Autowired
-    private TokenAuthenticationService tokenAuthenticationService;
-
-    @Autowired
-    private CorsFilter corsFilter;
-
-    @Autowired
-    private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
-
-    @Bean(name = "messageSource")
-    public MessageSource messageSource() {
-      ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
-      messageSource.setBasenames(
-          "i18n.LoginResource",
-          "i18n.admin_image",
-          "i18n.admin_messages",
-          "i18n.moneyflow"
-      );
-      messageSource.setUseCodeAsDefaultMessage(true);
-      return messageSource;
-    }
-
-    @Bean
-    public AuthenticationFailureHandlerImpl customizedAuthenticationFailureHandler() {
-      return new AuthenticationFailureHandlerImpl(messageSource());
-    }
-
-    @Bean
-    public AuthenticationSuccessHandlerImpl customizedAuthenticationSuccessHandler() {
-      return new AuthenticationSuccessHandlerImpl();
+        jsonConverter.setObjectMapper(objectMapper);
+        return jsonConverter;
     }
 
     @Override
-    protected UserDetailsService userDetailsService() {
-      return userDetailsService;
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(customJackson2HttpMessageConverter());
     }
 
-    @Bean
-    public AccessDeniedHandlerImpl customizedAccessDeniedHandler() {
-      return new AccessDeniedHandlerImpl(messageSource());
+    @Bean(name = "dataSource")
+    public DataSource dataSource() {
+        final String databaseUrl = env.getProperty("database.url");
+        final String username = env.getProperty("database.username");
+        final String password = env.getProperty("database.password");
+
+        logger.debug("databaseUrl=={}", databaseUrl);
+
+        MysqlDataSource datasource = new MysqlDataSource();
+        datasource.setURL(databaseUrl);
+        datasource.setUser(username);
+        datasource.setPassword(password);
+
+        return datasource;
+    }
+
+    @Bean(name = "txManager")
+    public PlatformTransactionManager txManager() {
+        return new DataSourceTransactionManager(dataSource());
+    }
+
+    @Bean(name = "transactionTemplate")
+    public TransactionTemplate transactionTemplate() {
+        return new TransactionTemplate(txManager());
     }
 
 
     @Override
-    protected void configure(HttpSecurity http) throws Exception {
-      http
-          .sessionManagement()
-          .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.defaultContentType(MediaType.APPLICATION_JSON);
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        super.addInterceptors(registry);
+    }
+
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver createMultipartResolver() {
+        CommonsMultipartResolver resolver = new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("utf-8");
+        resolver.setMaxUploadSize(1000000);
+        return resolver;
+    }
+
+    /**
+     * RestControllers argument injections
+     * 1) Paging and Sorting arguments
+     * 2) HTLang arguments
+     *
+     * @param argumentResolvers list af argumentResolvers
+     */
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
+        resolver.setOneIndexedParameters(true);
+        resolver.setFallbackPageable(new PageRequest(0, 25));
+        argumentResolvers.add(resolver);
+
+        argumentResolvers.add(new SortHandlerMethodArgumentResolver());
+        argumentResolvers.add(new HeaderLangHandlerMethodArgumentResolver());
+
+        super.addArgumentResolvers(argumentResolvers);
+    }
+
+    @Configuration
+    @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = (int) sessionTimeoutInSec, sessionMapName = "spring:session:sessions")
+    protected static class SessionConfig {
+        @Bean
+        public HazelcastInstance embeddedHazelcast() {
+            Config cfg = new Config();
+            cfg.setProperty("hazelcast.logging.type", "slf4j");
+            final NetworkConfig netConfig = cfg.getNetworkConfig();
+            netConfig.getJoin().getTcpIpConfig().setEnabled(false);
+            netConfig.getJoin().getMulticastConfig().setEnabled(false);
+
+            return Hazelcast.newHazelcastInstance(cfg);
+        }
+
+        @Bean
+        public HttpSessionStrategy httpSessionStrategy() {
+            return new HeaderHttpSessionStrategy();
+        }
+
+    }
+
+    @Bean
+    public TransactionFilter txFilter() {
+        return new TransactionFilter();
+    }
+
+    @Bean(destroyMethod = "stop")
+    public ConnectionsWatchdog connectionsWatchdog() {
+        TransactionsList transactions = TransactionsList.getInstance();
+        ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(60), transactions);
+        Thread watcherThread = new Thread(watcher);
+        watcherThread.setDaemon(true);
+        watcherThread.start();
+
+        return watcher;
+    }
+
+    @Bean(name = "jdbcTemplate")
+    public JdbcTemplate jdbcTemplate()
+            throws SQLException {
+        return new JdbcTemplate(dataSource());
+    }
+
+    @Bean(name = "namedTemplate")
+    public NamedParameterJdbcTemplate namedTemplate()
+            throws SQLException {
+        return new NamedParameterJdbcTemplate(dataSource());
+    }
+
+    @Configuration
+    @EnableWebSecurity
+    @EnableGlobalMethodSecurity(prePostEnabled = true) // ENABLE @PreAuthorize & @PostAuthorize annotations
+    // <security:global-method-security pre-post-annotations="enabled" />
+    protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
+        @Autowired
+        PlatformTransactionManager txManager;
+
+        @Resource(name = "authService")
+        private UserDetailsService userDetailsService;
+
+        @Autowired
+        private RestAuthenticationEntryPoint restAuthenticationEntryPoint;
+
+        @Autowired
+        private TokenAuthenticationService tokenAuthenticationService;
+
+        @Autowired
+        private CorsFilter corsFilter;
+
+        @Autowired
+        private AccessDeniedHandlerImpl accessDeniedHandlerImpl;
+
+        @Bean(name = "messageSource")
+        public MessageSource messageSource() {
+            ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+            messageSource.setBasenames(
+                    "i18n.LoginResource",
+                    "i18n.admin_image",
+                    "i18n.admin_messages",
+                    "i18n.moneyflow"
+            );
+            messageSource.setUseCodeAsDefaultMessage(true);
+            return messageSource;
+        }
+
+        @Bean
+        public AuthenticationFailureHandlerImpl customizedAuthenticationFailureHandler() {
+            return new AuthenticationFailureHandlerImpl(messageSource());
+        }
+
+        @Bean
+        public AuthenticationSuccessHandlerImpl customizedAuthenticationSuccessHandler() {
+            return new AuthenticationSuccessHandlerImpl();
+        }
+
+        @Override
+        protected UserDetailsService userDetailsService() {
+            return userDetailsService;
+        }
+
+        @Bean
+        public AccessDeniedHandlerImpl customizedAccessDeniedHandler() {
+            return new AccessDeniedHandlerImpl(messageSource());
+        }
+
+
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 //          .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 //          .maximumSessions(10)
 //          .and()
-          .and()
-          .exceptionHandling()
-          .authenticationEntryPoint(restAuthenticationEntryPoint)
-          .accessDeniedHandler(accessDeniedHandlerImpl)
-          .and()
-          .csrf().disable()
-          .authorizeRequests()
-          //allow anonymous POSTs to login
-          .antMatchers(HttpMethod.POST, "/svc/login").permitAll()
-          .antMatchers(HttpMethod.GET, "/svc/messages").permitAll()
-          //all other request need to be authenticated
-          .antMatchers("/svc/**").authenticated()
-          .and()
-          .logout()
-          .logoutRequestMatcher(new AntPathRequestMatcher("/logout", HttpMethod.POST.name()))
-          .invalidateHttpSession(true)
-          .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
-          .and()
-          // custom CORS filter as the mvc cors config doesn't play well, yet, with security
-          .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
-          // custom JSON based authentication by POST of {"userName":"<name>","userPass":"<password>"}
-          .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
-          .addFilterBefore(statelessAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
-          .addFilterAfter(loggingEnhancingFilter(), FilterSecurityInterceptor.class)
-      ;
+                    .and()
+                    .exceptionHandling()
+                    .authenticationEntryPoint(restAuthenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandlerImpl)
+                    .and()
+                    .csrf().disable()
+                    .authorizeRequests()
+                    //allow anonymous POSTs to login
+                    .antMatchers(HttpMethod.POST, "/svc/login").permitAll()
+                    .antMatchers(HttpMethod.GET, "/svc/messages").permitAll()
+                    //all other request need to be authenticated
+                    .antMatchers("/svc/**").authenticated()
+                    .and()
+                    .logout()
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout", HttpMethod.POST.name()))
+                    .invalidateHttpSession(true)
+                    .logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler())
+                    .and()
+                    // custom CORS filter as the mvc cors config doesn't play well, yet, with security
+                    .addFilterBefore(corsFilter, ChannelProcessingFilter.class)
+                    // custom JSON based authentication by POST of {"userName":"<name>","userPass":"<password>"}
+                    .addFilterBefore(statelessLoginFilter(), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterBefore(statelessAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                    .addFilterAfter(loggingEnhancingFilter(), FilterSecurityInterceptor.class)
+            ;
+        }
+
+        @Bean
+        public CorsFilter corsFilter() {
+            UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+            CorsConfiguration config = new CorsConfiguration();
+            config.setAllowCredentials(true); // you USUALLY want this
+            config.addAllowedOrigin("*");
+            config.addAllowedHeader("*");
+            config.addAllowedMethod("GET");
+            config.addAllowedMethod("HEAD");
+            config.addAllowedMethod("POST");
+            config.addAllowedMethod("DELETE");
+            config.addAllowedMethod("PATCH");
+            config.addAllowedMethod("PUT");
+
+            config.addExposedHeader("Location");
+            config.addExposedHeader("X-AUTH-TOKEN");
+            source.registerCorsConfiguration("/**", config);
+            return new CorsFilter(source);
+        }
+
+        @Bean
+        LoggingEnhancingFilter loggingEnhancingFilter() {
+            return new LoggingEnhancingFilter();
+        }
+
+        @Bean
+        StatelessLoginFilter statelessLoginFilter() throws Exception {
+            return new StatelessLoginFilter(
+                    "/login"
+                    , authenticationManagerBean()
+                    , customizedAuthenticationFailureHandler()
+                    , customizedAuthenticationSuccessHandler());
+        }
+
+        @Bean
+        StatelessAuthenticationFilter statelessAuthenticationFilter() {
+            return new StatelessAuthenticationFilter(tokenAuthenticationService);
+        }
+
+        //TODO split mvc and security config
+        @Bean
+        public Object pwdEncoder() {
+            PasswordEncoder passwordEncoder = null;
+            // (SHA1) Used when connect to UDAL for testing e_transact
+            // String passHashAlg = "SHA1";
+            String passHashAlg = "DEFAULT";
+            switch (passHashAlg) {
+                case "MD5/0.5":
+                    passwordEncoder = new MD5HalfPasswordEncoder();
+                    break;
+                case "MD5":
+                    passwordEncoder = new MD5PasswordEncoder();
+                    break;
+                case "SHA1":
+                    passwordEncoder = new SHA1PasswordEncoder();
+                    break;
+                case "DEFAULT":
+                    passwordEncoder = new DefaultPasswordEncoder();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unknown password hash type");
+            }
+
+            return new PasswordEncoderImpl(passwordEncoder) {
+            };
+        }
+
+        @Bean
+        public Boolean hideUserNotFound() {
+            return false;
+        }
+
     }
-
-    @Bean
-    public CorsFilter corsFilter() {
-      UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-      CorsConfiguration config = new CorsConfiguration();
-      config.setAllowCredentials(true); // you USUALLY want this
-      config.addAllowedOrigin("*");
-      config.addAllowedHeader("*");
-      config.addAllowedMethod("GET");
-      config.addAllowedMethod("HEAD");
-      config.addAllowedMethod("POST");
-      config.addAllowedMethod("DELETE");
-      config.addAllowedMethod("PATCH");
-      config.addAllowedMethod("PUT");
-
-      config.addExposedHeader("Location");
-      config.addExposedHeader("X-AUTH-TOKEN");
-      source.registerCorsConfiguration("/**", config);
-      return new CorsFilter(source);
-    }
-
-    @Bean
-    LoggingEnhancingFilter loggingEnhancingFilter() {
-      return new LoggingEnhancingFilter();
-    }
-
-    @Bean
-    StatelessLoginFilter statelessLoginFilter() throws Exception {
-      return new StatelessLoginFilter(
-          "/login"
-          , authenticationManagerBean()
-          , customizedAuthenticationFailureHandler()
-          , customizedAuthenticationSuccessHandler());
-    }
-
-    @Bean
-    StatelessAuthenticationFilter statelessAuthenticationFilter() {
-      return new StatelessAuthenticationFilter(tokenAuthenticationService);
-    }
-
-    //TODO split mvc and security config
-    @Bean
-    public Object pwdEncoder() {
-      PasswordEncoder passwordEncoder = null;
-      // (SHA1) Used when connect to UDAL for testing e_transact
-      // String passHashAlg = "SHA1";
-      String passHashAlg = "DEFAULT";
-      switch (passHashAlg) {
-        case "MD5/0.5":
-          passwordEncoder = new MD5HalfPasswordEncoder();
-          break;
-        case "MD5":
-          passwordEncoder = new MD5PasswordEncoder();
-          break;
-        case "SHA1":
-          passwordEncoder = new SHA1PasswordEncoder();
-          break;
-        case "DEFAULT":
-          passwordEncoder = new DefaultPasswordEncoder();
-          break;
-        default:
-          throw new IllegalArgumentException("Unknown password hash type");
-      }
-
-      return new PasswordEncoderImpl(passwordEncoder) {
-      };
-    }
-
-    @Bean
-    public Boolean hideUserNotFound() {
-      return false;
-    }
-
-  }
 }

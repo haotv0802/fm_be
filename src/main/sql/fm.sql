@@ -42,8 +42,8 @@ DROP TABLE IF EXISTS `fm_users`;
 CREATE TABLE `fm_users`
 (
     `id`        BIGINT      NOT NULL,
-    `user_name` VARCHAR(45) NOT NULL,
-    `password`  VARCHAR(45) NOT NULL,
+    `user_name` VARCHAR(50) NOT NULL,
+    `password`  VARCHAR(50) NOT NULL,
     `created`   DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_user_table_id_unique` (`id`),
@@ -87,6 +87,7 @@ CREATE TABLE `fm_banks`
     `website` VARCHAR(45),
     `logo`    VARCHAR(45), -- Logos of Banks
     `created` DATETIME DEFAULT now(),
+    INDEX (name),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
@@ -98,15 +99,15 @@ DROP TABLE IF EXISTS `fm_individuals`;
 CREATE TABLE `fm_individuals`
 (
     `id`           BIGINT AUTO_INCREMENT,
-    `first_name`   VARCHAR(45) NOT NULL,
-    `last_name`    VARCHAR(45) NOT NULL,
-    `middle_name`  VARCHAR(45),
+    `first_name`   VARCHAR(30)  NOT NULL,
+    `last_name`    VARCHAR(30)  NOT NULL,
+    `middle_name`  VARCHAR(30),
     `birthday`     DATE,
     `gender`       VARCHAR(10),
-    `email`        VARCHAR(50) NOT NULL,
-    `phone_number` VARCHAR(50),
+    `email`        VARCHAR(100) NOT NULL,
+    `phone_number` VARCHAR(20),
     `income`       DOUBLE,
-    `user_id`      BIGINT      NOT NULL,
+    `user_id`      BIGINT       NOT NULL,
     `created`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_individuals_id_unique` (`id`),
@@ -125,7 +126,7 @@ DROP
 CREATE TABLE `fm_promotion_categories`
 (
     `id`      BIGINT AUTO_INCREMENT,
-    `name`    VARCHAR(45) NOT NULL,
+    `name`    VARCHAR(30) NOT NULL,
     `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
@@ -140,9 +141,9 @@ CREATE TABLE `fm_promotions`
 (
     `id`          BIGINT AUTO_INCREMENT,
     `title`       VARCHAR(45)    NOT NULL,
-    `content`     NVARCHAR(9000) NOT NULL,
-    `discount`    VARCHAR(45)    NULL, # Could be % or specific amount
-    `installment` TINYINT        NULL, # Could be % or specific amount
+    `content`     NVARCHAR(9000) NOT NULL, # NVARCHAR to store UTF-8 text
+    `discount`    VARCHAR(50)    NULL,     # Could be % or specific amount
+    `installment` TINYINT        NULL,     # Could be % or specific amount
     `start_date`  DATE           NOT NULL,
     `end_date`    DATE           NOT NULL,
     `url`         VARCHAR(200)   NOT NULL,
@@ -160,8 +161,8 @@ DROP TABLE IF EXISTS `fm_payment_methods`;
 CREATE TABLE `fm_payment_methods`
 (
     `id`      BIGINT      NOT NULL AUTO_INCREMENT,
-    `name`    VARCHAR(45) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
-    `logo`    VARCHAR(45) NULL,
+    `name`    VARCHAR(50) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
+    `logo`    VARCHAR(50) NULL, # TODO: it should be binary type to store an image.
     `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_event_types_id_unique` (`id`)
@@ -173,10 +174,10 @@ DROP TABLE IF EXISTS `fm_money_source`;
 CREATE TABLE `fm_money_source`
 (
     `id`            BIGINT      NOT NULL AUTO_INCREMENT,
-    `name`          VARCHAR(45) NULL, # HSBC, ANZ 123 or any name you like for such source.
+    `name`          VARCHAR(50) NULL, # HSBC, ANZ 123 or any name you like for such source.
     `start_date`    DATE        NULL,
     `expiry_date`   DATE        NULL,
-    `card_number`   VARCHAR(45) NULL, # last 6 digits
+    `card_number`   VARCHAR(50) NULL, # last 6 digits
     `amount`        DOUBLE      NOT NULL,
     `card_type_id`  BIGINT      NULL,
     `user_id`       BIGINT      NULL,
@@ -196,18 +197,18 @@ CREATE TABLE `fm_money_source`
 DROP TABLE IF EXISTS `fm_money_flow`;
 CREATE TABLE `fm_money_flow`
 (
-    `id`              BIGINT      NOT NULL AUTO_INCREMENT,
-    `user_id`         BIGINT      NOT NULL,
-    `amount`          DOUBLE      NULL, # if `is_an_event is TRUE, amount can be updated later when event is over
+    `id`              BIGINT       NOT NULL AUTO_INCREMENT,
+    `user_id`         BIGINT       NOT NULL,
+    `amount`          DOUBLE       NULL, # if `is_an_event is TRUE, amount can be updated later when event is over
     `date`            DATETIME DEFAULT now(),
-    `name`            VARCHAR(45) NOT NULL,
-    `money_source_id` BIGINT      NULL, # if `is_an_event is TRUE, card_id is NULL, or card_id is NULL means CASH payment
+    `name`            VARCHAR(45)  NOT NULL,
+    `money_source_id` BIGINT       NULL, # if `is_an_event is TRUE, card_id is NULL, or card_id is NULL means CASH payment
     `is_deleted`      BOOLEAN  DEFAULT FALSE,
     `is_spending`     BOOLEAN  DEFAULT FALSE,
     `created`         DATETIME DEFAULT now(),
     `updated`         DATETIME DEFAULT now(),
-    `note`            VARCHAR(45) NULL, # Notes for item
-    `link`            VARCHAR(45) NULL, # URL for reference
+    `note`            VARCHAR(200) NULL, # Notes for item
+    `link`            VARCHAR(200) NULL, # URL for reference
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_expenses_id_unique` (`id`),
     INDEX (name),
@@ -224,12 +225,12 @@ CREATE TABLE `fm_money_flow`
 DROP TABLE IF EXISTS `fm_error_tracking`;
 CREATE TABLE `fm_error_tracking`
 (
-    `id`            BIGINT       NOT NULL AUTO_INCREMENT,
-    `error_message` VARCHAR(100) NOT NULL,
-    `stack_trace`   TEXT         NOT NULL,
-    `exception`     VARCHAR(100) NOT NULL,
+    `id`            BIGINT        NOT NULL AUTO_INCREMENT,
+    `error_message` VARCHAR(100)  NOT NULL,
+    `stack_trace`   VARCHAR(1000) NOT NULL,
+    `exception`     VARCHAR(100)  NOT NULL,
     `user`          VARCHAR(50),
-    `error_date`    DATETIME     NOT NULL DEFAULT now(),
+    `error_date`    DATETIME      NOT NULL DEFAULT now(),
     PRIMARY KEY (`id`),
     INDEX (exception),
     INDEX (error_date),
