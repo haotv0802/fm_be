@@ -112,9 +112,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
-    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
-//    final String databaseUrl = env.getProperty("databaseUrl");
-//    final String databaseUrl =  env.getProperty("databaseUrl");
+//    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
+    final String databaseUrl = env.getProperty("database.url");
     final String usr = "root";
     final String pass = "fmsystem123";
 
@@ -134,7 +133,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 //     JdbcDataSource ds = new JdbcDataSource();
     MysqlDataSource ds = new MysqlDataSource();
 //    OracleDataSource ds = new OracleDataSource();
-    ds.setURL(databaseUrl);
+    ds.setURL(env.getProperty("database.url"));
     ds.setUser(usr);
     ds.setPassword(pass);
 

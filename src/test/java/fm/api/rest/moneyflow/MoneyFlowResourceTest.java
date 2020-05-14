@@ -53,7 +53,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
                         fieldWithPath("expenses[].amount").description(getMessage("Amount")).type(Types.BIG_DECIMAL),
                         fieldWithPath("expenses[].date").description(getMessage("Date")).type(Types.DATE),
                         fieldWithPath("expenses[].name").description(getMessage("Name")).type(Types.STRING),
-                        fieldWithPath("expenses[].moneySourceId").description(getMessage("Mouney source Id")).type(Types.LONG),
+                        fieldWithPath("expenses[].moneySourceId").description(getMessage("Money source Id")).type(Types.LONG),
                         fieldWithPath("expenses[].moneySourceName").description(getMessage("Money source Name")).type(Types.STRING),
                         fieldWithPath("expenses[].paymentMethod").description(getMessage("Payment method")).type(Types.STRING),
                         fieldWithPath("expenses[].cardNumber").description(getMessage("Card number")).type(Types.STRING),
