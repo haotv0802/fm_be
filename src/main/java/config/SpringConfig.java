@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.PageRequest;
@@ -73,14 +74,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-//Marks this class as configuration
-@Configuration
-//Enable API documentation
-// Specifies which package to scan
-@ComponentScan({"fm"}) // xml config: <context:component-scan base-package="fm"/>
-// Enables Spring's annotations
-@EnableWebMvc
-@EnableAspectJAutoProxy(proxyTargetClass = true)
+@Configuration //Marks this class as configuration
+@ComponentScan({"fm"}) // Specifies which package to scan // xml config: <context:component-scan base-package="fm"/>
+@EnableWebMvc // Enables Spring's annotations
+@EnableAspectJAutoProxy(proxyTargetClass = true) // like <aop:aspectj-autoproxy /> in XML configuration
+@PropertySource("classpath:config/application.properties") // in order to do this: env.getProperty("database.url"). Also, private Environment env can be used any where with @Autowired
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
   private static final Logger logger = LogManager.getLogger(SpringConfig.class);
@@ -111,30 +109,28 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   }
 
   @Bean(name = "dataSource")
-  public DataSource dataSource() throws SQLException {
-    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management?useLegacyDatetimeCode=false&serverTimezone=Asia/Ho_Chi_Minh";
-//    final String databaseUrl = env.getProperty("database.url");
-    final String usr = "root";
-    final String pass = "fmsystem123";
+  public DataSource dataSource() {
+    final String databaseUrl = env.getProperty("database.url");
+    final String username = env.getProperty("database.username");
+    final String password = env.getProperty("database.password");
 
     logger.debug("databaseUrl=={}", databaseUrl);
 
-    MysqlDataSource ds = new MysqlDataSource();
-    ds.setURL(databaseUrl);
-    ds.setUser(usr);
-    ds.setPassword(pass);
+    MysqlDataSource datasource = new MysqlDataSource();
+    datasource.setURL(databaseUrl);
+    datasource.setUser(username);
+    datasource.setPassword(password);
 
-    return ds;
-//    return new ManagedDataSourceProxy(ds);
+    return datasource;
   }
 
   @Bean(name = "txManager")
-  public PlatformTransactionManager txManager() throws SQLException {
+  public PlatformTransactionManager txManager() {
     return new DataSourceTransactionManager(dataSource());
   }
 
   @Bean(name = "transactionTemplate")
-  public TransactionTemplate transactionTemplate() throws SQLException {
+  public TransactionTemplate transactionTemplate() {
     return new TransactionTemplate(txManager());
   }
 
