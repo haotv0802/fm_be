@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Assert;
 import org.testng.annotations.Test;
@@ -37,6 +38,32 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
      */
     @Test
     public void testGetExpenses() throws Exception {
+
+        // Firstly, add expense into DB
+        Item creation = new Item();
+        creation.setName("new name");
+        creation.setAmount(new BigDecimal(1234));
+        creation.setDate(new Date());
+
+        MvcResult result = mockMvc
+                .perform(post("/svc/moneyflow")
+                        .header("Accept-Language", "en")
+                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(creation))
+                )
+                .andExpect(status().is(201))
+                .andReturn();
+
+        // result example: {"expenseId":21}
+        Assert.notNull(result.getResponse().getContentAsString());
+        JSONObject data = new JSONObject(result.getResponse().getContentAsString());
+
+        Integer expenseId = (Integer) data.get("expenseId");
+        Assert.notNull(expenseId);
+        Assert.isTrue(expenseId > 0);
+
+        // data has been added, now testing main service.
         RestDocumentationResultHandler restDocs = document(
                 SNIPPET_NAME_PATTERN
                 , preprocessResponse(prettyPrint())
@@ -61,7 +88,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
                 )
         );
 
-        MvcResult result = mockMvc
+        result = mockMvc
                 .perform(get("/svc/moneyflow")
                         .header("Accept-Language", "en")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
@@ -142,9 +169,35 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
     }
 
     @Test
+    @Rollback(false)
     public void testUpdateExpense() throws Exception {
 
+        // Firstly, add expense into DB
+        Item creation = new Item();
+        creation.setName("new name");
+        creation.setAmount(new BigDecimal(1234));
+        creation.setDate(new Date());
+
         MvcResult result = mockMvc
+                .perform(post("/svc/moneyflow")
+                        .header("Accept-Language", "en")
+                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(creation))
+                )
+                .andExpect(status().is(201))
+                .andReturn();
+
+        // result example: {"expenseId":21}
+        Assert.notNull(result.getResponse().getContentAsString());
+        JSONObject data = new JSONObject(result.getResponse().getContentAsString());
+
+        Integer expenseId = (Integer) data.get("expenseId");
+        Assert.notNull(expenseId);
+        Assert.isTrue(expenseId > 0);
+
+        // data has been added, we can take existing id for testing update service.
+        result = mockMvc
                 .perform(get("/svc/moneyflow")
                         .header("Accept-Language", "en")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
@@ -158,7 +211,10 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         Assert.notNull(expensesDetailsPresenter);
 
         List<ItemPresenter> items = expensesDetailsPresenter.getExpenses();
-        items.get(0).setUpdated(true);
+        ItemPresenter item = items.get(0);
+        item.setUpdated(true);
+        item.setId(expenseId);
+        item.setName("just updated");
 
         result = mockMvc
                 .perform(patch("/svc/moneyflow/list")
