@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  */
 public class PromotionsResourceTest extends BaseDocumentation {
 
-    @Test
+//    @Test
     public void testPromotionsCrawler() throws Exception {
 
         mockMvc
