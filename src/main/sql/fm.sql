@@ -210,6 +210,8 @@ CREATE TABLE `fm_money_flow`
     `link`            VARCHAR(45) NULL, # URL for reference
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_expenses_id_unique` (`id`),
+    INDEX (name),
+    INDEX (date),
     CONSTRAINT `fm_expenses_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`),
     CONSTRAINT `fm_expenses_money_source_id` FOREIGN KEY (`money_source_id`) REFERENCES `fm_money_source` (`id`)
 )
@@ -229,6 +231,8 @@ CREATE TABLE `fm_error_tracking`
     `user`          VARCHAR(50),
     `error_date`    DATETIME     NOT NULL DEFAULT now(),
     PRIMARY KEY (`id`),
+    INDEX (exception),
+    INDEX (error_date),
     UNIQUE KEY `error_tracking_id_unique` (`id`)
 )
     ENGINE = InnoDB
