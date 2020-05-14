@@ -119,21 +119,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
     LOGGER.debug("databaseUrl=={}", databaseUrl);
 
-//    BasicDataSource dataSource = new BasicDataSource();
-//
-//    dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//    dataSource.setUsername("username");
-//    dataSource.setPassword("password");
-//    dataSource.setUrl("jdbc:mysql://<host>:<port>/<database>");
-//    dataSource.setMaxActive(10);
-//    dataSource.setMaxIdle(5);
-//    dataSource.setInitialSize(5);
-//    dataSource.setValidationQuery("SELECT 1");
-
-//     JdbcDataSource ds = new JdbcDataSource();
     MysqlDataSource ds = new MysqlDataSource();
-//    OracleDataSource ds = new OracleDataSource();
-    ds.setURL(env.getProperty("database.url"));
+    ds.setURL(databaseUrl);
     ds.setUser(usr);
     ds.setPassword(pass);
 
