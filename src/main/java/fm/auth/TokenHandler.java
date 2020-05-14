@@ -1,5 +1,6 @@
 package fm.auth;
 
+import fm.utils.CryptoUtils;
 import io.jsonwebtoken.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,33 +11,26 @@ import java.util.Date;
 public class TokenHandler {
   private static final Logger logger = LogManager.getLogger(TokenHandler.class);
 
-  private static final SignatureAlgorithm DEFAULT_ALGO = SignatureAlgorithm.HS512;
+  private static final SignatureAlgorithm DEFAULT_ALGORITHM = SignatureAlgorithm.HS512;
 
   private final String secret;
-
 
   public TokenHandler(String secret) {
     this.secret = secret;
   }
 
-
   public String createTokenForUser(Integer id, UserDetails auth, Date expDate) {
     final String compact = Jwts.builder()
         .setSubject(auth.getUsername())
         .setExpiration(expDate)
-        .setId(encryptId(id))
-        .signWith(DEFAULT_ALGO, secret)
+        .setId(CryptoUtils.encrypt(Integer.toString(id), secret))
+        .signWith(DEFAULT_ALGORITHM, secret)
         .compact();
 
     if (logger.isDebugEnabled()) {
       logger.debug(compact);
     }
     return compact;
-  }
-
-  private String encryptId(Integer plainId) {
-    //todo ecrypt it
-    return Integer.toString(plainId);
   }
 
   /**
@@ -58,17 +52,12 @@ public class TokenHandler {
               .getBody()
               .getId();
 
-      id = decryptId(tokenId);
+      id = Integer.parseInt(CryptoUtils.decrypt(tokenId, secret));
     } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | IllegalArgumentException | SignatureException e) {
       logger.error(e.getMessage(), e);
     }
 
     return id;
-  }
-
-  private Integer decryptId(String encId) {
-    //todo decrypt
-    return Integer.parseInt(encId);
   }
 
 }
