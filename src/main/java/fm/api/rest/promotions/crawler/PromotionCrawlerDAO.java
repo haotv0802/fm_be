@@ -3,6 +3,8 @@ package fm.api.rest.promotions.crawler;
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.common.dao.DaoUtils;
+import fm.utils.FmDateUtils;
+import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -53,9 +57,11 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
                         + "(:title,                              "
                         + ":content,                             "
                         + ":discount,                            "
-                        + ":installment ,                         "
-                        + "STR_TO_DATE(:start_date, '%d-%m-%Y'), "
-                        + "STR_TO_DATE(:end_date, '%d-%m-%Y'),   "
+                        + ":installment ,                        "
+                        + ":start_date, "
+//                        + "STR_TO_DATE(:start_date, '%d-%m-%Y'), "
+                        + ":end_date,   "
+//                        + "STR_TO_DATE(:end_date, '%d-%m-%Y'),   "
                         + ":category_id,                         "
                         + ":url,                                 "
                         + ":bank_id)                             ";
@@ -65,19 +71,23 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         paramsMap.addValue("discount", promoModel.getDiscount());
         paramsMap.addValue("installment", promoModel.getInstallmentPeriod());
         if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
-            paramsMap.addValue("start_date", "02-10-2000");
+            paramsMap.addValue("start_date", LocalDateTime.now());
         } else {
-            paramsMap.addValue("start_date", promoModel.getStartDate().replaceAll("/", "-"));
+//            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
+            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
         if (promoModel.getEndDate().equals("")) {
-            paramsMap.addValue("end_date", "02-10-2000");
+            paramsMap.addValue("end_date", LocalDateTime.now());
         } else {
-            paramsMap.addValue("end_date", promoModel.getEndDate().replaceAll("/", "-"));
+//            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
+            paramsMap.addValue("end_date", FmDateUtils.parseDateWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
         paramsMap.addValue("url", promoModel.getLinkDetail());
         paramsMap.addValue("category_id", promoModel.getCategoryId());
         paramsMap.addValue("bank_id", promoModel.getBankId());
+
         DaoUtils.debugQuery(logger, sqlStatement, paramsMap.getValues());
+
         namedTemplate.update(sqlStatement, paramsMap);
         return true;
     }

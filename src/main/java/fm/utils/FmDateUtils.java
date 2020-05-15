@@ -57,4 +57,13 @@ public class FmDateUtils {
         return null;
     }
 
+    public static Date parseDateWithPattern(String dateTime, String pattern) {
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(pattern);
+            return sdf.parse(dateTime);
+        } catch (ParseException e) {
+            logger.error(e.getMessage(), e);
+        }
+        return null;
+    }
 }

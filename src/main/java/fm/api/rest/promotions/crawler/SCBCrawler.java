@@ -25,6 +25,7 @@ import java.util.*;
 @Service("scbCrawler")
 public class SCBCrawler implements IBankPromotionCrawler {
     private static final Logger logger = LogManager.getLogger(SCBCrawler.class);
+    private final Integer sleepTime = 50;
 
     private final String mainLink = "htstps://www.scb.com.vn/";
     private PromotionUtils promotionUtils;
@@ -47,23 +48,23 @@ public class SCBCrawler implements IBankPromotionCrawler {
         categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
         try {
             // Test all function
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getPrivilegeGoodwillPromotion(), categoriesDB.get("Privilege Goodwill"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherPromotion(), categoriesDB.get("Other"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstalment(), categoriesDB.get("Shopping"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstalment(), categoriesDB.get("Education"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getJewelryInstalment(), categoriesDB.get("Jewelry"));
-
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherInstalment(), categoriesDB.get("Other"));
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
+//
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
+//
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
+//
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getPrivilegeGoodwillPromotion(), categoriesDB.get("Other"));
+//
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherPromotion(), categoriesDB.get("Other"));
+//
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstalment(), categoriesDB.get("Shopping"));
+//
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstalment(), categoriesDB.get("Education"));
+//
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getJewelryInstalment(), categoriesDB.get("Jewelry"));
+//
+//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherInstalment(), categoriesDB.get("Other"));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -259,7 +260,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Privilege Goodwill");
+        int cateId = categoriesDB.get("Other");
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
         List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
 
@@ -367,7 +368,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
         List<String> listPromotionLinks = getAllPromotionLinks(url);
 
         for (String link : listPromotionLinks) {
-            Thread.sleep(2000);
+            Thread.sleep(sleepTime);
             PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
             if (model != null) {
                 if (promotionUtils.checkInfoExit(model, listPromoBankData)) {

@@ -18,26 +18,34 @@ public class FmLocalDateUtils {
 
     private static final Logger logger = LogManager.getLogger(FmLocalDateUtils.class);
 
-    public static String formatDateTime(LocalDateTime dateTime) {
+    public static String format(LocalDateTime dateTime) {
         if (dateTime == null) {
             return "";
         }
         return dateFormatter.format(dateTime);
     }
 
-    public static String formatDate(LocalDate date) {
+    public static String format(LocalDate date) {
         if (date == null) {
             return "";
         }
         return dateTimeFormatter.format(date);
     }
 
-    public static String formatDateWithPattern(LocalDate date, String pattern) {
+    public static String formatWithPattern(LocalDate date, String pattern) {
         if (date == null) {
             return "";
         }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return formatter.format(date);
+    }
+
+    public static String formatWithPattern(LocalDateTime dateTime, String pattern) {
+        if (dateTime == null) {
+            return "";
+        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
+        return formatter.format(dateTime);
     }
 
     public static LocalDate parseDate(String date) {
