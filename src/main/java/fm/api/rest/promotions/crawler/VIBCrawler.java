@@ -157,7 +157,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      */
 
     private List<PromotionCrawlerModel> getEducationPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get("Education");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
 
         List<PromotionCrawlerModel> educationPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_EDUCATION);
 
@@ -172,7 +172,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getTravelPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get("Travel");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
         List<PromotionCrawlerModel> travelPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_TRAVEL);
 
@@ -188,7 +188,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getFoodPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get("Food");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
 
         List<PromotionCrawlerModel> foodPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_FOOD);
 
@@ -202,7 +202,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getHealthPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get("Health");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
 
         List<PromotionCrawlerModel> healthPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_HEALTHCARE);
 
@@ -217,7 +217,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      */
     private List<PromotionCrawlerModel> getShoppingPromotion() throws InterruptedException {
 
-        int cateID = categoriesDB.get("Shopping");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
 
         List<PromotionCrawlerModel> shoppingPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_SHOPPING);
 
@@ -233,7 +233,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getShoppingInstallment() throws InterruptedException {
 
 
-        int cateID = categoriesDB.get("Shopping");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
 
         List<PromotionCrawlerModel> shoppingInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_SHOPPING);
 
@@ -249,7 +249,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getHealthInstallment() throws InterruptedException {
 
 
-        int cateID = categoriesDB.get("Health");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
 
         List<PromotionCrawlerModel> heanlthInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_HEALTHCARE);
 
@@ -265,7 +265,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getElectricateInstallment() throws InterruptedException {
 
 
-        int cateID = categoriesDB.get("Electronics");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS);
 
         List<PromotionCrawlerModel> electricateInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE);
 
@@ -280,7 +280,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      */
     private List<PromotionCrawlerModel> getEducationInstallment() throws InterruptedException {
 
-        int cateID = categoriesDB.get("Education");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
 
         List<PromotionCrawlerModel> educationInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION);
 
@@ -295,7 +295,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      */
     private List<PromotionCrawlerModel> getTravelInstallment() throws InterruptedException {
 
-        int cateID = categoriesDB.get("Travel");
+        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
         List<PromotionCrawlerModel> travelInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL);
 

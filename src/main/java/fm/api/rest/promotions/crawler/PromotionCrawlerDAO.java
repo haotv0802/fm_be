@@ -74,7 +74,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
             paramsMap.addValue("start_date", LocalDateTime.now());
         } else {
 //            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
-            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
+            paramsMap.addValue("start_date", FmDateUtils.parseDateWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
         if (promoModel.getEndDate().equals("")) {
             paramsMap.addValue("end_date", LocalDateTime.now());

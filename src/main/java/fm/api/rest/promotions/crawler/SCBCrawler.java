@@ -208,7 +208,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getTravelPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Travel");
+        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
@@ -226,7 +226,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getFoodPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Food");
+        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
         List<PromotionCrawlerModel> foodPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD, listPromoBankData);
@@ -243,7 +243,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getHealthPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Health");
+        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
         List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
@@ -260,7 +260,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Other");
+        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
         List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
 
@@ -276,7 +276,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getOtherPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Other");
+        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
         List<PromotionCrawlerModel> otherPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER, listPromoBankData);
 
@@ -324,7 +324,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getJewelryInstalment() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Jewelry");
+        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
         List<PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_JEWELRY, listPromoBankData);
@@ -341,7 +341,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
     private List<PromotionCrawlerModel> getOtherInstalment() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Other");
+        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
         List<PromotionCrawlerModel> otherInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER, listPromoBankData);

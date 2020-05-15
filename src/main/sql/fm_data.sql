@@ -34,6 +34,7 @@ INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (1, 'HSBC', '123
 INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (2, 'VIB', '123 Dong Khoi', 'hsbc.com.vn');
 INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (3, 'SCB', '123 Dong Khoi', 'hsbc.com.vn');
 INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (4, 'Citi Bank', '123 Dong Khoi', 'hsbc.com.vn');
+INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (5, 'Shinhan Bank', '123 Dong Khoi', 'hsbc.com.vn');
 
 INSERT INTO fm_individuals (`id`, `first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `income`, `user_id`)
 VALUES (1, 'Hao', 'Ho', 'Anh', '1988-04-19', 'Male', 'hoanhhao@gmail.com', '0906729775', '1000000000', 2);

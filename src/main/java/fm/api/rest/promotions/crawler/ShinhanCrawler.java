@@ -8,7 +8,6 @@
  import fm.api.rest.promotions.crawler.utils.PromotionUtils;
  import io.jsonwebtoken.lang.Assert;
  import org.apache.http.NameValuePair;
- import org.apache.http.ParseException;
  import org.apache.http.client.entity.UrlEncodedFormEntity;
  import org.apache.http.client.methods.CloseableHttpResponse;
  import org.apache.http.client.methods.HttpPost;
@@ -35,15 +34,15 @@
  import java.util.TreeMap;
 
  @Service("shinhanCrawler")
- public class ShinHanBank implements IBankPromotionCrawler {
-   private static final Logger LOGGER = LogManager.getLogger(ShinHanBank.class);
+ public class ShinhanCrawler implements IBankPromotionCrawler {
+   private static final Logger LOGGER = LogManager.getLogger(ShinhanCrawler.class);
    private PromotionUtils promotionUtils;
    private IPromotionCrawlerDAO iPromotionCrawlerDAO;
 
 
    @Autowired
-   public ShinHanBank(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
-                      @Qualifier("promoUtils") PromotionUtils promotionUtils) {
+   public ShinhanCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
+                         @Qualifier("promoUtils") PromotionUtils promotionUtils) {
      Assert.notNull(iPromotionCrawlerDAO);
      Assert.notNull(promotionUtils);
      this.iPromotionCrawlerDAO = iPromotionCrawlerDAO;
