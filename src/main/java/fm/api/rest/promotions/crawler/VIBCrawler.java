@@ -29,6 +29,8 @@ public class VIBCrawler implements IBankPromotionCrawler {
     private final String mainLink = "https://www.vib.com.vn/";
     private Map<String, Integer> categoriesDB = new HashMap<>();
 
+    private final Integer sleepTime = 50;
+
     @Autowired
     public VIBCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
                       @Qualifier("promoUtils") PromotionUtils promotionUtils) {
@@ -343,9 +345,8 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
         List<String> linkPromotionsLinks = getAllListFromCateMainLink(url);
 
-
         for (String link : linkPromotionsLinks) {
-            Thread.sleep(2000);
+            Thread.sleep(sleepTime);
             PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
             if (model != null) {
                 if (this.promotionUtils.checkInfoExit(model, listPromoBankData)) {

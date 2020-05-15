@@ -1,7 +1,6 @@
 package fm.auth;
 
-public interface AuthConstants extends Constants
-{
+public interface AuthConstants {
   String AUTH_HEADER_NAME = "X-AUTH-TOKEN";
 }
 

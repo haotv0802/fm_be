@@ -140,10 +140,10 @@ DROP
 CREATE TABLE `fm_promotions`
 (
     `id`          BIGINT AUTO_INCREMENT,
-    `title`       VARCHAR(45)    NOT NULL,
+    `title`       VARCHAR(100)   NOT NULL,
     `content`     NVARCHAR(9000) NOT NULL, # NVARCHAR to store UTF-8 text
     `discount`    VARCHAR(50)    NULL,     # Could be % or specific amount
-    `installment` TINYINT        NULL,     # Could be % or specific amount
+    `installment` VARCHAR(100)   NULL,     # Could be % or specific amount
     `start_date`  DATE           NOT NULL,
     `end_date`    DATE           NOT NULL,
     `url`         VARCHAR(200)   NOT NULL,
@@ -151,6 +151,8 @@ CREATE TABLE `fm_promotions`
     `bank_id`     BIGINT         NOT NULL,
     `created`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
+    UNIQUE KEY `fm_expenses_id_unique` (`url`),
+    INDEX (`url`),
     CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`),
     CONSTRAINT `fm_promotions_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 ) ENGINE = InnoDB
@@ -164,8 +166,7 @@ CREATE TABLE `fm_payment_methods`
     `name`    VARCHAR(50) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
     `logo`    VARCHAR(50) NULL, # TODO: it should be binary type to store an image.
     `created` DATETIME DEFAULT now(),
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_event_types_id_unique` (`id`)
+    PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8;
@@ -210,9 +211,8 @@ CREATE TABLE `fm_money_flow`
     `note`            VARCHAR(200) NULL, # Notes for item
     `link`            VARCHAR(200) NULL, # URL for reference
     PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_expenses_id_unique` (`id`),
-    INDEX (name),
-    INDEX (date),
+    INDEX (`name`),
+    INDEX (`date`),
     CONSTRAINT `fm_expenses_user_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`),
     CONSTRAINT `fm_expenses_money_source_id` FOREIGN KEY (`money_source_id`) REFERENCES `fm_money_source` (`id`)
 )
@@ -232,8 +232,8 @@ CREATE TABLE `fm_error_tracking`
     `user`          VARCHAR(50),
     `error_date`    DATETIME      NOT NULL DEFAULT now(),
     PRIMARY KEY (`id`),
-    INDEX (exception),
-    INDEX (error_date),
+    INDEX (`exception`),
+    INDEX (`error_date`),
     UNIQUE KEY `error_tracking_id_unique` (`id`)
 )
     ENGINE = InnoDB

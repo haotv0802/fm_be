@@ -265,9 +265,7 @@ public class PromotionUtils {
    * @return
    */
   public List<PromotionPresenter> initBankData(int bankId, int cateId) {
-    List<PromotionPresenter> listBankDataInfo = new ArrayList<>();
-    listBankDataInfo = iPromotionCrawlerDAO.getPrmoTionByBankId(bankId, cateId);
-    return listBankDataInfo;
+    return iPromotionCrawlerDAO.getPrmoTionByBankId(bankId, cateId);
   }
 
   /**
@@ -277,12 +275,15 @@ public class PromotionUtils {
    * @param listBankPromotion
    * @return
    */
-  public Map<Integer, List<PromotionCrawlerModel>> addPromotionDataIntoMap(Map<Integer, List<PromotionCrawlerModel>> promotionMap, List<PromotionCrawlerModel> listBankPromotion, int cateId) {
+  public Map<Integer, List<PromotionCrawlerModel>> addPromotionDataIntoMap(Map<Integer, List<PromotionCrawlerModel>> promotionMap,
+                                                                           List<PromotionCrawlerModel> listBankPromotion,
+                                                                           int cateId) {
     if (!listBankPromotion.isEmpty()) {
       if (promotionMap.get(cateId) != null) {
-        for (PromotionCrawlerModel model : listBankPromotion) {
-          promotionMap.get(cateId).add(model);
-        }
+        promotionMap.get(cateId).addAll(listBankPromotion);
+//        for (PromotionCrawlerModel model : listBankPromotion) {
+//          promotionMap.get(cateId).add(model);
+//        }
         return promotionMap;
       } else {
         promotionMap.put(cateId, listBankPromotion);
