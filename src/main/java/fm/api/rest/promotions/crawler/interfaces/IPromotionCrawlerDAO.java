@@ -10,7 +10,7 @@ import java.util.Map;
 public interface IPromotionCrawlerDAO {
   boolean savePromotion(PromotionCrawlerModel model);
 
-  List<PromotionPresenter> getPrmoTionByBankId(int bankID, int category_id);
+  List<PromotionPresenter> getPromotionByBankId(int bankID, int category_id);
 
   Map<String, Integer> getCategoryAndId();
 }

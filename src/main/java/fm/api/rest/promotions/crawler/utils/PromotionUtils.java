@@ -265,7 +265,7 @@ public class PromotionUtils {
    * @return
    */
   public List<PromotionPresenter> initBankData(int bankId, int cateId) {
-    return iPromotionCrawlerDAO.getPrmoTionByBankId(bankId, cateId);
+    return iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
   }
 
   /**

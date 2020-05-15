@@ -93,7 +93,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     }
 
     @Override
-    public List<PromotionPresenter> getPrmoTionByBankId(int bankID, int category_id) {
+    public List<PromotionPresenter> getPromotionByBankId(int bankID, int category_id) {
         List<PromotionPresenter> result = new ArrayList<>();
         final String sqlQuery =
                 "SELECT    "

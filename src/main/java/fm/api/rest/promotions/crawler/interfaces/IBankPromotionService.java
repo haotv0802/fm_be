@@ -9,8 +9,11 @@
  import java.util.Map;
 
  public interface IBankPromotionService {
-  Map<String,List<PromotionCrawlerModel>> getListPromotionInfo(List<PromotionPresenter> promotionPresenterList);
-  PromotionCrawlerModel getPromotionFromLink(String link, int categoryId);
-  String getDetail(Elements container , String selector , String tagName);
-  List<String> getLocations(Elements container);
+     Map<String, List<PromotionCrawlerModel>> getListPromotionInfo(List<PromotionPresenter> promotionPresenterList);
+
+     PromotionCrawlerModel getPromotionFromLink(String link, int categoryId);
+
+     String getDetail(Elements container, String selector, String tagName);
+
+     List<String> getLocations(Elements container);
  }

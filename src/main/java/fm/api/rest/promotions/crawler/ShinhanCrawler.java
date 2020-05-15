@@ -76,7 +76,7 @@
        List<PromotionCrawlerModel> list = new ArrayList<>();
        String crwalingData = "";
        HttpPost postConnection = new HttpPost(link);
-       List<PromotionPresenter> listBankDataPromo = iPromotionCrawlerDAO.getPrmoTionByBankId(5, cateId);
+       List<PromotionPresenter> listBankDataPromo = iPromotionCrawlerDAO.getPromotionByBankId(5, cateId);
        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
        urlParameters.add(new BasicNameValuePair("_token", "iEWghzwz8FGa0yCkILYxWtwJx1A8Ya1avRJyPyay"));
        urlParameters.add(new BasicNameValuePair("province", "all"));

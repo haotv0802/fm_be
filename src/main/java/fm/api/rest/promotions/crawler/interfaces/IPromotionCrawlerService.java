@@ -10,8 +10,8 @@ import java.util.List;
 @Service("promotionCrawlerService")
 public interface IPromotionCrawlerService {
 
-  String insertBankPromotion(PromotionCrawlerModel model);
+    void saveBankPromotion(PromotionCrawlerModel model);
 
-  List<PromotionPresenter> getPrmoTionByBankId(int bankID, int cateID);
+    List<PromotionPresenter> getPromotionByBankId(int bankID, int cateID);
 
 }
