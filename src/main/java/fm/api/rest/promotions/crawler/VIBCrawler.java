@@ -5,6 +5,7 @@ import fm.api.rest.promotions.crawler.interfaces.BankLinkPromotion;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.utils.PromotionUtils;
+import fm.common.FmConstants;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,25 +51,25 @@ public class VIBCrawler implements IBankPromotionCrawler {
         Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
         categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
         try {
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationPromotion(), categoriesDB.get("Education"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingPromotion(), categoriesDB.get("Shopping"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelInstallment(), categoriesDB.get("Travel"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstallment(), categoriesDB.get("Education"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthInstallment(), categoriesDB.get("Health"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getElectricateInstallment(), categoriesDB.get("Electronics"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getElectricateInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstallment(), categoriesDB.get("Shopping"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

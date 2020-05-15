@@ -8,6 +8,7 @@ import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.interfaces.BankLinkPromotion;
 import fm.api.rest.promotions.crawler.utils.PromotionUtils;
+import fm.common.FmConstants;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -48,23 +49,23 @@ public class SCBCrawler implements IBankPromotionCrawler {
         categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
         try {
             // Test all function
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));
-//
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get("Food"));
-//
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get("Health"));
-//
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getPrivilegeGoodwillPromotion(), categoriesDB.get("Other"));
-//
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherPromotion(), categoriesDB.get("Other"));
-//
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstalment(), categoriesDB.get("Shopping"));
-//
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstalment(), categoriesDB.get("Education"));
-//
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getJewelryInstalment(), categoriesDB.get("Jewelry"));
-//
-//            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherInstalment(), categoriesDB.get("Other"));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getPrivilegeGoodwillPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getJewelryInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
+
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,7 +115,6 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
 
     }
-
 
     /**
      * This service is to get infomation base on tag name.
@@ -349,7 +349,6 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
         return otherInstalmnetData;
     }
-
 
     /**
      * This service is to do crawling promtion detail data from link
