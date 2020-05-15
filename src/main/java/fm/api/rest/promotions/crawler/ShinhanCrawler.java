@@ -108,7 +108,7 @@
            String image_future = subJsonArray.getJSONObject(y).getString("image_future");
            String get_permalinks = subJsonArray.getJSONObject(y).getString("get_permalinks");
            PromotionCrawlerModel model = new PromotionCrawlerModel(title, description, promotionUtils.getProvision(description), "", date_start, date_end, cateId, 5, contentHTML, get_permalinks, "", "", "", "");
-           if (promotionUtils.checkInfoExit(model, listBankDataPromo)) {
+           if (promotionUtils.checkIfPromotionExisting(model, listBankDataPromo)) {
              LOGGER.info("SCB Bank Promotion Date is Existed");
            } else {
              list.add(model);

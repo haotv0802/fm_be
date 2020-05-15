@@ -232,29 +232,8 @@ public class PromotionUtils {
    * @param list
    * @return
    */
-  public boolean checkInfoExit(PromotionCrawlerModel model, List<PromotionPresenter> list) {
-    if (!list.isEmpty()) {
-      for (PromotionPresenter item : list) {
-        if (model.getTitle().equals(item.getTitle())) {
-          if (model.getContent().equals(item.getContent())) {
-            if (model.getDiscount() != null && item.getDiscount() != null) {
-              if (!model.getDiscount().equals(item.getDiscount()) || !model.getEndDate().equals(item.getEndDate())) {
-                //do update
-                logger.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
-                return true;
-              }
-            }
-            if (model.getInstallmentPeriod() != null && item.getInstallmentPeriod() != null) {
-              if (!model.getInstallmentPeriod().equals(item.getInstallmentPeriod()) || !model.getEndDate().equals(item.getEndDate())) {
-                logger.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
-                return true;
-              }
-            }
-          }
-        }
-      }
-    }
-    return false;
+  public boolean checkIfPromotionExisting(PromotionCrawlerModel model, List<PromotionPresenter> list) {
+    return this.iPromotionCrawlerDAO.isPromotionExisting(model.getLinkDetail());
   }
 
   /**

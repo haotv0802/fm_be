@@ -13,4 +13,6 @@ public interface IPromotionCrawlerDAO {
   List<PromotionPresenter> getPromotionByBankId(int bankID, int category_id);
 
   Map<String, Integer> getCategoryAndId();
+
+  Boolean isPromotionExisting(String url);
 }

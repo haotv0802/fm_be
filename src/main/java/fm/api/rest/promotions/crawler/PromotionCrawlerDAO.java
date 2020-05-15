@@ -96,7 +96,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     public List<PromotionPresenter> getPromotionByBankId(int bankID, int category_id) {
         List<PromotionPresenter> result = new ArrayList<>();
         final String sqlQuery =
-                "SELECT    "
+                          "SELECT    "
                         + "id,                              "
                         + "title,                                  "
                         + "content,                                "
@@ -147,6 +147,17 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
 //    }
 
         return categoriesAndIdlist;
+    }
+
+    @Override
+    public Boolean isPromotionExisting(String url) {
+        final String sql = "SELECT COUNT(*) FROM fm_promotions WHERE url = :url";
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("url", url);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
     }
 
     private PromotionPresenter buildPromotionModel(ResultSet rs) throws SQLException {

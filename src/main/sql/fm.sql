@@ -151,7 +151,7 @@ CREATE TABLE `fm_promotions`
     `bank_id`     BIGINT         NOT NULL,
     `created`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
-#     UNIQUE KEY `fm_expenses_id_unique` (`url`),
+#     UNIQUE KEY `fm_promotions_url_unique` (`url`),
     INDEX (`url`),
     CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`),
     CONSTRAINT `fm_promotions_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)

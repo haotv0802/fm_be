@@ -212,7 +212,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> travelPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL, listPromoBankData);
+        List<PromotionCrawlerModel> travelPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL, listPromoBankData);
 
 
         return travelPromotionData;
@@ -229,7 +229,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
         int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> foodPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD, listPromoBankData);
+        List<PromotionCrawlerModel> foodPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD, listPromoBankData);
 
 
         return foodPromotionData;
@@ -246,7 +246,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
         int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
+        List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
 
 
         return healthPromotionData;
@@ -262,7 +262,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() throws IOException, InterruptedException {
         int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
-        List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
+        List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
 
 
         return privilegeGoodwillPromotionData;
@@ -278,7 +278,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getOtherPromotion() throws IOException, InterruptedException {
         int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
         List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
-        List<PromotionCrawlerModel> otherPromotionData = doCrawlingPromotionDetaiData(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER, listPromoBankData);
+        List<PromotionCrawlerModel> otherPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER, listPromoBankData);
 
 
         return otherPromotionData;
@@ -359,7 +359,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> doCrawlingPromotionDetaiData(int cateID, String url, List<PromotionPresenter> listPromoBankData) throws IOException, InterruptedException {
+    private List<PromotionCrawlerModel> doCrawlingPromotionDetail(int cateID, String url, List<PromotionPresenter> listPromoBankData) throws IOException, InterruptedException {
 
         List<PromotionCrawlerModel> listPromotionCrawling = new ArrayList<>();
 
@@ -370,7 +370,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
             Thread.sleep(sleepTime);
             PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
             if (model != null) {
-                if (promotionUtils.checkInfoExit(model, listPromoBankData)) {
+                if (promotionUtils.checkIfPromotionExisting(model, listPromoBankData)) {
                     logger.info("SCB Bank Promotion Date is Existed");
                 } else {
                     listPromotionCrawling.add(model);
