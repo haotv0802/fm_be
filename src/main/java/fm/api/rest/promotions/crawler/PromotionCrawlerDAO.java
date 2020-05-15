@@ -88,18 +88,19 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     List<PromotionPresenter> result = new ArrayList<>();
     final String sqlQuery =
               "SELECT    "
-            + "id,                              "
+            + "id,                                     "
             + "title,                                  "
             + "content,                                "
             + "discount,                               "
             + "installment,                            "
-            + "DATE_FORMAT(start_date, '%d-%m-%Y'),   "
+            + "DATE_FORMAT(start_date, '%d-%m-%Y'),    "
             + "DATE_FORMAT(end_date, '%d-%m-%Y'),      "
             + "category_id,                            "
             + "bank_id                                 "
             + "FROM fm_promotions                      "
             + "WHERE bank_id=:bank_id                  "
-            + "AND category_id=:category_id            ";
+            + "AND category_id=:category_id            "
+            + "AND CURDATE() < start_date              ";
     try {
       final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
       paramsMap.addValue("bank_id", bankID);

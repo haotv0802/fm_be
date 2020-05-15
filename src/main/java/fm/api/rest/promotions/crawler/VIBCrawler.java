@@ -27,7 +27,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
   private Set<String> listDetailPromoLink = new HashSet<>();
   private IPromotionCrawlerDAO iPromotionCrawlerDAO;
   private final String mainLink = "https://www.vib.com.vn/";
-  private Map<String, Integer> categoriesDB = new HashMap<>();
+  private Map<String, Integer> categoriesDB = new TreeMap<>();
 
   @Autowired
   public VIBCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
@@ -45,7 +45,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
    */
   @Override
   public Map<Integer, List<PromotionCrawlerModel>> crawl() {
-    Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
+    Map<Integer, List<PromotionCrawlerModel>> ressult = new TreeMap<>();
     categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
     try {
       ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get("Travel"));

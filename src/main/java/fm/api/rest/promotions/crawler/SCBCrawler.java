@@ -24,7 +24,7 @@ import java.util.*;
 
 @Service("scbCrawler")
 public class SCBCrawler implements IBankPromotionCrawler {
-  private static final Logger LOGGER = LogManager.getLogger(PromotionCrawlerDAO.class);
+  private static final Logger LOGGER = LogManager.getLogger(SCBCrawler.class);
   private final String mainLink = "htstps://www.scb.com.vn/";
   private PromotionUtils promotionUtils;
   private Set<String> listDetailPromoLinks = new HashSet<>();

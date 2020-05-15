@@ -236,13 +236,13 @@ public class PromotionUtils {
             if (model.getDiscount() != null && item.getDiscount() != null) {
               if (!model.getDiscount().equals(item.getDiscount()) || !model.getEndDate().equals(item.getEndDate())) {
                 //do update
-                LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
+                LOGGER.info("Update Promotion - Promotion link  :  " + model.getLinkDetail());
                 return true;
               }
             }
             if (model.getInstallmentPeriod() != null && item.getInstallmentPeriod() != null) {
               if (!model.getInstallmentPeriod().equals(item.getInstallmentPeriod()) || !model.getEndDate().equals(item.getEndDate())) {
-                LOGGER.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
+                LOGGER.info("Update Promotion - Promotion link  :  " + model.getLinkDetail());
                 return true;
               }
             }
@@ -287,4 +287,10 @@ public class PromotionUtils {
     return promotionMap;
   }
 
+
+  public String formatDateText(String text) {
+    text = text.replaceAll("/", "-");
+    String[] textParts = text.split("-");
+    return textParts[2] + "-" + textParts[1] +"-"+ textParts[0];
+  }
 }

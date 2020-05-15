@@ -21,5 +21,6 @@
   final String VIB_INSTALLMENT_HEALTHCARE ="https://www.vib.com.vn/wps/portal/vn/promotion/promotions-installment?cate=7&name=Suc-khoe";
   final String VIB_INSTALLMENT_TRAVEL ="https://www.vib.com.vn/wps/portal/vn/promotion/promotions-installment?cate=9&name=Du-lich";
   final String VIB_INSTALLMENT_EDUCATION ="https://www.vib.com.vn/wps/portal/vn/promotion/promotions-installment?cate=8&name=Giao-duc";
+  final String SHINHAN_PROMOTION ="https://shinhan.com.vn/get_shinhan_promotion";
 
  }
