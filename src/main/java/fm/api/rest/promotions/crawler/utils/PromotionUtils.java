@@ -1,5 +1,5 @@
 package fm.api.rest.promotions.crawler.utils;
-/* Quy created on 3/11/2020  */
+/*   */
 
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
@@ -21,9 +21,13 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Quy created on 3/11/2020
+ */
 @Service("promoUtils")
 public class PromotionUtils {
-  private static final Logger LOGGER = LogManager.getLogger(PromotionUtils.class);
+  private static final Logger logger = LogManager.getLogger(PromotionUtils.class);
+
   private IPromotionCrawlerDAO iPromotionCrawlerDAO;
 
   @Autowired
@@ -236,13 +240,13 @@ public class PromotionUtils {
             if (model.getDiscount() != null && item.getDiscount() != null) {
               if (!model.getDiscount().equals(item.getDiscount()) || !model.getEndDate().equals(item.getEndDate())) {
                 //do update
-                LOGGER.info("Update Promotion - Promotion link  :  " + model.getLinkDetail());
+                logger.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
                 return true;
               }
             }
             if (model.getInstallmentPeriod() != null && item.getInstallmentPeriod() != null) {
               if (!model.getInstallmentPeriod().equals(item.getInstallmentPeriod()) || !model.getEndDate().equals(item.getEndDate())) {
-                LOGGER.info("Update Promotion - Promotion link  :  " + model.getLinkDetail());
+                logger.info("Update VIB Promotion - Promotion link  :  " + model.getLinkDetail());
                 return true;
               }
             }

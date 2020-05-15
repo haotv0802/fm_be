@@ -19,107 +19,104 @@ import java.util.List;
 @Service("bankDao")
 public class BankDao implements IBankDao {
 
-  private static final Logger LOGGER = LogManager.getLogger(IndividualDao.class);
+    private static final Logger logger = LogManager.getLogger(BankDao.class);
 
-  private final NamedParameterJdbcTemplate namedTemplate;
+    private final NamedParameterJdbcTemplate namedTemplate;
 
-  @Autowired
-  public BankDao(NamedParameterJdbcTemplate namedTemplate) {
-    Assert.notNull(namedTemplate);
-    this.namedTemplate = namedTemplate;
-  }
+    @Autowired
+    public BankDao(NamedParameterJdbcTemplate namedTemplate) {
+        Assert.notNull(namedTemplate);
+        this.namedTemplate = namedTemplate;
+    }
 
-  @Override
-  public List<BankPresenter> getBanksByUserId(Integer userId) {
-    final String sql =
-          "SELECT                                            "
-        + " b.id,                                            "
-        + " b.name,                                          "
-        + " b.address,                                       "
-        + " b.website                                        "
-        + "FROM                                              "
-        + " fm_banks b                                       "
-        + " inner join fm_money_source m on m.bank_id = b.id "
-        + "WHERE                                             "
-        + " m.user_id = :userId                              "
-        ;
+    @Override
+    public List<BankPresenter> getBanksByUserId(Integer userId) {
+        final String sql =
+                "SELECT                                            "
+                        + " b.id,                                            "
+                        + " b.name,                                          "
+                        + " b.address,                                       "
+                        + " b.website                                        "
+                        + "FROM                                              "
+                        + " fm_banks b                                       "
+                        + " inner join fm_money_source m on m.bank_id = b.id "
+                        + "WHERE                                             "
+                        + " m.user_id = :userId                              ";
 
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("userId", userId);
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("userId", userId);
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-    List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-          BankPresenter bankPresenter = new BankPresenter();
-          bankPresenter.setId(rs.getLong("id"));
-          bankPresenter.setName(rs.getString("name"));
-          bankPresenter.setAddress(rs.getString("address"));
-          bankPresenter.setWebsite(rs.getString("website"));
-          return bankPresenter;
-        }
-    );
+        List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+                    BankPresenter bankPresenter = new BankPresenter();
+                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setName(rs.getString("name"));
+                    bankPresenter.setAddress(rs.getString("address"));
+                    bankPresenter.setWebsite(rs.getString("website"));
+                    return bankPresenter;
+                }
+        );
 
-    return bankPresenters;
-  }
+        return bankPresenters;
+    }
 
-  @Override
-  public List<BankPresenter> getAllBanks() {
-    final String sql =
-              "SELECT      "
-            + " b.id,      "
-            + " b.name,    "
-            + " b.address, "
-            + " b.website  "
-            + "FROM        "
-            + " fm_banks b "
-        ;
+    @Override
+    public List<BankPresenter> getAllBanks() {
+        final String sql =
+                "SELECT      "
+                        + " b.id,      "
+                        + " b.name,    "
+                        + " b.address, "
+                        + " b.website  "
+                        + "FROM        "
+                        + " fm_banks b ";
 
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-    List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-          BankPresenter bankPresenter = new BankPresenter();
-          bankPresenter.setId(rs.getLong("id"));
-          bankPresenter.setName(rs.getString("name"));
-          bankPresenter.setAddress(rs.getString("address"));
-          bankPresenter.setWebsite(rs.getString("website"));
-          return bankPresenter;
-        }
-    );
+        List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+                    BankPresenter bankPresenter = new BankPresenter();
+                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setName(rs.getString("name"));
+                    bankPresenter.setAddress(rs.getString("address"));
+                    bankPresenter.setWebsite(rs.getString("website"));
+                    return bankPresenter;
+                }
+        );
 
-    return bankPresenters;
-  }
+        return bankPresenters;
+    }
 
-  @Override
-  public BankPresenter getBankById(Long id) {
-    final String sql =
-              "SELECT      "
-            + " b.id,      "
-            + " b.name,    "
-            + " b.address, "
-            + " b.website  "
-            + "FROM        "
-            + " fm_banks b "
-            + "WHERE       "
-            + " b.id = :id "
-        ;
+    @Override
+    public BankPresenter getBankById(Long id) {
+        final String sql =
+                "SELECT      "
+                        + " b.id,      "
+                        + " b.name,    "
+                        + " b.address, "
+                        + " b.website  "
+                        + "FROM        "
+                        + " fm_banks b "
+                        + "WHERE       "
+                        + " b.id = :id ";
 
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("id", id);
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("id", id);
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-    BankPresenter bank = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
-          BankPresenter bankPresenter = new BankPresenter();
-          bankPresenter.setId(rs.getLong("id"));
-          bankPresenter.setName(rs.getString("name"));
-          bankPresenter.setAddress(rs.getString("address"));
-          bankPresenter.setWebsite(rs.getString("website"));
-          return bankPresenter;
-        }
-    );
+        BankPresenter bank = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
+                    BankPresenter bankPresenter = new BankPresenter();
+                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setName(rs.getString("name"));
+                    bankPresenter.setAddress(rs.getString("address"));
+                    bankPresenter.setWebsite(rs.getString("website"));
+                    return bankPresenter;
+                }
+        );
 
-    return bank;
-  }
+        return bank;
+    }
 }

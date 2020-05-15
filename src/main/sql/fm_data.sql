@@ -1,6 +1,6 @@
-INSERT INTO `fm_user_roles` VALUES (1, 'ADMIN'), (2, 'USER');
+INSERT INTO `fm_user_roles` (id, role_name) VALUES (1, 'ADMIN'), (2, 'USER');
 
-INSERT INTO `fm_users`
+INSERT INTO `fm_users` (id, user_name, password)
 VALUES
   (1, 'admin', 'admin'), (2, 'haho', 'hoanhhao'), (3, 'hao', 'hiep'), (4, 'hiep', 'hiep'),
   (6, 'admin1', 'admin'), (7, 'admin2', 'admin'), (8, 'admin3', 'admin'),
@@ -24,69 +24,55 @@ VALUES
   (61, 'haho61', 'hoanhhao'), (62, 'haho62', 'hoanhhao'), (63, 'haho63', 'hoanhhao')
 ;
 
-INSERT INTO `fm_user_role_details` VALUES
+INSERT INTO `fm_user_role_details` (id, user_id, role_id) VALUES
   (1, 1, 1), (2, 2, 2)
-;
-
-INSERT INTO `fm_messages` (`role_id`, `component_name`, `message_key`, `message_en`, `message_fr`)
-VALUES
-  (1, 'roomsList', 'name', 'Name', 'NOM'),
-  (1, 'roomsList', 'numOfPeople', 'Num of people', 'Nombre de personnes'),
-  (1, 'roomsList', 'numOfBeds', 'Num of beds', 'Nombre de lits'),
-  (1, 'roomsList', 'typeOfBed', 'Type of bed', 'Type de lit'),
-  (1, 'roomUpdate', 'name', 'Name', 'NOM'),
-  (1, 'roomUpdate', 'numOfPeople', 'Num of people', 'Nombre de personnes'),
-  (1, 'roomUpdate', 'numOfBeds', 'Num of beds', 'Nombre de lits'),
-  (1, 'roomUpdate', 'typeOfBed', 'Type of bed', 'Type de lit'),
-  (null, 'login', 'userName', 'User name', 'Nom d''utilisateur'),
-  (null, 'login', 'password', 'Password', 'Mot de passe'),
-  (null, 'login', 'loginButton', 'Login', 'Soumettre'),
-  (null, 'login', 'registerButton', 'Register', 'Registre'),
-  (null, 'login', 'loginTitle', 'Login', 'S''identifier'),
-  (null, 'login', 'language', 'Language', 'Langue')
 ;
 
 INSERT INTO fm_payment_methods(`id`, `name`) VALUES (1, 'VISA CREDIT'), (2, 'VISA DEBIT'), (3, 'American Express');
 
-INSERT INTO fm_cards_information (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`)
-VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2);
+INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (1, 'HSBC', '123 Dong Khoi', 'hsbc.com.vn');
+INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (2, 'VIB', '123 Dong Khoi', 'hsbc.com.vn');
+INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (3, 'SCB', '123 Dong Khoi', 'hsbc.com.vn');
+INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (4, 'Citi Bank', '123 Dong Khoi', 'hsbc.com.vn');
 
-INSERT INTO `fm_earnings` (`user_id`, `amount`, `description`) VALUES (2, 20000000, 'monthly salary');
+INSERT INTO fm_individuals (`id`, `first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `income`, `user_id`)
+VALUES (1, 'Hao', 'Ho', 'Anh', '1988-04-19', 'Male', 'hoanhhao@gmail.com', '0906729775', '1000000000', 2);
 
-INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `date`, `for_person`, `is_an_event`, `card_id`)
+INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`, `bank_id`)
+VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2, 1);
+INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`, `bank_id`)
+VALUES (2, 'VIB', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2, 2);
+INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`, `bank_id`)
+VALUES (3, 'Citi Bank', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2, 3);
+
+INSERT INTO fm_money_flow (`user_id`, `amount`, `name`, `date`, `is_deleted`, `money_source_id`)
 VALUES
-  (2, 37600, 'Grab', '2017-05-01',NULL, FALSE, NULL),
-  (2, 56000, 'Vinasun', '2017-05-02', NULL, FALSE, NULL),
-  (2, 78000, 'New Sun Hotel', '2017-05-03', NULL, FALSE, NULL),
-  (2, 90000, 'Bun Bo Ganh', '2017-05-04', NULL, FALSE, NULL),
-  (2, 120000, 'That\'s cafe', '2017-05-05', NULL, FALSE, NULL),
-  (2, 14000, 'Citibank annual fee', '2017-05-06', NULL, FALSE, 1),
-  (2, 45000, 'Maximax', '2017-05-07', NULL, FALSE, 1),
-  (2, 5000, 'Highlands Coffee', '2017-05-08', NULL, FALSE, 1),
-  (2, 70000, 'Year-end party', '2017-05-09', NULL, FALSE, 1),
-  (2, 990000, 'Hang Duong Quan', '2017-05-12', NULL, FALSE, 1),
-
-  (2, 15000, 'The Coffee House', '2017-06-01',NULL, FALSE, NULL),
-  (2, 45000, 'Gongcha', '2017-06-02', NULL, FALSE, NULL),
-  (2, 55000, 'KOI', '2017-06-03', NULL, FALSE, NULL),
-  (2, 50000, 'Watcha', '2017-06-04', NULL, FALSE, NULL),
-  (2, 20000, 'Nha Khoa Minh Khai', '2017-06-05', NULL, FALSE, NULL),
-  (2, 15000, 'CGV', '2017-06-06', NULL, FALSE, 1),
-  (2, 45000, 'AEON Mall', '2017-06-07', NULL, FALSE, 1),
-  (2, 55000, 'Tokio Deli', '2017-06-08', NULL, FALSE, 1),
-  (2, 50000, 'Traveloka', '2017-06-09', NULL, FALSE, 1),
-  (2, 20000, 'Uber', '2017-06-12', NULL, FALSE, 1)
-;
-INSERT INTO fm_expenses (`user_id`, `amount`, `place`, `date`, `for_person`, `is_an_event`, `card_id`, `event_type_id`, `event_name`)
-VALUES
-  (2, NULL, 'Vung Tau', now(), NULL, TRUE, 1, NULL, 'New Event')
-;
-INSERT INTO fm_event_expenses (`amount`, `place`, `date`, `for_person`, `by_person`, `card_id`, `expense_id`)
-    VALUES (123, 'Dim Tu Tac', '2017-07-05', 'unknown', 'unknown', 1, 21),
-      (456, 'KOI', '2017-07-06', 'unknown', 'unknown', 1, 21)
+  (2, 37600, 'Grab', '2017-05-01', FALSE, NULL),
+  (2, 56000, 'Vinasun', '2017-05-02', FALSE, NULL),
+  (2, 78000, 'New Sun Hotel', '2017-05-03', FALSE, NULL),
+  (2, 90000, 'Bun Bo Ganh', '2017-05-04', FALSE, NULL),
+  (2, 120000, 'That s cafe', '2017-05-05', FALSE, NULL),
+  (2, 14000, 'Citibank annual fee', '2017-05-06', FALSE, 1),
+  (2, 45000, 'Maximax', '2017-05-07', FALSE, 1),
+  (2, 5000, 'Highlands Coffee', '2017-05-08', FALSE, 1),
+  (2, 70000, 'Year-end party', '2017-05-09', FALSE, 1),
+  (2, 990000, 'Hang Duong Quan', '2017-05-12', FALSE, 1),
+  (2, 15000, 'The Coffee House', '2017-06-01', FALSE, NULL),
+  (2, 45000, 'Gongcha', '2017-06-02', FALSE, NULL),
+  (2, 55000, 'KOI', '2017-06-03', FALSE, NULL),
+  (2, 50000, 'Watcha', '2017-06-04', FALSE, NULL),
+  (2, 20000, 'Nha Khoa Minh Khai', '2017-06-05', FALSE, NULL),
+  (2, 15000, 'CGV', '2017-06-06', FALSE, 1),
+  (2, 45000, 'AEON Mall', '2017-06-07', FALSE, 1),
+  (2, 55000, 'Tokio Deli', '2017-06-08', FALSE, 1),
+  (2, 50000, 'Traveloka', '2017-06-09', FALSE, 1),
+  (2, 20000, 'Uber', '2017-06-12', FALSE, 1)
 ;
 
-INSERT INTO `fm_person_picker`
-(`first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `official_income`, `payment_date_of_month`, `user_id`)
-VALUES ('Chau', 'Nguyen', NULL, '2017-07-05', TRUE, 'chaunguyen@gmail.com', '84096729775', 123456789, 05, 2),
-  ('Nhi', 'Nguyen', NULL, '2017-07-05', TRUE, 'nhinguyen@gmail.com', '84096729775', 123456789, 05, 2)
+INSERT INTO fm_promotion_categories (name) VALUES ('Travel');
+INSERT INTO fm_promotion_categories (name) VALUES ('Food');
+INSERT INTO fm_promotion_categories (name) VALUES ('Shopping');
+INSERT INTO fm_promotion_categories (name) VALUES ('Health');
+INSERT INTO fm_promotion_categories (name) VALUES ('Education');
+INSERT INTO fm_promotion_categories (name) VALUES('Electronics');
+INSERT INTO fm_promotion_categories (name) VALUES ('Khác');

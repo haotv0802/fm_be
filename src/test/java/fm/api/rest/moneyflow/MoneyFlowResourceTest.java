@@ -2,6 +2,8 @@ package fm.api.rest.moneyflow;
 
 import fm.api.constants.Types;
 import fm.api.rest.BaseDocumentation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
@@ -13,15 +15,11 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
-import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
-import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Created by haoho on 4/25/20.
  */
 public class MoneyFlowResourceTest extends BaseDocumentation {
+
+    private static final Logger logger = LogManager.getLogger(MoneyFlowResourceTest.class);
 
     /**
      * Normal case
@@ -48,7 +48,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
                         fieldWithPath("expenses[].amount").description(getMessage("Amount")).type(Types.BIG_DECIMAL),
                         fieldWithPath("expenses[].date").description(getMessage("Date")).type(Types.DATE),
                         fieldWithPath("expenses[].name").description(getMessage("Name")).type(Types.STRING),
-                        fieldWithPath("expenses[].moneySourceId").description(getMessage("Mouney source Id")).type(Types.LONG),
+                        fieldWithPath("expenses[].moneySourceId").description(getMessage("Money source Id")).type(Types.LONG),
                         fieldWithPath("expenses[].moneySourceName").description(getMessage("Money source Name")).type(Types.STRING),
                         fieldWithPath("expenses[].paymentMethod").description(getMessage("Payment method")).type(Types.STRING),
                         fieldWithPath("expenses[].cardNumber").description(getMessage("Card number")).type(Types.STRING),
@@ -158,6 +158,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         Assert.notNull(expensesDetailsPresenter);
 
         List<ItemPresenter> items = expensesDetailsPresenter.getExpenses();
+        items.get(0).setUpdated(true);
 
         result = mockMvc
                 .perform(patch("/svc/moneyflow/list")

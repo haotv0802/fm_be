@@ -12,19 +12,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.Assert;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.regex.Pattern;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
  * Will make sure to translate some exceptions to a meaningful response to the client.
  */
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private final Logger LOGGER = LogManager.getLogger(getClass());
-    private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_END = 20999;
-    private static final int PL_SQL_USER_DEFINED_ERR_CODE_RANGE_START = 20000;
-    private static final Pattern NEW_LINE = Pattern.compile("\\R");
+    private static final Logger logger = LogManager.getLogger(GlobalExceptionHandler.class);
 
     private final ResourceBundleMessageSource messageSource;
 
@@ -54,7 +52,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST) //400
     @ResponseBody
     public ServiceFault handleConflict(ValidationException e) {
-        LOGGER.error(e.getMessage(), e);
+        logger.error(e.getMessage(), e);
         String faultCode = e.getFaultCode();
         Object[] context = e.getContext();
 
@@ -65,15 +63,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // 404
     public ServiceFault handleConflict(EmptyResultDataAccessException e) {
-        LOGGER.info("Info: ", e);
+        logger.error(e.getMessage(), e);
         return errorService.registerBackEndFault(new ServiceFault(HttpStatus.NOT_FOUND.toString(), e.getMessage()), e.getStackTrace(), e, getCurrentUserName());
     }
 
     @ExceptionHandler(CannotAcquireLockException.class)
     @ResponseStatus(HttpStatus.LOCKED) // 423
     public ServiceFault handleConflict(CannotAcquireLockException e) {
-        LOGGER.info("Info:", e);
+        logger.error(e.getMessage(), e);
         return errorService.registerBackEndFault(new ServiceFault(HttpStatus.LOCKED.toString(), e.getMessage()), e.getStackTrace(), e, getCurrentUserName());
     }
-
 }

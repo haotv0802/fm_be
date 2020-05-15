@@ -15,7 +15,7 @@ public class Item {
   private Date date;
   private String name;
 
-//  @NotNull(message = "Money source cannot be null") // TODO in order to pass UnitTest, let it be like this temporarily.
+//  @NotNull(message = "Money source cannot be null")
   private Integer moneySourceId;
 
   private Boolean isSpending;

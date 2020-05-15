@@ -2,6 +2,7 @@
 .idea
 logs
 .idea/fm_be.iml
+*/fm_be.iml
 **/*.iml
 *.iml
 target

@@ -20,71 +20,71 @@ import java.util.TreeMap;
 @Repository("messagesDao")
 public class MessagesDao implements IMessagesDao {
 
-  private static final Logger LOGGER = LogManager.getLogger(MessagesDao.class);
+    private static final Logger logger = LogManager.getLogger(MessagesDao.class);
 
-  private final NamedParameterJdbcTemplate namedTemplate;
+    private final NamedParameterJdbcTemplate namedTemplate;
 
-  @Autowired
-  public MessagesDao(NamedParameterJdbcTemplate namedTemplate) {
-    Assert.notNull(namedTemplate);
+    @Autowired
+    public MessagesDao(NamedParameterJdbcTemplate namedTemplate) {
+        Assert.notNull(namedTemplate);
 
-    this.namedTemplate = namedTemplate;
-  }
-
-  @Override
-  public Map<String, Map<String, String>> getMessages(String language) {
-    final String sql = "SELECT                      "
-                     + "	m.message_key,            "
-                     + "	m.message_en,             "
-                     + "	m.message_fr              "
-                     + "FROM                        "
-                     + "	fm_messages m             "
-                     + "WHERE                       "
-                     + "	m.role_id is null         "
-                     + "AND m.component_name = :name"
-        ;
-    List<String> componentsList = this.getComponentsList();
-
-    Map<String, Map<String, String>> messages = new TreeMap<>();
-    for (String component : componentsList) {
-      final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-      paramsMap.addValue("name", component);
-
-
-      DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-      Map<String, String> keysValuesMap = namedTemplate.query(sql, paramsMap, rs -> {
-        Map<String, String> keysValues = new TreeMap<>();
-
-        while (rs.next()) {
-          keysValues.put(
-              rs.getString("message_key"),
-              rs.getString("message_" + language.toLowerCase())
-          );
-        }
-
-        return keysValues;
-      });
-
-      messages.put(component, keysValuesMap);
+        this.namedTemplate = namedTemplate;
     }
 
-    return messages;
-  }
+    @Override
+    public Map<String, Map<String, String>> getMessages(String language) {
+        final String sql =
+                  "SELECT                      "
+                + "	m.message_key,             "
+                + "	m.message_en,              "
+                + "	m.message_fr               "
+                + "FROM                        "
+                + "	fm_messages m              "
+                + "WHERE                       "
+                + "	m.role_id is null          "
+                + "AND m.component_name = :name";
+        List<String> componentsList = this.getComponentsList();
 
-  private List<String> getComponentsList() {
-    final String sql = "SELECT DISTINCT    "
-                     + "	m.component_name "
-                     + "FROM               "
-                     + "	fm_messages m    "
-                     + "WHERE              "
-                     + "	m.role_id IS NULL"
-        ;
+        Map<String, Map<String, String>> messages = new TreeMap<>();
+        for (String component : componentsList) {
+            final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+            paramsMap.addValue("name", component);
 
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+            DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-    return namedTemplate.queryForList(sql, paramsMap, String.class);
-  }
+            Map<String, String> keysValuesMap = namedTemplate.query(sql, paramsMap, rs -> {
+                Map<String, String> keysValues = new TreeMap<>();
+
+                while (rs.next()) {
+                    keysValues.put(
+                            rs.getString("message_key"),
+                            rs.getString("message_" + language.toLowerCase())
+                    );
+                }
+
+                return keysValues;
+            });
+
+            messages.put(component, keysValuesMap);
+        }
+
+        return messages;
+    }
+
+    private List<String> getComponentsList() {
+        final String sql =
+                  "SELECT DISTINCT    "
+                + "	m.component_name  "
+                + "FROM               "
+                + "	fm_messages m     "
+                + "WHERE              "
+                + "	m.role_id IS NULL ";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForList(sql, paramsMap, String.class);
+    }
 }

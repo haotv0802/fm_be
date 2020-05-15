@@ -2,6 +2,8 @@ package fm.api.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fm.auth.Credentials;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -16,13 +18,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 3/3/2017.
  */
-@WebAppConfiguration
-@ContextConfiguration(
-    locations = {
-         "/config/spring-mvc.xml"
-        ,"/config/spring-mvc-test.xml"
-    })
 public class LoginResourceTest extends BaseDocumentation {
+
+  private static final Logger logger = LogManager.getLogger(LoginResourceTest.class);
 
   @Autowired
   @Qualifier("authTokenService")

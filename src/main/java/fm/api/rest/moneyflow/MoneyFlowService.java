@@ -3,11 +3,12 @@ package fm.api.rest.moneyflow;
 import fm.api.rest.moneyflow.interfaces.IMoneyFlowDao;
 import fm.api.rest.moneyflow.interfaces.IMoneyFlowService;
 import io.jsonwebtoken.lang.Assert;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -15,6 +16,8 @@ import java.util.List;
  */
 @Service("moneyFlowService")
 public class MoneyFlowService implements IMoneyFlowService {
+
+  private static final Logger logger = LogManager.getLogger(MoneyFlowService.class);
 
   private final IMoneyFlowDao expensesDao;
 
