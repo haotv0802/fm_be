@@ -1,8 +1,14 @@
  /* Quy created on 3/13/2020 */
  package fm.api.rest.promotions.crawler;
 
+ import fm.api.rest.promotions.PromotionPresenter;
+ import fm.api.rest.promotions.crawler.interfaces.BankLinkPromotion;
  import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
+ import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
+ import fm.api.rest.promotions.crawler.utils.PromotionUtils;
+ import io.jsonwebtoken.lang.Assert;
  import org.apache.http.NameValuePair;
+ import org.apache.http.ParseException;
  import org.apache.http.client.entity.UrlEncodedFormEntity;
  import org.apache.http.client.methods.CloseableHttpResponse;
  import org.apache.http.client.methods.HttpPost;
@@ -10,8 +16,16 @@
  import org.apache.http.impl.client.HttpClients;
  import org.apache.http.message.BasicNameValuePair;
  import org.apache.http.util.EntityUtils;
+ import org.apache.logging.log4j.LogManager;
+ import org.apache.logging.log4j.Logger;
  import org.json.JSONArray;
  import org.json.JSONObject;
+ import org.jsoup.Jsoup;
+ import org.jsoup.nodes.Document;
+ import org.jsoup.nodes.Element;
+ import org.jsoup.select.Elements;
+ import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.beans.factory.annotation.Qualifier;
  import org.springframework.stereotype.Service;
 
  import java.io.IOException;
@@ -22,15 +36,48 @@
 
  @Service("shinhanCrawler")
  public class ShinHanBank implements IBankPromotionCrawler {
+   private static final Logger LOGGER = LogManager.getLogger(ShinHanBank.class);
+   private PromotionUtils promotionUtils;
+   private IPromotionCrawlerDAO iPromotionCrawlerDAO;
+
+
+   @Autowired
+   public ShinHanBank(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
+                      @Qualifier("promoUtils") PromotionUtils promotionUtils) {
+     Assert.notNull(iPromotionCrawlerDAO);
+     Assert.notNull(promotionUtils);
+     this.iPromotionCrawlerDAO = iPromotionCrawlerDAO;
+     this.promotionUtils = promotionUtils;
+   }
+
+
+   private Map<String, Integer> categoriesDB = new TreeMap<>();
 
    @Override
    public Map<Integer, List<PromotionCrawlerModel>> crawl() {
-     final String mainLink = "https://shinhan.com.vn/get_shinhan_promotion";
-     Map<String, List<PromotionCrawlerModel>> listPromotions = new TreeMap<>();
+     categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
+     int cateID = categoriesDB.get("Other");
+     Map<Integer, List<PromotionCrawlerModel>> ressult = new TreeMap<>();
+
+     try {
+       int limitPageNum = getLimitPagePromoCate();
+
+       ressult = promotionUtils.addPromotionDataIntoMap(ressult, getBankPromotion(cateID, BankLinkPromotion.SHINHAN_PROMOTION, limitPageNum), cateID);
+
+
+     } catch (IOException e) {
+       e.printStackTrace();
+     }
+     return ressult;
+   }
+
+
+   private List<PromotionCrawlerModel> getBankPromotion(int cateId, String link, int limitPageNum) {
      try {
        List<PromotionCrawlerModel> list = new ArrayList<>();
-       String result = "";
-       HttpPost postConnection = new HttpPost(mainLink);
+       String crwalingData = "";
+       HttpPost postConnection = new HttpPost(link);
+       List<PromotionPresenter> listBankDataPromo = iPromotionCrawlerDAO.getPrmoTionByBankId(5, cateId);
        List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
        urlParameters.add(new BasicNameValuePair("_token", "iEWghzwz8FGa0yCkILYxWtwJx1A8Ya1avRJyPyay"));
        urlParameters.add(new BasicNameValuePair("province", "all"));
@@ -41,46 +88,65 @@
        urlParameters.add(new BasicNameValuePair("cate", "all"));
        urlParameters.add(new BasicNameValuePair("lang", "vi"));
        urlParameters.add(new BasicNameValuePair("order_by", "0"));
-       for (int i = 0; i <= 10; i++) {
+       for (int i = 1; i <= limitPageNum; i++) {
          urlParameters.add(new BasicNameValuePair("page", i + ""));
          postConnection.setEntity(new UrlEncodedFormEntity(urlParameters));
 
          try (CloseableHttpClient httpClient = HttpClients.createDefault();
               CloseableHttpResponse response = httpClient.execute(postConnection)) {
 
-           result = EntityUtils.toString(response.getEntity());
+           crwalingData = EntityUtils.toString(response.getEntity());
          }
-         System.out.println(result);
-         JSONObject obj = new JSONObject(result);
+         JSONObject obj = new JSONObject(crwalingData);
          JSONArray subJsonArray = obj.getJSONArray("list_result");
          for (int y = 0; y < subJsonArray.length(); y++) {
            String title = subJsonArray.getJSONObject(y).getString("title");
            String description = subJsonArray.getJSONObject(y).getString("description");
-           String date_start = subJsonArray.getJSONObject(y).getString("date_start");
-           String date_end = subJsonArray.getJSONObject(y).getString("date_end");
+           String contentHTML = subJsonArray.getJSONObject(y).getString("content");
+           String date_start = !subJsonArray.getJSONObject(y).getString("date_start").equals("") ? promotionUtils.formatDateText((String) subJsonArray.getJSONObject(y).getString("date_start")) : "";
+           String date_end = !subJsonArray.getJSONObject(y).getString("date_end").equals("") ? promotionUtils.formatDateText((String) subJsonArray.getJSONObject(y).getString("date_end")) : "";
            String type = subJsonArray.getJSONObject(y).getString("type");
            String image_future = subJsonArray.getJSONObject(y).getString("image_future");
            String get_permalinks = subJsonArray.getJSONObject(y).getString("get_permalinks");
-           Object category = subJsonArray.getJSONObject(y).get("category");
-           System.out.println("title : " + title);
-           System.out.println("description : " + description);
-           System.out.println("date_start : " + date_start);
-           System.out.println("date_end : " + date_end);
-           System.out.println("type : " + type);
-           System.out.println("image_future : " + image_future);
-           System.out.println("get_permalinks : " + get_permalinks);
-           System.out.println("category : " + category.toString());
-           System.out.println("*************************");
-//      list.add(new PromotionCrawlerModel(title,description,date_start,date_end,type,image_future,4,get_permalinks,"","","","","")) ;
+           PromotionCrawlerModel model = new PromotionCrawlerModel(title, description, promotionUtils.getProvision(description), "", date_start, date_end, cateId, 5, contentHTML, get_permalinks, "", "", "", "");
+           if (promotionUtils.checkInfoExit(model, listBankDataPromo)) {
+             LOGGER.info("SCB Bank Promotion Date is Existed");
+           } else {
+             list.add(model);
+           }
          }
        }
-
+       return list;
 
      } catch (IOException e) {
        System.out.println(e.getMessage());
      }
+
      return null;
    }
 
 
+   /**
+    * This service is to get max number of cataegoriees page.
+    *
+    * @return
+    */
+   private int getLimitPagePromoCate() throws IOException {
+     String url = "https://shinhan.com.vn/vi/promotion";
+     Document pageDoc = Jsoup.connect(url).get();
+     Elements numbPage = pageDoc.select("#paginate li");
+     int temp = 0;
+     for (Element item : numbPage) {
+       String pageNum = item.text().trim();
+       if (!pageNum.equals("")) {
+         try {
+           if (temp < Integer.parseInt(pageNum)) {
+             temp = Integer.parseInt(pageNum);
+           }
+         } catch (NumberFormatException e) {
+         }
+       }
+     }
+     return temp;
+   }
  }

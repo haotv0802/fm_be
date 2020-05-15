@@ -292,4 +292,10 @@ public class PromotionUtils {
     return promotionMap;
   }
 
+
+  public String formatDateText(String text) {
+    text = text.replaceAll("/", "-");
+    String[] textParts = text.split("-");
+    return textParts[2] + "-" + textParts[1] +"-"+ textParts[0];
+  }
 }
