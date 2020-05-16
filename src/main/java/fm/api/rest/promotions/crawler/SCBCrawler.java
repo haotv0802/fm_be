@@ -48,34 +48,28 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
     @Override
     public Map<Integer, List<PromotionCrawlerModel>> crawl() {
-        Map<Integer, List<PromotionCrawlerModel>> ressult = new TreeMap<>();
+        Map<Integer, List<PromotionCrawlerModel>> results = new TreeMap<>();
         categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
-        try {
-            // Test all function
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
+        promotionUtils.addPromotionDataIntoMap(results, getTravelPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
+        promotionUtils.addPromotionDataIntoMap(results, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getPrivilegeGoodwillPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+        promotionUtils.addPromotionDataIntoMap(results, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+        promotionUtils.addPromotionDataIntoMap(results, getPrivilegeGoodwillPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
+        promotionUtils.addPromotionDataIntoMap(results, getOtherPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
+        promotionUtils.addPromotionDataIntoMap(results, getShoppingInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getJewelryInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
+        promotionUtils.addPromotionDataIntoMap(results, getEducationInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getOtherInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+        promotionUtils.addPromotionDataIntoMap(results, getJewelryInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return ressult;
+        promotionUtils.addPromotionDataIntoMap(results, getOtherInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+
+        return results;
     }
 
     /**
@@ -210,14 +204,19 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getTravelPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
+    private List<PromotionCrawlerModel> getTravelPromotion() {
+        try {
+            int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> travelPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL, listPromoBankData);
+            List<PromotionCrawlerModel> travelPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL, listPromoBankData);
 
-        return travelPromotionData;
+            return travelPromotionData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -227,14 +226,17 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getFoodPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    private List<PromotionCrawlerModel> getFoodPromotion() {
+        try {
+            int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> foodPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD, listPromoBankData);
-
-
-        return foodPromotionData;
+            List<PromotionCrawlerModel> foodPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD, listPromoBankData);
+            return foodPromotionData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -244,13 +246,18 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getHealthPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    private List<PromotionCrawlerModel> getHealthPromotion() {
+        try {
+            int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
+            List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
 
-        return healthPromotionData;
+            return healthPromotionData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -260,13 +267,17 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
-        List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
+    private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() {
+        try {
+            int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
 
-
-        return privilegeGoodwillPromotionData;
+            return privilegeGoodwillPromotionData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -276,13 +287,19 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getOtherPromotion() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
-        List<PromotionCrawlerModel> otherPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER, listPromoBankData);
+    private List<PromotionCrawlerModel> getOtherPromotion() {
+        try {
+
+            int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionCrawlerModel> otherPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER, listPromoBankData);
 
 
-        return otherPromotionData;
+            return otherPromotionData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -292,13 +309,18 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getShoppingInstalment() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Shopping");
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
-        List<PromotionCrawlerModel> shoppingInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_SHOPPING_ELECTRIC, listPromoBankData);
+    private List<PromotionCrawlerModel> getShoppingInstalment() {
+        try {
+            int cateId = categoriesDB.get("Shopping");
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionCrawlerModel> shoppingInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_SHOPPING_ELECTRIC, listPromoBankData);
 
 
-        return shoppingInstalmnetData;
+            return shoppingInstalmnetData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -308,13 +330,16 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getEducationInstalment() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get("Education");
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
-        List<PromotionCrawlerModel> educationInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION, listPromoBankData);
-
-
-        return educationInstalmnetData;
+    private List<PromotionCrawlerModel> getEducationInstalment() {
+        try {
+            int cateId = categoriesDB.get("Education");
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionCrawlerModel> educationInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION, listPromoBankData);
+            return educationInstalmnetData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -324,14 +349,17 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getJewelryInstalment() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    private List<PromotionCrawlerModel> getJewelryInstalment() {
+        try {
+            int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_JEWELRY, listPromoBankData);
-
-
-        return jewelryInstalmnetData;
+            List<PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_JEWELRY, listPromoBankData);
+            return jewelryInstalmnetData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -341,14 +369,17 @@ public class SCBCrawler implements IBankPromotionCrawler {
      * @throws IOException
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getOtherInstalment() throws IOException, InterruptedException {
-        int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+    private List<PromotionCrawlerModel> getOtherInstalment() {
+        try {
+            int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
+            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
 
-        List<PromotionCrawlerModel> otherInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER, listPromoBankData);
-
-
-        return otherInstalmnetData;
+            List<PromotionCrawlerModel> otherInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER, listPromoBankData);
+            return otherInstalmnetData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**

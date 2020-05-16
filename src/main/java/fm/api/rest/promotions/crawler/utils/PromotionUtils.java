@@ -239,13 +239,13 @@ public class PromotionUtils {
         String endDate = model.getEndDate();
         Date endDateTime;
         if (StringUtils.isEmpty(endDate)) {
-          Date currentTime = new Date();
-          endDateTime = new Date();
-          endDateTime.setYear(currentTime.getYear() + 1);
-          endDateTime.setMonth(11);
-          endDateTime.setDate(31);
-          String temp = FmDateUtils.formatDate(endDateTime);
-          endDateTime = FmDateUtils.parseDate(temp);
+            Date currentTime = new Date();
+            endDateTime = new Date();
+            endDateTime.setYear(currentTime.getYear() + 1);
+            endDateTime.setMonth(11);
+            endDateTime.setDate(31);
+            String temp = FmDateUtils.formatDate(endDateTime);
+            endDateTime = FmDateUtils.parseDate(temp);
         } else {
             endDateTime = FmDateUtils.parseDateWithPattern(endDate, "dd-MM-yyyy");
         }
@@ -272,15 +272,13 @@ public class PromotionUtils {
      * @param listBankPromotion
      * @return
      */
-    public Map<Integer, List<PromotionCrawlerModel>> addPromotionDataIntoMap(Map<Integer, List<PromotionCrawlerModel>> promotionMap,
-                                                                             List<PromotionCrawlerModel> listBankPromotion,
-                                                                             int cateId) {
-        if (!listBankPromotion.isEmpty()) {
+    public Map<Integer, List<PromotionCrawlerModel>> addPromotionDataIntoMap(
+            Map<Integer, List<PromotionCrawlerModel>> promotionMap,
+            List<PromotionCrawlerModel> listBankPromotion,
+            int cateId) {
+        if (listBankPromotion != null && !listBankPromotion.isEmpty()) {
             if (promotionMap.get(cateId) != null) {
                 promotionMap.get(cateId).addAll(listBankPromotion);
-//        for (PromotionCrawlerModel model : listBankPromotion) {
-//          promotionMap.get(cateId).add(model);
-//        }
                 return promotionMap;
             } else {
                 promotionMap.put(cateId, listBankPromotion);

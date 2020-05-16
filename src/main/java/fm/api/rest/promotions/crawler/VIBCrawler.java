@@ -50,33 +50,29 @@ public class VIBCrawler implements IBankPromotionCrawler {
      */
     @Override
     public Map<Integer, List<PromotionCrawlerModel>> crawl() {
-        Map<Integer, List<PromotionCrawlerModel>> ressult = new HashMap<>();
+        Map<Integer, List<PromotionCrawlerModel>> results = new HashMap<>();
         categoriesDB = this.iPromotionCrawlerDAO.getCategoryAndId();
-        try {
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
+        promotionUtils.addPromotionDataIntoMap(results, getTravelPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
+        promotionUtils.addPromotionDataIntoMap(results, getEducationPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
+        promotionUtils.addPromotionDataIntoMap(results, getShoppingPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
+        promotionUtils.addPromotionDataIntoMap(results, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
+        promotionUtils.addPromotionDataIntoMap(results, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getTravelInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
+        promotionUtils.addPromotionDataIntoMap(results, getTravelInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getEducationInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
+        promotionUtils.addPromotionDataIntoMap(results, getEducationInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
+        promotionUtils.addPromotionDataIntoMap(results, getHealthInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getElectronicsInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS));
+        promotionUtils.addPromotionDataIntoMap(results, getElectronicsInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        promotionUtils.addPromotionDataIntoMap(results, getShoppingInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
         listDetailPromoLink.clear();
-        return ressult;
+        return results;
     }
 
 
@@ -158,13 +154,15 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @throws InterruptedException
      */
 
-    private List<PromotionCrawlerModel> getEducationPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
-
-        List<PromotionCrawlerModel> educationPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_EDUCATION);
-
-        return educationPromotionCrawlinData;
-
+    private List<PromotionCrawlerModel> getEducationPromotion() {
+        try {
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
+            List<PromotionCrawlerModel> educationPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_EDUCATION);
+            return educationPromotionCrawlinData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -173,14 +171,17 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getTravelPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
+    private List<PromotionCrawlerModel> getTravelPromotion() {
+        try {
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
-        List<PromotionCrawlerModel> travelPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_TRAVEL);
+            List<PromotionCrawlerModel> travelPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_TRAVEL);
 
-        return travelPromotionCrawlinData;
-
-
+            return travelPromotionCrawlinData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -189,12 +190,17 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getFoodPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
+    private List<PromotionCrawlerModel> getFoodPromotion() {
+        try {
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
 
-        List<PromotionCrawlerModel> foodPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_FOOD);
+            List<PromotionCrawlerModel> foodPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_FOOD);
 
-        return foodPromotionCrawlinData;
+            return foodPromotionCrawlinData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -203,12 +209,17 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getHealthPromotion() throws InterruptedException {
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
+    private List<PromotionCrawlerModel> getHealthPromotion() {
+        try {
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
 
-        List<PromotionCrawlerModel> healthPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_HEALTHCARE);
+            List<PromotionCrawlerModel> healthPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_HEALTHCARE);
 
-        return healthPromotionCrawlinData;
+            return healthPromotionCrawlinData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -217,13 +228,18 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getShoppingPromotion() throws InterruptedException {
+    private List<PromotionCrawlerModel> getShoppingPromotion() {
+        try {
 
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
 
-        List<PromotionCrawlerModel> shoppingPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_SHOPPING);
+            List<PromotionCrawlerModel> shoppingPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_SHOPPING);
 
-        return shoppingPromotionCrawlinData;
+            return shoppingPromotionCrawlinData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -232,14 +248,18 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getShoppingInstallment() throws InterruptedException {
+    private List<PromotionCrawlerModel> getShoppingInstallment() {
+        try {
 
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
 
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
+            List<PromotionCrawlerModel> shoppingInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_SHOPPING);
 
-        List<PromotionCrawlerModel> shoppingInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_SHOPPING);
-
-        return shoppingInstallmentCrawlinData;
+            return shoppingInstallmentCrawlinData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -248,14 +268,18 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getHealthInstallment() throws InterruptedException {
+    private List<PromotionCrawlerModel> getHealthInstallment() {
+        try {
 
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
 
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
+            List<PromotionCrawlerModel> heanlthInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_HEALTHCARE);
 
-        List<PromotionCrawlerModel> heanlthInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_HEALTHCARE);
-
-        return heanlthInstallmentCrawlinData;
+            return heanlthInstallmentCrawlinData;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -264,13 +288,17 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getElectronicsInstallment() throws InterruptedException {
+    private List<PromotionCrawlerModel> getElectronicsInstallment() {
+        try {
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS);
 
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS);
+            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE);
 
-        List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE);
-
-        return data;
+            return data;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -279,13 +307,17 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getEducationInstallment() throws InterruptedException {
+    private List<PromotionCrawlerModel> getEducationInstallment() {
+        try {
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
 
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
+            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION);
 
-        List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION);
-
-        return data;
+            return data;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
 
     /**
@@ -294,15 +326,16 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getTravelInstallment() throws InterruptedException {
-
-        int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
-
-        List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL);
-
-        return data;
+    private List<PromotionCrawlerModel> getTravelInstallment() {
+        try {
+            int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
+            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL);
+            return data;
+        } catch (Exception ex) {
+            logger.error(ex.getMessage(), ex);
+        }
+        return null;
     }
-
 
     /**
      * This service is to get all links which is belong to category;
@@ -320,7 +353,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
             for (Element el : promotionbox) {
                 String linkPromoDetail = mainLink + el.select("a").attr("href");
                 if (!listDetailPromoLink.add(linkPromoDetail)) {
-                    logger.error("Promotion is Existed, {}" , linkPromoDetail);
+                    logger.error("Promotion is Existed, {}", linkPromoDetail);
                 } else {
                     listPromotionLinks.add(linkPromoDetail);
                 }
