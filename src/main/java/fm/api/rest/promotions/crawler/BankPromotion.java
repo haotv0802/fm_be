@@ -9,12 +9,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 @Service("bankPromotion")
 public class BankPromotion implements IBankPromotion {
@@ -23,18 +25,23 @@ public class BankPromotion implements IBankPromotion {
     private final BankCrawlerFactory bankCrawlerFactory;
     private final IPromotionCrawlerService promotionCrawlerService;
     private final ListableBeanFactory beanFactory; // use to load all implementations of IBankPromotionCrawler interfaces
+    private final ThreadPoolTaskExecutor executor;
 
     @Autowired
     public BankPromotion(@Qualifier("bankCrawlerFactory") BankCrawlerFactory bankCrawlerFactory,
                          @Qualifier("promotionCrawlerService") IPromotionCrawlerService promotionCrawlerService,
-                         ListableBeanFactory beanFactory) {
+                         ListableBeanFactory beanFactory,
+                         ThreadPoolTaskExecutor executor
+    ) {
         Assert.notNull(bankCrawlerFactory);
         Assert.notNull(promotionCrawlerService);
         Assert.notNull(beanFactory);
+        Assert.notNull(executor);
 
         this.bankCrawlerFactory = bankCrawlerFactory;
         this.promotionCrawlerService = promotionCrawlerService;
         this.beanFactory = beanFactory;
+        this.executor = executor;
     }
 
     @Override
@@ -52,6 +59,17 @@ public class BankPromotion implements IBankPromotion {
             IBankPromotionCrawler crawler = iterator.next();
             Map<Integer, List<PromotionCrawlerModel>> data =  crawler.crawl();
             saveCrawledData(data);
+        }
+    }
+
+    @Override
+    public void crawlAllByMultiThreads() {
+        Collection<IBankPromotionCrawler> crawlers = beanFactory.getBeansOfType(IBankPromotionCrawler.class).values();
+        Iterator<IBankPromotionCrawler> iterator = crawlers.iterator();
+
+        while (iterator.hasNext()) {
+            IBankPromotionCrawler crawler = iterator.next();
+            this.executor.execute(new CrawlingTask(promotionCrawlerService, crawler));
         }
     }
 

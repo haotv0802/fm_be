@@ -41,6 +41,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -78,7 +79,8 @@ import java.util.concurrent.TimeUnit;
 @ComponentScan({"fm"}) // Specifies which package to scan // xml config: <context:component-scan base-package="fm"/>
 @EnableWebMvc // Enables Spring's annotations
 @EnableAspectJAutoProxy(proxyTargetClass = true) // like <aop:aspectj-autoproxy /> in XML configuration
-@PropertySource("classpath:config/application.properties") // in order to do this: env.getProperty("database.url"). Also, private Environment env can be used any where with @Autowired
+@PropertySource("classpath:config/application.properties")
+// in order to do this: env.getProperty("database.url"). Also, private Environment env can be used any where with @Autowired
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
     private static final Logger logger = LogManager.getLogger(SpringConfig.class);
@@ -221,6 +223,17 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     public NamedParameterJdbcTemplate namedTemplate()
             throws SQLException {
         return new NamedParameterJdbcTemplate(dataSource());
+    }
+
+    @Bean
+    public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor t = new ThreadPoolTaskExecutor();
+        t.setCorePoolSize(5);
+        t.setMaxPoolSize(10);
+        t.setAllowCoreThreadTimeOut(true);
+        t.setKeepAliveSeconds(120);
+        t.setThreadNamePrefix("Hanjin schedule-");
+        return t;
     }
 
     @Configuration

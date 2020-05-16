@@ -512,4 +512,10 @@ public class SCBCrawler implements IBankPromotionCrawler {
         return link;
     }
 
+    @Override
+    public String toString() {
+        return "SCBCrawler{" +
+                ", mainLink='" + mainLink + '\'' +
+                '}';
+    }
 }

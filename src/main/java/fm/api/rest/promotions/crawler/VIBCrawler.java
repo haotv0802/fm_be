@@ -394,4 +394,11 @@ public class VIBCrawler implements IBankPromotionCrawler {
         listDetailPromoLink.clear();
         return promotionCrawlinData;
     }
+
+    @Override
+    public String toString() {
+        return "VIBCrawler{" +
+                ", mainLink='" + mainLink + '\'' +
+                '}';
+    }
 }

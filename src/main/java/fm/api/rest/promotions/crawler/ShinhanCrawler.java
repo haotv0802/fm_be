@@ -146,4 +146,9 @@
          }
          return temp;
      }
+
+     @Override
+     public String toString() {
+         return "ShinhanCrawler";
+     }
  }
