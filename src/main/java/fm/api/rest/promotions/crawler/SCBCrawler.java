@@ -250,7 +250,6 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
         List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
 
-
         return healthPromotionData;
     }
 
