@@ -26,28 +26,28 @@ public class PromotionsResourceTest extends BaseDocumentation {
                 .andExpect(status().is(200))
         ;
 
-        mockMvc
-                .perform(get("/svc/promotions/crawler/vib")
-                        .header("Accept-Language", "en")
-                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().is(200))
-        ;
+//        mockMvc
+//                .perform(get("/svc/promotions/crawler/vib")
+//                        .header("Accept-Language", "en")
+//                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                )
+//                .andExpect(status().is(200))
+//        ;
 
-        mockMvc
-                .perform(get("/svc/promotions/crawler/scb")
-                        .header("Accept-Language", "en")
-                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-                        .contentType(MediaType.APPLICATION_JSON)
-                )
-                .andExpect(status().is(200))
-        ;
+//        mockMvc
+//                .perform(get("/svc/promotions/crawler/scb")
+//                        .header("Accept-Language", "en")
+//                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                )
+//                .andExpect(status().is(200))
+//        ;
     }
 
     @Test
     @Rollback(false)
-    public void testCrawlall() throws Exception {
+    public void testCrawlAll() throws Exception {
 
         mockMvc
                 .perform(get("/svc/promotions/crawlall")

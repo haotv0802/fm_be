@@ -18,6 +18,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -26,7 +27,9 @@ import java.util.*;
 @Service("scbCrawler")
 public class SCBCrawler implements IBankPromotionCrawler {
     private static final Logger logger = LogManager.getLogger(SCBCrawler.class);
-    private final Integer sleepTime = 50;
+
+    @Value("${crawler.sleeptime}")
+    private Integer sleepTime; // @Value sets variable final by default, even is is forced with other value in constructor.
 
     private final String mainLink = "htstps://www.scb.com.vn/";
     private PromotionUtils promotionUtils;
@@ -214,7 +217,6 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
         List<PromotionCrawlerModel> travelPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL, listPromoBankData);
 
-
         return travelPromotionData;
     }
 
@@ -362,7 +364,6 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> doCrawlingPromotionDetail(int cateID, String url, List<PromotionPresenter> listPromoBankData) throws IOException, InterruptedException {
 
         List<PromotionCrawlerModel> listPromotionCrawling = new ArrayList<>();
-
 
         List<String> listPromotionLinks = getAllPromotionLinks(url);
 

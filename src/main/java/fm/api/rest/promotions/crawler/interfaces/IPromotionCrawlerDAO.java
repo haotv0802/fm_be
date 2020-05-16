@@ -4,6 +4,7 @@ package fm.api.rest.promotions.crawler.interfaces;
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -14,5 +15,5 @@ public interface IPromotionCrawlerDAO {
 
   Map<String, Integer> getCategoryAndId();
 
-  Boolean isPromotionExisting(String url);
+  Boolean isPromotionExisting(String url, String title, Date endDate);
 }

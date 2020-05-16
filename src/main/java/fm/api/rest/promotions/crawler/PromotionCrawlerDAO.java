@@ -4,7 +4,6 @@ import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.common.dao.DaoUtils;
 import fm.utils.FmDateUtils;
-import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -71,18 +70,19 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         paramsMap.addValue("discount", promoModel.getDiscount());
         paramsMap.addValue("installment", promoModel.getInstallmentPeriod());
         if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
-            paramsMap.addValue("start_date", LocalDateTime.now());
+            paramsMap.addValue("start_date", LocalDate.now());
         } else {
 //            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
             paramsMap.addValue("start_date", FmDateUtils.parseDateWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
         if (promoModel.getEndDate().equals("")) {
-            paramsMap.addValue("end_date", LocalDateTime.now());
+            LocalDate currentTime = LocalDate.now();
+            paramsMap.addValue("end_date", LocalDate.of(currentTime.getYear() + 1, 12, 31));
         } else {
 //            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
             paramsMap.addValue("end_date", FmDateUtils.parseDateWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
-        paramsMap.addValue("url", promoModel.getLinkDetail());
+        paramsMap.addValue("url", promoModel.getUrl());
         paramsMap.addValue("category_id", promoModel.getCategoryId());
         paramsMap.addValue("bank_id", promoModel.getBankId());
 
@@ -150,10 +150,12 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     }
 
     @Override
-    public Boolean isPromotionExisting(String url) {
-        final String sql = "SELECT COUNT(*) FROM fm_promotions WHERE url = :url";
+    public Boolean isPromotionExisting(String url, String title, Date endDate) {
+        final String sql = "SELECT COUNT(*) FROM fm_promotions WHERE url = :url AND title = :title AND end_date = :end_date";
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("url", url);
+        paramsMap.addValue("title", title);
+        paramsMap.addValue("end_date", endDate);
 
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 

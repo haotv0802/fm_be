@@ -3,6 +3,7 @@ package fm.utils;
 import fm.common.FmConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,6 +41,10 @@ public class FmDateUtils {
     }
 
     public static Date parseDate(String date) {
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        }
+
         try {
             return sdfDate.parse(date);
         } catch (ParseException e) {
@@ -49,6 +54,10 @@ public class FmDateUtils {
     }
 
     public static Date parseDateTime(String dateTime) {
+        if (StringUtils.isEmpty(dateTime)) {
+            return null;
+        }
+
         try {
             return sdfDateTime.parse(dateTime);
         } catch (ParseException e) {
@@ -58,6 +67,10 @@ public class FmDateUtils {
     }
 
     public static Date parseDateWithPattern(String dateTime, String pattern) {
+        if (StringUtils.isEmpty(dateTime)) {
+            return null;
+        }
+
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(pattern);
             return sdf.parse(dateTime);

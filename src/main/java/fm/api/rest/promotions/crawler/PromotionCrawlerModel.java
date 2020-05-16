@@ -11,14 +11,14 @@ public class PromotionCrawlerModel {
     private int categoryId;
     private int bankId;
     private String htmlText;
-    private String linkDetail;
+    private String url;
     private String installmentPeriod;
     private String imgURL;
     private String cardType;
     private String condition;
     private String location;
 
-    public PromotionCrawlerModel(String title, String content, String discount, String installmentPeriod, String startDate, String endDate, int categoryId, int bankId, String htmlText, String linkDetail, String imgURL, String cardType, String condition, String location) {
+    public PromotionCrawlerModel(String title, String content, String discount, String installmentPeriod, String startDate, String endDate, int categoryId, int bankId, String htmlText, String url, String imgURL, String cardType, String condition, String location) {
         this.title = title;
         this.content = content;
         this.discount = discount;
@@ -27,7 +27,7 @@ public class PromotionCrawlerModel {
         this.categoryId = categoryId;
         this.bankId = bankId;
         this.htmlText = htmlText;
-        this.linkDetail = linkDetail;
+        this.url = url;
         this.imgURL = imgURL;
         this.cardType = cardType;
         this.condition = condition;
@@ -99,12 +99,12 @@ public class PromotionCrawlerModel {
         this.htmlText = htmlText;
     }
 
-    public String getLinkDetail() {
-        return linkDetail;
+    public String getUrl() {
+        return url;
     }
 
-    public void setLinkDetail(String linkDetail) {
-        this.linkDetail = linkDetail;
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getImgURL() {
@@ -145,5 +145,25 @@ public class PromotionCrawlerModel {
 
     public void setInstallmentPeriod(String installmentPeriod) {
         this.installmentPeriod = installmentPeriod;
+    }
+
+    @Override
+    public String toString() {
+        return "PromotionCrawlerModel{" +
+                "title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", discount='" + discount + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", categoryId=" + categoryId +
+                ", bankId=" + bankId +
+//                ", htmlText='" + htmlText + '\'' +
+                ", url='" + url + '\'' +
+                ", installmentPeriod='" + installmentPeriod + '\'' +
+                ", imgURL='" + imgURL + '\'' +
+                ", cardType='" + cardType + '\'' +
+                ", condition='" + condition + '\'' +
+                ", location='" + location + '\'' +
+                '}';
     }
 }

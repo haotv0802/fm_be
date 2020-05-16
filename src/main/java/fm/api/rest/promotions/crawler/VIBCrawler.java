@@ -15,6 +15,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,7 +31,8 @@ public class VIBCrawler implements IBankPromotionCrawler {
     private final String mainLink = "https://www.vib.com.vn/";
     private Map<String, Integer> categoriesDB = new HashMap<>();
 
-    private final Integer sleepTime = 50;
+    @Value("${crawler.sleeptime}")
+    private Integer sleepTime; // @Value sets variable final by default, even is is forced with other value in constructor.
 
     @Autowired
     public VIBCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
@@ -67,7 +69,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
             ressult = promotionUtils.addPromotionDataIntoMap(ressult, getHealthInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
 
-            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getElectricateInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS));
+            ressult = promotionUtils.addPromotionDataIntoMap(ressult, getElectronicsInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS));
 
             ressult = promotionUtils.addPromotionDataIntoMap(ressult, getShoppingInstallment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
         } catch (InterruptedException e) {
@@ -262,14 +264,13 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> getElectricateInstallment() throws InterruptedException {
-
+    private List<PromotionCrawlerModel> getElectronicsInstallment() throws InterruptedException {
 
         int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS);
 
-        List<PromotionCrawlerModel> electricateInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE);
+        List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE);
 
-        return electricateInstallmentCrawlinData;
+        return data;
     }
 
     /**
@@ -282,9 +283,9 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
         int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
 
-        List<PromotionCrawlerModel> educationInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION);
+        List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION);
 
-        return educationInstallmentCrawlinData;
+        return data;
     }
 
     /**
@@ -297,9 +298,9 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
         int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
-        List<PromotionCrawlerModel> travelInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL);
+        List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL);
 
-        return travelInstallmentCrawlinData;
+        return data;
     }
 
 
@@ -319,13 +320,13 @@ public class VIBCrawler implements IBankPromotionCrawler {
             for (Element el : promotionbox) {
                 String linkPromoDetail = mainLink + el.select("a").attr("href");
                 if (!listDetailPromoLink.add(linkPromoDetail)) {
-                    logger.error("THe Link detail is Existed : " + linkPromoDetail);
+                    logger.error("Promotion is Existed, {}" , linkPromoDetail);
                 } else {
                     listPromotionLinks.add(linkPromoDetail);
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage(), e);
         }
 
         return listPromotionLinks;
