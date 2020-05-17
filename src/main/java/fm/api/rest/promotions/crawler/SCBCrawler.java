@@ -57,21 +57,21 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
     promotionUtils.addPromotionDataIntoMap(results, getTravelPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL));
 
-////    promotionUtils.addPromotionDataIntoMap(results, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
-//
-//    promotionUtils.addPromotionDataIntoMap(results, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
-//
-//    promotionUtils.addPromotionDataIntoMap(results, getPrivilegeGoodwillPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
-//
-//    promotionUtils.addPromotionDataIntoMap(results, getOtherPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
-//
-//    promotionUtils.addPromotionDataIntoMap(results, getShoppingInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
-//
-//    promotionUtils.addPromotionDataIntoMap(results, getEducationInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
-//
-//    promotionUtils.addPromotionDataIntoMap(results, getJewelryInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
-//
-//    promotionUtils.addPromotionDataIntoMap(results, getOtherInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+    promotionUtils.addPromotionDataIntoMap(results, getFoodPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD));
+
+    promotionUtils.addPromotionDataIntoMap(results, getHealthPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH));
+
+    promotionUtils.addPromotionDataIntoMap(results, getPrivilegeGoodwillPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+
+    promotionUtils.addPromotionDataIntoMap(results, getOtherPromotion(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
+
+    promotionUtils.addPromotionDataIntoMap(results, getShoppingInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
+
+    promotionUtils.addPromotionDataIntoMap(results, getEducationInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION));
+
+    promotionUtils.addPromotionDataIntoMap(results, getJewelryInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING));
+
+    promotionUtils.addPromotionDataIntoMap(results, getOtherInstalment(), categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER));
 
     return results;
   }
@@ -412,7 +412,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
     for (String link : listPromotionLinks) {
       Thread.sleep(sleepTime);
-      PromotionCrawlerModel model = getPromotionFromLink("https://www.scb.com.vn/vie/uu-dai-chu-the/kos-shop", cateID);
+      PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
       if (model != null) {
         if (promotionUtils.checkIfPromotionExisting(model, listPromoBankData)) {
           logger.info("SCB Bank Promotion Date is Existed");
