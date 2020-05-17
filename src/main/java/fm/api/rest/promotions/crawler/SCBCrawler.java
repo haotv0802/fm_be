@@ -88,7 +88,13 @@ public class SCBCrawler implements IBankPromotionCrawler {
     Elements elPromoDetailInfo = docPromotionDetailInfo.getElementsByClass("content-1");
     String tilte = getTitle(docPromotionDetailInfo.select(".sale-detail-wrap"), ".title-d-1") != null ? getTitle(docPromotionDetailInfo.select(".sale-detail-wrap"), ".title-d-1") : "";
     String content = getDetail(elPromoDetailInfo, "p", "Ưu đãi");
+    if (content.length() <= 12) {
+      content = getContentIfNull(elPromoDetailInfo, "p", "Ưu đãi");
+    }
     String date = getDetail(elPromoDetailInfo, "p", "Thời gian");
+    if (date.length() == 13 || date.equals("")) {
+      date = getDateSCB(elPromoDetailInfo, "p", "Thời gian");
+    }
     String cardType = getDetail(elPromoDetailInfo, "p", "Áp dụng");
     String condition = getDetail(elPromoDetailInfo, "p", "Điều kiện điều khoản");
     if (condition == null) {
@@ -96,13 +102,21 @@ public class SCBCrawler implements IBankPromotionCrawler {
     }
 
     String htmlText = elPromoDetailInfo.text();
-    if (date != null) {
+    if (!date.equals("")) {
       if (date.split("đến").length > 1) {
         start_Date = date.split("đến")[0].replaceAll("/", "-");
         end_Date = date.split("đến")[1].replaceAll("/", "-");
+      } else if (date.split("–").length > 1) {
+        start_Date = date.split("–")[0].replaceAll("/", "-");
+        end_Date = date.split("–")[1].replaceAll("/", "-");
+      } else if (date.split("-").length > 1) {
+        start_Date = date.split("-")[0].replaceAll("/", "-");
+        end_Date = date.split("-")[1].replaceAll("/", "-");
       } else {
-        start_Date = date;
+        start_Date = "";
       }
+    } else {
+      date = getDateSCB(elPromoDetailInfo, "p", "Thời gian");
     }
     if (content != null) {
       PromotionCrawlerModel model = new PromotionCrawlerModel(tilte, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content), promotionUtils.getDateSCBData(start_Date), promotionUtils.getDateSCBData(end_Date), cateId, 3, htmlText, link, "", cardType, condition, "");
