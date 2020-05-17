@@ -53,4 +53,9 @@ public class PromotionResource extends BaseResource {
         this.bankPromotion.crawlAll();
     }
 
+    @GetMapping("/promotions/crawlall/threads")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public void crawlAllByMultiThreads(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+        this.bankPromotion.crawlAllByMultiThreads();
+    }
 }

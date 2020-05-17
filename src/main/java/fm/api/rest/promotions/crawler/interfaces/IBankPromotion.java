@@ -7,4 +7,6 @@ public interface IBankPromotion {
     void crawl(String bankName);
 
     void crawlAll();
+
+    void crawlAllByMultiThreads();
 }
