@@ -1,8 +1,11 @@
 package fm.api.rest.promotions.crawler;
-/* Quy created on 3/11/2020  */
 
+/**
+ *  Quy created on 3/11/2020
+ *  */
 public class PromotionCrawlerModel {
 
+    private Long id;
     private String title;
     private String content;
     private String discount;

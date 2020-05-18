@@ -1,6 +1,3 @@
-/**
- * Created by Quy on 4/30/2020.
- */
 package fm.api.rest.promotions.crawler;
 
 import fm.api.rest.promotions.PromotionPresenter;
@@ -26,6 +23,9 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Created by Quy on 4/30/2020.
+ */
 @Service("scbCrawler")
 public class SCBCrawler implements IBankPromotionCrawler {
     private static final Logger logger = LogManager.getLogger(SCBCrawler.class);
@@ -421,11 +421,12 @@ public class SCBCrawler implements IBankPromotionCrawler {
             Thread.sleep(sleepTime);
             PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
             if (model != null) {
-                if (promotionUtils.checkIfPromotionExisting(model, listPromoBankData)) {
-                    logger.info("SCB Bank Promotion Date is Existed");
-                } else {
-                    listPromotionCrawling.add(model);
-                }
+//                if (promotionUtils.checkIfPromotionExisting(model, listPromoBankData)) {
+//                    logger.info("SCB Bank Promotion Date is Existed");
+//                } else {
+//                    listPromotionCrawling.add(model);
+//                }
+                listPromotionCrawling.add(model);
             }
         }
         listPromotionLinks.clear();

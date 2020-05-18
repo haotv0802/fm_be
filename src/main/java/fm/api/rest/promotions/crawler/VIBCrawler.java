@@ -388,11 +388,13 @@ public class VIBCrawler implements IBankPromotionCrawler {
             Thread.sleep(sleepTime);
             PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
             if (model != null) {
-                if (this.promotionUtils.checkIfPromotionExisting(model, listPromoBankData)) {
-                    logger.info("VIB Bank Promotion Data is Existed");
-                } else {
-                    promotionCrawlinData.add(model);
-                }
+//                if (this.promotionUtils.checkIfPromotionExisting(model, listPromoBankData)) {
+//                    logger.info("VIB Bank Promotion Data is Existed");
+//                } else {
+//                    promotionCrawlinData.add(model);
+//                }
+
+                promotionCrawlinData.add(model);
             }
         }
         listDetailPromoLink.clear();

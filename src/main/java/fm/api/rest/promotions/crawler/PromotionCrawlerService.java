@@ -23,7 +23,7 @@ public class PromotionCrawlerService implements IPromotionCrawlerService {
 
     @Override
     public void saveBankPromotion(PromotionCrawlerModel model) {
-        promotionCrawlerDAO.savePromotion(model);
+        promotionCrawlerDAO.addPromotion(model);
     }
 
     @Override

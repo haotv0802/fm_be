@@ -10,29 +10,28 @@
  public class BankCrawlerFactory {
 
      private IBankPromotionCrawler vibCrawler;
-     private IBankPromotionCrawler scbCrawler2;
+     private IBankPromotionCrawler scbCrawler;
      private IBankPromotionCrawler shinhanCrawler;
 
      public BankCrawlerFactory(@Qualifier("vibCrawler") IBankPromotionCrawler vibCrawler,
-                               @Qualifier("scbCrawler") IBankPromotionCrawler scbCrawler2,
+                               @Qualifier("scbCrawler") IBankPromotionCrawler scbCrawler,
                                @Qualifier("shinhanCrawler") IBankPromotionCrawler shinhanCrawler) {
-
-
          Assert.notNull(vibCrawler);
+         Assert.notNull(scbCrawler);
+         Assert.notNull(shinhanCrawler);
 
          this.vibCrawler = vibCrawler;
-         this.scbCrawler2 = scbCrawler2;
+         this.scbCrawler = scbCrawler;
          this.shinhanCrawler = shinhanCrawler;
 
      }
 
      public IBankPromotionCrawler getBankCrawler(String bankName) {
-
          switch (bankName) {
              case "vib":
                  return this.vibCrawler;
              case "scb":
-                 return this.scbCrawler2;
+                 return this.scbCrawler;
              case "shinhan":
                  return this.shinhanCrawler;
              default:

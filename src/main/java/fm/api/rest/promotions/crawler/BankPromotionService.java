@@ -3,7 +3,9 @@ package fm.api.rest.promotions.crawler;
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotion;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
+import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
+import fm.utils.FmDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,20 +28,24 @@ public class BankPromotionService implements IBankPromotion {
     private final IPromotionCrawlerService promotionCrawlerService;
     private final ListableBeanFactory beanFactory; // use to load all implementations of IBankPromotionCrawler interfaces
     private final ThreadPoolTaskExecutor executor;
+    private final IPromotionCrawlerDAO promotionCrawlerDAO;
 
     @Autowired
     public BankPromotionService(@Qualifier("bankCrawlerFactory") BankCrawlerFactory bankCrawlerFactory,
                                 @Qualifier("promotionCrawlerService") IPromotionCrawlerService promotionCrawlerService,
+                                @Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO promotionCrawlerDAO,
                                 ListableBeanFactory beanFactory,
                                 ThreadPoolTaskExecutor executor
     ) {
         Assert.notNull(bankCrawlerFactory);
         Assert.notNull(promotionCrawlerService);
+        Assert.notNull(promotionCrawlerDAO);
         Assert.notNull(beanFactory);
         Assert.notNull(executor);
 
         this.bankCrawlerFactory = bankCrawlerFactory;
         this.promotionCrawlerService = promotionCrawlerService;
+        this.promotionCrawlerDAO = promotionCrawlerDAO;
         this.beanFactory = beanFactory;
         this.executor = executor;
     }
@@ -82,7 +88,24 @@ public class BankPromotionService implements IBankPromotion {
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
                 logger.info("saving promotion {}", model.toString());
-                this.promotionCrawlerService.saveBankPromotion(model);
+                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl(), model.getTitle(), FmDateUtils.parseDateWithPattern(model.getEndDate(), "dd-MM-yyyy"));
+//                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl());
+                if (promotion == null) {
+                    promotionCrawlerDAO.addPromotion(model);
+                } else {
+                    promotion.setContent(model.getContent());
+                    promotion.setDiscount(model.getDiscount());
+                    promotion.setInstallmentPeriod(model.getInstallmentPeriod());
+                    promotion.setEndDate(model.getEndDate());
+                    promotion.setStartDate(model.getStartDate());
+                    promotion.setTitle(model.getTitle());
+                    promotion.setUrl(model.getUrl());
+                    promotion.setBankId(model.getBankId());
+                    promotion.setCategoryId(model.getCategoryId());
+
+                    promotionCrawlerDAO.updatePromotion(promotion);
+                }
+
             }
         }
     }

@@ -4,17 +4,17 @@ package fm.api.rest.promotions;
  * Created by haoho on 2/27/20 10:03.
  */
 public class PromotionPresenter {
-  int id;
+  private Long id;
   private String title;
   private String content;
   private String discount;
   private String startDate;
   private String endDate;
-  private int categoryID;
+  private int categoryId;
   private int bankId;
   private String installmentPeriod;
   private String htmlText;
-  private String linkDetail;
+  private String url;
   private String imgURL;
   private String cardType;
   private String condition;
@@ -23,17 +23,17 @@ public class PromotionPresenter {
   public PromotionPresenter() {
   }
 
-  public PromotionPresenter(String title, String content, String discount, String installmentPeriod, String startDate, String endDate, int categoryID, int bankId, String htmlText, String linkDetail, String imgURL, String cardType, String condition, String location) {
+  public PromotionPresenter(String title, String content, String discount, String installmentPeriod, String startDate, String endDate, int categoryId, int bankId, String htmlText, String url, String imgURL, String cardType, String condition, String location) {
     this.title = title;
     this.content = content;
     this.discount = discount;
     this.installmentPeriod = installmentPeriod;
     this.startDate = startDate;
     this.endDate = endDate;
-    this.categoryID = categoryID;
+    this.categoryId = categoryId;
     this.bankId = bankId;
     this.htmlText = htmlText;
-    this.linkDetail = linkDetail;
+    this.url = url;
     this.imgURL = imgURL;
     this.cardType = cardType;
     this.condition = condition;
@@ -80,20 +80,12 @@ public class PromotionPresenter {
     this.endDate = endDate;
   }
 
-  public int getId() {
-    return id;
+  public int getCategoryId() {
+    return categoryId;
   }
 
-  public void setId(int id) {
-    this.id = id;
-  }
-
-  public int getCategoryID() {
-    return categoryID;
-  }
-
-  public void setCategoryID(int categoryID) {
-    this.categoryID = categoryID;
+  public void setCategoryId(int categoryId) {
+    this.categoryId = categoryId;
   }
 
   public int getBankId() {
@@ -112,12 +104,12 @@ public class PromotionPresenter {
     this.htmlText = htmlText;
   }
 
-  public String getLinkDetail() {
-    return linkDetail;
+  public String getUrl() {
+    return url;
   }
 
-  public void setLinkDetail(String linkDetail) {
-    this.linkDetail = linkDetail;
+  public void setUrl(String url) {
+    this.url = url;
   }
 
   public String getImgURL() {
@@ -158,5 +150,13 @@ public class PromotionPresenter {
 
   public void setInstallmentPeriod(String installmentPeriod) {
     this.installmentPeriod = installmentPeriod;
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 }

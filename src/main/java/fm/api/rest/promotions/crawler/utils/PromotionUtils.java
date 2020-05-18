@@ -227,7 +227,6 @@ public class PromotionUtils {
 
     }
 
-
     /**
      * This service is to check existed data
      *
@@ -275,7 +274,6 @@ public class PromotionUtils {
         }
         return promotionMap;
     }
-
 
     public String formatDateText(String text) {
         text = text.replaceAll("/", "-");

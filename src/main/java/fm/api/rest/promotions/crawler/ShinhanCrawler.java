@@ -111,11 +111,7 @@
                      String image_future = subJsonArray.getJSONObject(y).getString("image_future");
                      String get_permalinks = subJsonArray.getJSONObject(y).getString("get_permalinks");
                      PromotionCrawlerModel model = new PromotionCrawlerModel(title, description, promotionUtils.getProvision(description), null, date_start, date_end, cateId, bankId, contentHTML, get_permalinks, null, null, null, null);
-                     if (promotionUtils.checkIfPromotionExisting(model, listBankDataPromo)) {
-                         logger.info("Shinhan Bank Promotion is Existed, {}", model.getUrl());
-                     } else {
-                         list.add(model);
-                     }
+                     list.add(model);
                  }
              }
              return list;

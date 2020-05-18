@@ -142,17 +142,18 @@ CREATE TABLE `fm_promotions`
     `id`          BIGINT AUTO_INCREMENT,
     `title`       NVARCHAR(100)  NOT NULL,
     `content`     NVARCHAR(9000) NOT NULL, # NVARCHAR to store UTF-8 text
-    `discount`    VARCHAR(50)    NULL,                             # Could be % or specific amount
-    `installment` VARCHAR(100)   NULL,                             # Could be % or specific amount
+    `discount`    VARCHAR(50)    NULL,     # Could be % or specific amount
+    `installment` VARCHAR(100)   NULL,     # Could be % or specific amount
     `start_date`  DATE           NOT NULL,
     `end_date`    DATE           NOT NULL,
     `url`         VARCHAR(200)   NOT NULL,
     `category_id` BIGINT         NOT NULL,
     `bank_id`     BIGINT         NOT NULL,
     `created`     DATETIME DEFAULT now(),
+    `updated`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_promotions_url_unique` (`title`, `url`, `end_date`),
-    INDEX (`url`),
+    UNIQUE KEY `fm_promotions_url_unique` (`url`),
+    INDEX (`url`, `title`, `end_date`),
     CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`),
     CONSTRAINT `fm_promotions_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 ) ENGINE = InnoDB
@@ -227,7 +228,7 @@ CREATE TABLE `fm_error_tracking`
 (
     `id`            BIGINT        NOT NULL AUTO_INCREMENT,
     `error_message` VARCHAR(100)  NOT NULL,
-    `stack_trace`   VARCHAR(1000) NOT NULL,
+    `stack_trace`   VARCHAR(9000) NOT NULL,
     `exception`     VARCHAR(100)  NOT NULL,
     `user`          VARCHAR(50),
     `error_date`    DATETIME      NOT NULL DEFAULT now(),

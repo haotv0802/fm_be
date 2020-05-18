@@ -1,5 +1,4 @@
 package fm.api.rest.promotions.crawler.interfaces;
-/* Quy created on 3/11/2020  */
 
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
@@ -8,12 +7,19 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Quy created on 3/11/2020
+ */
 public interface IPromotionCrawlerDAO {
-  boolean savePromotion(PromotionCrawlerModel model);
+    void addPromotion(PromotionCrawlerModel model);
 
-  List<PromotionPresenter> getPromotionByBankId(int bankID, int category_id);
+    void updatePromotion(PromotionPresenter model);
 
-  Map<String, Integer> getCategoryAndId();
+    List<PromotionPresenter> getPromotionByBankId(int bankID, int category_id);
 
-  Boolean isPromotionExisting(String url, String title, Date endDate);
+    Map<String, Integer> getCategoryAndId();
+
+    Boolean isPromotionExisting(String url, String title, Date endDate);
+
+    PromotionPresenter getPromotion(String url, String title, Date endDate);
 }
