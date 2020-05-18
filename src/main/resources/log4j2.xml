@@ -6,10 +6,10 @@
                       fileName="logs/fm-${date:yyyy-MM-dd}.log"
                       immediateFlush="false"
                       append="true">
-      <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" />
+      <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" charset="UTF-8"/>
     </RandomAccessFile>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" />
+      <PatternLayout pattern="%d %p [%t] %X %c{1.} %m%n" charset="UTF-8"/>
     </Console>
   </Appenders>
   <Loggers>
