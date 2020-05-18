@@ -140,10 +140,10 @@ DROP
 CREATE TABLE `fm_promotions`
 (
     `id`          BIGINT AUTO_INCREMENT,
-    `title`       VARCHAR(100)   NOT NULL,
+    `title`       NVARCHAR(100)  NOT NULL,
     `content`     NVARCHAR(9000) NOT NULL, # NVARCHAR to store UTF-8 text
-    `discount`    VARCHAR(50)    NULL,     # Could be % or specific amount
-    `installment` VARCHAR(100)   NULL,     # Could be % or specific amount
+    `discount`    VARCHAR(50)    NULL,                             # Could be % or specific amount
+    `installment` VARCHAR(100)   NULL,                             # Could be % or specific amount
     `start_date`  DATE           NOT NULL,
     `end_date`    DATE           NOT NULL,
     `url`         VARCHAR(200)   NOT NULL,
