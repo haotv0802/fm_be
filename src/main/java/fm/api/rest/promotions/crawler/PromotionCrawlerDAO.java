@@ -4,6 +4,7 @@ import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.common.dao.DaoUtils;
 import fm.utils.FmDateUtils;
+import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -74,14 +75,13 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
             paramsMap.addValue("start_date", LocalDate.now());
         } else {
-//            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
+//            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
             paramsMap.addValue("start_date", FmDateUtils.parseDateWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
         if (promoModel.getEndDate().equals("")) {
-            LocalDate currentTime = LocalDate.now();
-            paramsMap.addValue("end_date", LocalDate.of(currentTime.getYear() + 1, 12, 31));
+            paramsMap.addValue("end_date", FmLocalDateUtils.getLastDateOfNextYear());
         } else {
-//            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
+//            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
             paramsMap.addValue("end_date", FmDateUtils.parseDateWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
         paramsMap.addValue("url", promoModel.getUrl());
@@ -94,7 +94,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     }
 
     @Override
-    public void updatePromotion(PromotionPresenter promoModel) {
+    public void updatePromotion(PromotionPresenter promotion) {
         final String sql =
                           "UPDATE                       "
                         + " fm_promotions               "
@@ -109,30 +109,31 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
                         + "  bank_id = :bank_id,        "
                         + "  updated = :updated         "
                         + "WHERE                        "
-                        + "bank_id = :bank_id           "
+                        + " id = :id                    "
                 ;
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-        paramsMap.addValue("title", promoModel.getTitle());
-        paramsMap.addValue("content", promoModel.getContent());
-        paramsMap.addValue("discount", promoModel.getDiscount());
-        paramsMap.addValue("installment", promoModel.getInstallmentPeriod());
-        if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
+        paramsMap.addValue("title", promotion.getTitle());
+        paramsMap.addValue("content", promotion.getContent());
+        paramsMap.addValue("discount", promotion.getDiscount());
+        paramsMap.addValue("installment", promotion.getInstallmentPeriod());
+        if (promotion.getStartDate().equals("") || promotion.getStartDate().equals("T? nay")) {
             paramsMap.addValue("start_date", LocalDate.now());
         } else {
-//            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
-            paramsMap.addValue("start_date", FmDateUtils.parseDateWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
+//            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
+            paramsMap.addValue("start_date", FmDateUtils.parseDateWithPattern(promotion.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
-        if (promoModel.getEndDate().equals("")) {
+        if (promotion.getEndDate().equals("")) {
             LocalDate currentTime = LocalDate.now();
-            paramsMap.addValue("end_date", LocalDate.of(currentTime.getYear() + 1, 12, 31));
+            paramsMap.addValue("end_date", FmLocalDateUtils.getLastDateOfNextYear());
         } else {
-//            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
-            paramsMap.addValue("end_date", FmDateUtils.parseDateWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy"));
+//            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
+            paramsMap.addValue("end_date", FmDateUtils.parseDateWithPattern(promotion.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy"));
         }
-        paramsMap.addValue("url", promoModel.getUrl());
-        paramsMap.addValue("category_id", promoModel.getCategoryId());
-        paramsMap.addValue("bank_id", promoModel.getBankId());
+        paramsMap.addValue("url", promotion.getUrl());
+        paramsMap.addValue("category_id", promotion.getCategoryId());
+        paramsMap.addValue("bank_id", promotion.getBankId());
         paramsMap.addValue("updated", LocalDateTime.now());
+        paramsMap.addValue("id", promotion.getId());
 
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
@@ -140,7 +141,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     }
 
     @Override
-    public List<PromotionPresenter> getPromotionByBankId(int bankID, int category_id) {
+    public List<PromotionPresenter> getPromotionByBankId(int bankID, int categoryId) {
         final String sqlQuery =
                           "SELECT    "
                         + "id,                              "
@@ -154,11 +155,11 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
                         + "bank_id                                 "
                         + "FROM fm_promotions                      "
                         + "WHERE bank_id=:bank_id                  "
-                        + "AND category_id=:category_id            ";
+                        + "AND category_id=:categoryId             ";
         try {
             final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
             paramsMap.addValue("bank_id", bankID);
-            paramsMap.addValue("category_id", category_id);
+            paramsMap.addValue("categoryId", categoryId);
             DaoUtils.debugQuery(logger, sqlQuery, paramsMap.getValues());
             return namedTemplate.query(sqlQuery, paramsMap, (rs, rowNum) -> buildPromotionModel(rs));
         } catch (Exception e) {
@@ -209,7 +210,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     public PromotionPresenter getPromotion(String url, String title, Date endDate) {
 //    public PromotionPresenter getPromotion(String url) {
         final String sql =
-                          "SELECT    "
+                          "SELECT                                "
                         + "  id,                                 "
                         + "  title,                              "
                         + "  content,                            "
@@ -218,17 +219,18 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
                         + "  DATE_FORMAT(start_date, '%d-%m-%Y'),"
                         + "  DATE_FORMAT(end_date, '%d-%m-%Y'),  "
                         + "  category_id,                        "
-                        + "  bank_id                             "
+                        + "  bank_id,                            "
+                        + "  category_id                         "
                         + "FROM fm_promotions                    "
                         + "WHERE url = :url                      "
                         + "AND title = :title                    "
-                        + "AND end_date = :end_date              "
+                        + "AND end_date = :endDate               "
                 ;
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("url", url);
         paramsMap.addValue("title", title);
-        paramsMap.addValue("end_date", endDate);
+        paramsMap.addValue("endDate", endDate);
 
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
@@ -248,7 +250,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         presenter.setInstallmentPeriod(rs.getString("installment"));
         presenter.setStartDate(rs.getString("DATE_FORMAT(start_date, '%d-%m-%Y')"));
         presenter.setEndDate(rs.getString("DATE_FORMAT(end_date, '%d-%m-%Y')"));
-        presenter.setCategoryId(rs.getInt("category_id"));
+        presenter.setCategoryId(rs.getInt("category_Id"));
         presenter.setBankId(rs.getInt("bank_id"));
         return presenter;
     }

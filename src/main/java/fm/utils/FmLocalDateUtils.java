@@ -65,4 +65,8 @@ public class FmLocalDateUtils {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return LocalDateTime.parse(dateTime, formatter);
     }
+
+    public static LocalDate getLastDateOfNextYear() {
+        return LocalDate.of(LocalDate.now().getYear() + 1, 12, 31);
+    }
 }

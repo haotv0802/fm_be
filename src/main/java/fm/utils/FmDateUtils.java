@@ -7,6 +7,7 @@ import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -78,5 +79,18 @@ public class FmDateUtils {
             logger.error(e.getMessage(), e);
         }
         return null;
+    }
+
+    public static Date getLastDateOfNextYear() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+        calendar.set(Calendar.YEAR, calendar.get(Calendar.YEAR) + 1);
+        calendar.set(Calendar.MONTH, 11);
+        calendar.set(Calendar.DATE, 31);
+
+        return calendar.getTime();
     }
 }

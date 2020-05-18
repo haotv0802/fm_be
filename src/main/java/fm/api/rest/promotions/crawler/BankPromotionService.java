@@ -6,6 +6,7 @@ import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
 import fm.utils.FmDateUtils;
+import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -88,7 +90,8 @@ public class BankPromotionService implements IBankPromotion {
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
                 logger.info("saving promotion {}", model.toString());
-                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl(), model.getTitle(), FmDateUtils.parseDateWithPattern(model.getEndDate(), "dd-MM-yyyy"));
+                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl(), model.getTitle(),
+                        StringUtils.isEmpty(model.getEndDate()) ? FmDateUtils.getLastDateOfNextYear() : FmDateUtils.parseDateWithPattern(model.getEndDate(), "dd-MM-yyyy"));
 //                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl());
                 if (promotion == null) {
                     promotionCrawlerDAO.addPromotion(model);
