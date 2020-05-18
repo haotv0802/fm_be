@@ -255,17 +255,6 @@ public class PromotionUtils {
     }
 
     /**
-     * This service is to get bank promotion  data from Database.
-     *
-     * @param bankId
-     * @param cateId
-     * @return
-     */
-    public List<PromotionPresenter> initBankData(int bankId, int cateId) {
-        return iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
-    }
-
-    /**
      * This service is to add list promotion from bank into Map because there are has the same Key value from map.
      *
      * @param promotionMap      : current Map value

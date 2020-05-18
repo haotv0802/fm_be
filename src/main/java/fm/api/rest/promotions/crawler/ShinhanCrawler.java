@@ -25,6 +25,7 @@
  import org.jsoup.select.Elements;
  import org.springframework.beans.factory.annotation.Autowired;
  import org.springframework.beans.factory.annotation.Qualifier;
+ import org.springframework.beans.factory.annotation.Value;
  import org.springframework.stereotype.Service;
 
  import java.io.IOException;
@@ -39,6 +40,8 @@
      private PromotionUtils promotionUtils;
      private IPromotionCrawlerDAO iPromotionCrawlerDAO;
 
+     @Value("${bank.shinhan.id}")
+     private Integer bankId;
 
      @Autowired
      public ShinhanCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
@@ -75,7 +78,8 @@
              List<PromotionCrawlerModel> list = new ArrayList<>();
              String crwalingData = "";
              HttpPost postConnection = new HttpPost(link);
-             List<PromotionPresenter> listBankDataPromo = iPromotionCrawlerDAO.getPromotionByBankId(5, cateId);
+             List<PromotionPresenter> listBankDataPromo = iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
+
              List<NameValuePair> urlParameters = new ArrayList<NameValuePair>();
              urlParameters.add(new BasicNameValuePair("_token", "iEWghzwz8FGa0yCkILYxWtwJx1A8Ya1avRJyPyay"));
              urlParameters.add(new BasicNameValuePair("province", "all"));
@@ -106,7 +110,7 @@
                      String type = subJsonArray.getJSONObject(y).getString("type");
                      String image_future = subJsonArray.getJSONObject(y).getString("image_future");
                      String get_permalinks = subJsonArray.getJSONObject(y).getString("get_permalinks");
-                     PromotionCrawlerModel model = new PromotionCrawlerModel(title, description, promotionUtils.getProvision(description), "", date_start, date_end, cateId, 5, contentHTML, get_permalinks, "", "", "", "");
+                     PromotionCrawlerModel model = new PromotionCrawlerModel(title, description, promotionUtils.getProvision(description), null, date_start, date_end, cateId, bankId, contentHTML, get_permalinks, null, null, null, null);
                      if (promotionUtils.checkIfPromotionExisting(model, listBankDataPromo)) {
                          logger.info("Shinhan Bank Promotion is Existed, {}", model.getUrl());
                      } else {

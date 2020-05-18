@@ -34,6 +34,9 @@ public class VIBCrawler implements IBankPromotionCrawler {
     @Value("${crawler.sleeptime}")
     private Integer sleepTime; // @Value sets variable final by default, even is is forced with other value in constructor.
 
+    @Value("${bank.vib.id}")
+    private Integer bankId;
+
     @Autowired
     public VIBCrawler(@Qualifier("promotionCrawlerDao") IPromotionCrawlerDAO iPromotionCrawlerDAO,
                       @Qualifier("promoUtils") PromotionUtils promotionUtils) {
@@ -92,7 +95,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
             String content = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "Content");
             List<String> location = getLocations(promotionPageEls);
             String htmlText = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "HTML");
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content) + " tháng", "", endDate, categoryId, 2, htmlText, link, "IMG", "CARD TYPE", "CONDITION", "LOCATION");
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content) + " tháng", "", endDate, categoryId, bankId, htmlText, link, "IMG", "CARD TYPE", "CONDITION", "LOCATION");
             if (content != null) {
                 return model;
             } else {
@@ -376,7 +379,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> doCrawling(int cateID, String url) throws InterruptedException {
         List<PromotionCrawlerModel> promotionCrawlinData = new ArrayList<>();
 
-        List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(2, cateID);
+        List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateID);
 
         List<String> linkPromotionsLinks = getAllListFromCateMainLink(url);
 

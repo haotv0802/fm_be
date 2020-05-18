@@ -33,6 +33,8 @@ public class SCBCrawler implements IBankPromotionCrawler {
     @Value("${crawler.sleeptime}")
     private Integer sleepTime; // @Value sets variable final by default, even is is forced with other value in constructor.
 
+    @Value("${bank.scb.id}")
+    private Integer bankId;
     private final String mainLink = "htstps://www.scb.com.vn/";
     private PromotionUtils promotionUtils;
     private Set<String> listDetailPromoLinks = new HashSet<>();
@@ -119,7 +121,9 @@ public class SCBCrawler implements IBankPromotionCrawler {
             date = getDateSCB(elPromoDetailInfo, "p", "Thời gian");
         }
         if (content != null) {
-            PromotionCrawlerModel model = new PromotionCrawlerModel(tilte, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content), promotionUtils.getDateSCBData(start_Date), promotionUtils.getDateSCBData(end_Date), cateId, 3, htmlText, link, "", cardType, condition, "");
+            PromotionCrawlerModel model = new PromotionCrawlerModel(tilte, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0",
+                    promotionUtils.getPeriod(content), promotionUtils.getDateSCBData(start_Date), promotionUtils.getDateSCBData(end_Date), cateId,
+                    bankId, htmlText, link, null, cardType, condition, null);
             return model;
         } else {
             logger.info("ERROR LINK PROMOTION : " + link);
@@ -224,7 +228,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
         try {
             int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
 
             List<PromotionCrawlerModel> travelPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_TRAVEL, listPromoBankData);
 
@@ -245,7 +249,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getFoodPromotion() {
         try {
             int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
 
             List<PromotionCrawlerModel> foodPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_FOOD, listPromoBankData);
             return foodPromotionData;
@@ -265,7 +269,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getHealthPromotion() {
         try {
             int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
 
             List<PromotionCrawlerModel> healthPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_HEALTH, listPromoBankData);
 
@@ -286,7 +290,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getPrivilegeGoodwillPromotion() {
         try {
             int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
             List<PromotionCrawlerModel> privilegeGoodwillPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_PRIVILEGEGOODWILL, listPromoBankData);
 
             return privilegeGoodwillPromotionData;
@@ -307,7 +311,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
         try {
 
             int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
             List<PromotionCrawlerModel> otherPromotionData = doCrawlingPromotionDetail(cateId, BankLinkPromotion.SCB_PROMOTION_OTHER, listPromoBankData);
 
 
@@ -328,7 +332,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getShoppingInstalment() {
         try {
             int cateId = categoriesDB.get("Shopping");
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
             List<PromotionCrawlerModel> shoppingInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_SHOPPING_ELECTRIC, listPromoBankData);
 
 
@@ -349,7 +353,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getEducationInstalment() {
         try {
             int cateId = categoriesDB.get("Education");
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
             List<PromotionCrawlerModel> educationInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_HEALTH_EDUCATION, listPromoBankData);
             return educationInstalmnetData;
         } catch (Exception ex) {
@@ -368,7 +372,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getJewelryInstalment() {
         try {
             int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
 
             List<PromotionCrawlerModel> jewelryInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_JEWELRY, listPromoBankData);
             return jewelryInstalmnetData;
@@ -388,7 +392,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getOtherInstalment() {
         try {
             int cateId = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_OTHER);
-            List<PromotionPresenter> listPromoBankData = this.promotionUtils.initBankData(3, cateId);
+            List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateId);
 
             List<PromotionCrawlerModel> otherInstalmnetData = doCrawlingInstalment(cateId, BankLinkPromotion.SCB_INSTALLMENT_OTHER, listPromoBankData);
             return otherInstalmnetData;
@@ -486,7 +490,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
                 endDatae = promotionUtils.getDateSCBData(date.split("đến")[1]);
             }
 
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, "", getPeriod(content) + " tháng", startDate, endDatae, cateID, 3, htmlText, link, detailLink, "", codition, location);
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, "", getPeriod(content) + " tháng", startDate, endDatae, cateID, bankId, htmlText, link, detailLink, "", codition, location);
             listResult.add(model);
         }
 
