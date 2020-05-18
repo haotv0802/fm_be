@@ -381,6 +381,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
         List<String> linkPromotionsLinks = getAllListFromCateMainLink(url);
 
         for (String link : linkPromotionsLinks) {
+            logger.info("Sleep time: {}", sleepTime);
             Thread.sleep(sleepTime);
             PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
             if (model != null) {
