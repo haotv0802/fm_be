@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -89,10 +90,23 @@ public class BankPromotionService implements IBankPromotion {
     private void saveCrawledData(Map<Integer, List<PromotionCrawlerModel>> data) {
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
+                if (model.getTitle().equals("Getfit Gym&yoga")) {
+                    logger.info(model.getTitle());
+                }
+                if (model.getTitle().equals("VERTU VIỆT NAM")) {
+                    logger.info(model.getTitle());
+                }
                 logger.info("saving promotion {}", model.toString());
-                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl(), model.getTitle(),
-                        StringUtils.isEmpty(model.getEndDate()) ? FmDateUtils.getLastDateOfNextYear() : FmDateUtils.parseDateWithPattern(model.getEndDate(), "dd-MM-yyyy"));
-//                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl());
+                Date endDate;
+                String pattern;
+                if (model.getEndDate().contains("-")) {
+                    pattern = "dd-MM-yyyy";
+                } else {
+                    pattern = "dd/MM/yyyy";
+                }
+                endDate = StringUtils.isEmpty(model.getEndDate()) ? FmDateUtils.getLastDateOfNextYear() : FmDateUtils.parseDateWithPattern(model.getEndDate(), pattern);
+                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl(), model.getTitle(), endDate);
+
                 if (promotion == null) {
                     promotionCrawlerDAO.addPromotion(model);
                 } else {

@@ -152,8 +152,8 @@ CREATE TABLE `fm_promotions`
     `created`     DATETIME DEFAULT now(),
     `updated`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_promotions_url_unique` (`url`),
-    INDEX (`url`, `title`, `end_date`),
+    UNIQUE KEY `fm_promotions_url_unique` (`url`, `title`, `end_date`),
+    INDEX (`url`),
     CONSTRAINT `fm_promotions_category_id` FOREIGN KEY (`category_id`) REFERENCES `fm_promotion_categories` (`id`),
     CONSTRAINT `fm_promotions_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 ) ENGINE = InnoDB

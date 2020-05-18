@@ -15,8 +15,7 @@ public class PromotionsResourceTest extends BaseDocumentation {
 
     @Test
     @Rollback(false)
-    public void testPromotionsCrawler() throws Exception {
-
+    public void testPromotionsCrawlerForShinhan() throws Exception {
         mockMvc
                 .perform(get("/svc/promotions/crawler/shinhan")
                         .header("Accept-Language", "en")
@@ -25,24 +24,32 @@ public class PromotionsResourceTest extends BaseDocumentation {
                 )
                 .andExpect(status().is(200))
         ;
+    }
 
-//        mockMvc
-//                .perform(get("/svc/promotions/crawler/vib")
-//                        .header("Accept-Language", "en")
-//                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                )
-//                .andExpect(status().is(200))
-//        ;
-//
-//        mockMvc
-//                .perform(get("/svc/promotions/crawler/scb")
-//                        .header("Accept-Language", "en")
-//                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                )
-//                .andExpect(status().is(200))
-//        ;
+    @Test
+    @Rollback(false)
+    public void testPromotionsCrawlerForVIB() throws Exception {
+        mockMvc
+                .perform(get("/svc/promotions/crawler/vib")
+                        .header("Accept-Language", "en")
+                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().is(200))
+        ;
+    }
+
+    @Test
+    @Rollback(false)
+    public void testPromotionsCrawlerForSCB() throws Exception {
+        mockMvc
+                .perform(get("/svc/promotions/crawler/scb")
+                        .header("Accept-Language", "en")
+                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().is(200))
+        ;
     }
 
     @Test
@@ -74,5 +81,4 @@ public class PromotionsResourceTest extends BaseDocumentation {
         ;
 
     }
-
 }

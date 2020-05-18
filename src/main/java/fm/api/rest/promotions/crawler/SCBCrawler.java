@@ -477,7 +477,7 @@ public class SCBCrawler implements IBankPromotionCrawler {
 
         for (Element elInstalment : elsInstalmentContainer) {
             String startDate = "";
-            String endDatae = "";
+            String endDate = "";
             Elements elinstalmentTxtPartner = elInstalment.select(".txt-partner");
             String title = elinstalmentTxtPartner.first().getElementsByTag("h3").text() != null ? elinstalmentTxtPartner.first().getElementsByTag("h3").text() : "";
             String content = getDetail(elinstalmentTxtPartner, "p", "Trả góp");
@@ -486,12 +486,15 @@ public class SCBCrawler implements IBankPromotionCrawler {
             String date = getDetail(elinstalmentTxtPartner, "p", "Thời gian");
             String detailLink = getLinkDetail(elinstalmentTxtPartner, link);
             String htmlText = elinstalmentTxtPartner.outerHtml();
+            if (title.equals("VERTU VIỆT NAM")) {
+                logger.info(title);
+            }
             if (date != null) {
                 startDate = promotionUtils.getDateSCBData(date.split("đến")[0]);
-                endDatae = promotionUtils.getDateSCBData(date.split("đến")[1]);
+                endDate = promotionUtils.getDateSCBData(date.split("đến")[1]);
             }
 
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, "", getPeriod(content) + " tháng", startDate, endDatae, cateID, bankId, htmlText, link, detailLink, "", codition, location);
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, "", getPeriod(content) + " tháng", startDate, endDate, cateID, bankId, htmlText, link, detailLink, "", codition, location);
             listResult.add(model);
         }
 
