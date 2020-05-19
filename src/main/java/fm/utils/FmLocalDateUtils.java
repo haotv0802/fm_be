@@ -3,6 +3,7 @@ package fm.utils;
 import fm.common.FmConstants;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,11 +58,17 @@ public class FmLocalDateUtils {
     }
 
     public static LocalDate parseDateWithPattern(String date, String pattern) {
+        if (StringUtils.isEmpty(date)) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return LocalDate.parse(date, formatter);
     }
 
     public static LocalDateTime parseDateTimeWithPattern(String dateTime, String pattern) {
+        if (StringUtils.isEmpty(dateTime)) {
+            return null;
+        }
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
         return LocalDateTime.parse(dateTime, formatter);
     }

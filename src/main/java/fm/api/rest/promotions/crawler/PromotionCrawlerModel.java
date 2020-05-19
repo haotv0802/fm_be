@@ -1,16 +1,18 @@
 package fm.api.rest.promotions.crawler;
 
+import java.time.LocalDate;
+
 /**
- *  Quy created on 3/11/2020
- *  */
+ * Quy created on 3/11/2020
+ */
 public class PromotionCrawlerModel {
 
     private Long id;
     private String title;
     private String content;
     private String discount;
-    private String startDate;
-    private String endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int categoryId;
     private int bankId;
     private String htmlText;
@@ -21,7 +23,9 @@ public class PromotionCrawlerModel {
     private String condition;
     private String location;
 
-    public PromotionCrawlerModel(String title, String content, String discount, String installmentPeriod, String startDate, String endDate, int categoryId, int bankId, String htmlText, String url, String imgURL, String cardType, String condition, String location) {
+    public PromotionCrawlerModel(String title, String content, String discount, String installmentPeriod,
+                                 LocalDate startDate, LocalDate endDate, int categoryId, int bankId, String htmlText,
+                                 String url, String imgURL, String cardType, String condition, String location) {
         this.title = title;
         this.content = content;
         this.discount = discount;
@@ -62,19 +66,19 @@ public class PromotionCrawlerModel {
         this.discount = discount;
     }
 
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(String startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public String getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(String endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

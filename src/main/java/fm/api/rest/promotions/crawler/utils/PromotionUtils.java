@@ -5,6 +5,7 @@ import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.PromotionCrawlerModel;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.utils.FmDateUtils;
+import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -73,7 +74,7 @@ public class PromotionUtils {
      * @param text
      * @return
      */
-    public String getDateSCBData(String text) {
+    public LocalDate getDateSCBData(String text) {
         if (text != null) {
             String datePattern = "([0-9]+[/||-][0-9]+[/||-][0-9]{4})";
             Pattern r = Pattern.compile(datePattern);
@@ -84,11 +85,18 @@ public class PromotionUtils {
                     sb.append(m.group(0));
                 }
             }
-            if (!sb.toString().equals("")) {
-                return sb.toString();
+            if (!StringUtils.isEmpty(sb.toString())) {
+                String date = sb.toString();
+                String pattern;
+                if (date.contains("-")) {
+                    pattern = "dd-MM-yyyy";
+                } else {
+                    pattern = "dd/MM/yyyy";
+                }
+                return StringUtils.isEmpty(date) ? FmLocalDateUtils.getLastDateOfNextYear() : FmLocalDateUtils.parseDateWithPattern(date, pattern);
             }
         }
-        return "";
+        return FmLocalDateUtils.getLastDateOfNextYear();
     }
 
     /**
@@ -198,8 +206,8 @@ public class PromotionUtils {
                     row.createCell(2).setCellValue(item.getContent());
                     row.createCell(3).setCellValue(item.getDiscount());
                     row.createCell(4).setCellValue(item.getCategoryId());
-                    row.createCell(5).setCellValue(item.getStartDate());
-                    row.createCell(6).setCellValue(item.getEndDate());
+                    row.createCell(5).setCellValue(FmLocalDateUtils.format(item.getStartDate()));
+                    row.createCell(6).setCellValue(FmLocalDateUtils.format(item.getEndDate()));
                     row.createCell(7).setCellValue(item.getHtmlText());
                     row.createCell(8).setCellValue(item.getUrl());
                     if (header.length >= 13) {
@@ -235,22 +243,9 @@ public class PromotionUtils {
      * @return
      */
     public boolean checkIfPromotionExisting(PromotionCrawlerModel model, List<PromotionPresenter> list) {
-        String endDate = model.getEndDate();
-        Date endDateTime;
-        if (StringUtils.isEmpty(endDate)) {
-            Date currentTime = new Date();
-            endDateTime = new Date();
-            endDateTime.setYear(currentTime.getYear() + 1);
-            endDateTime.setMonth(11);
-            endDateTime.setDate(31);
-            String temp = FmDateUtils.formatDate(endDateTime);
-            endDateTime = FmDateUtils.parseDate(temp);
-        } else {
-            endDateTime = FmDateUtils.parseDateWithPattern(endDate, "dd-MM-yyyy");
-        }
         return this.iPromotionCrawlerDAO.isPromotionExisting(model.getUrl(),
                 model.getTitle(),
-                endDateTime);
+                model.getEndDate());
     }
 
     /**

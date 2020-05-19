@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -476,16 +477,16 @@ public class SCBCrawler implements IBankPromotionCrawler {
         Elements elsInstalmentContainer = docInstalmentPage.select(".item-partner");
 
         for (Element elInstalment : elsInstalmentContainer) {
-            String startDate = "";
-            String endDate = "";
-            Elements elinstalmentTxtPartner = elInstalment.select(".txt-partner");
-            String title = elinstalmentTxtPartner.first().getElementsByTag("h3").text() != null ? elinstalmentTxtPartner.first().getElementsByTag("h3").text() : "";
-            String content = getDetail(elinstalmentTxtPartner, "p", "Trả góp");
-            String codition = getDetail(elinstalmentTxtPartner, "p", "Kênh áp dụng");
-            String location = getDetail(elinstalmentTxtPartner, "p", "Địa chỉ");
-            String date = getDetail(elinstalmentTxtPartner, "p", "Thời gian");
-            String detailLink = getLinkDetail(elinstalmentTxtPartner, link);
-            String htmlText = elinstalmentTxtPartner.outerHtml();
+            LocalDate startDate = null;
+            LocalDate endDate = null;
+            Elements installment = elInstalment.select(".txt-partner");
+            String title = installment.first().getElementsByTag("h3").text() != null ? installment.first().getElementsByTag("h3").text() : "";
+            String content = getDetail(installment, "p", "Trả góp");
+            String condition = getDetail(installment, "p", "Kênh áp dụng");
+            String location = getDetail(installment, "p", "Địa chỉ");
+            String date = getDetail(installment, "p", "Thời gian");
+            String detailLink = getLinkDetail(installment, link);
+            String htmlText = installment.outerHtml();
             if (title.equals("VERTU VIỆT NAM")) {
                 logger.info(title);
             }
@@ -494,7 +495,8 @@ public class SCBCrawler implements IBankPromotionCrawler {
                 endDate = promotionUtils.getDateSCBData(date.split("đến")[1]);
             }
 
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, "", getPeriod(content) + " tháng", startDate, endDate, cateID, bankId, htmlText, link, detailLink, "", codition, location);
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, null, getPeriod(content) + " tháng",
+                    startDate, endDate, cateID, bankId, htmlText, link, detailLink, null, condition, location);
             listResult.add(model);
         }
 
