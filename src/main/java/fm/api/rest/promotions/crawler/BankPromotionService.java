@@ -72,30 +72,24 @@ public class BankPromotionService implements IBankPromotion {
     }
 
     @Override
-    public void crawlAllByMultiThreads() {
-        Collection<IBankPromotionCrawler> crawlers = beanFactory.getBeansOfType(IBankPromotionCrawler.class).values();
-        Iterator<IBankPromotionCrawler> iterator = crawlers.iterator();
-
-        while (iterator.hasNext()) {
-            IBankPromotionCrawler crawler = iterator.next();
-            this.executor.execute(new CrawlingTask(promotionCrawlerService, crawler));
-        }
-    }
-
-    @Override
     public List<PromotionPresenter> getCrawledData() {
         return null;
     }
 
-    private void saveCrawledData(Map<Integer, List<PromotionCrawlerModel>> data) {
+    @Override
+    public void saveCrawledData(Map<Integer, List<PromotionCrawlerModel>> data) {
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
-                if (model.getTitle().equals("Getfit Gym&yoga")) {
+//                if (model.getTitle().equals("Getfit Gym&yoga")) {
+//                    logger.info(model.getTitle());
+//                }
+//                if (model.getTitle().equals("VERTU VIỆT NAM")) {
+//                    logger.info(model.getTitle());
+//                }
+                if (model.getTitle().equals("Agoda")) {
                     logger.info(model.getTitle());
                 }
-                if (model.getTitle().equals("VERTU VIỆT NAM")) {
-                    logger.info(model.getTitle());
-                }
+
                 logger.info("saving promotion {}", model.toString());
                 Date endDate;
                 String pattern;
