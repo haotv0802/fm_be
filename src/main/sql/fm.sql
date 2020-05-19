@@ -202,7 +202,7 @@ CREATE TABLE `fm_money_flow`
     `id`              BIGINT       NOT NULL AUTO_INCREMENT,
     `user_id`         BIGINT       NOT NULL,
     `amount`          DOUBLE       NULL, # if `is_an_event is TRUE, amount can be updated later when event is over
-    `date`            DATETIME DEFAULT now(),
+    `date`            DATE         NOT NULL,
     `name`            VARCHAR(45)  NOT NULL,
     `money_source_id` BIGINT       NULL, # if `is_an_event is TRUE, card_id is NULL, or card_id is NULL means CASH payment
     `is_deleted`      BOOLEAN  DEFAULT FALSE,

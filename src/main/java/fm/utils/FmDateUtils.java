@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -92,5 +93,33 @@ public class FmDateUtils {
         calendar.set(Calendar.DATE, 31);
 
         return calendar.getTime();
+    }
+
+    /**
+     * Notes: java.sql.Date stores just only Date (not time)
+     *
+     * @param date
+     * @return
+     */
+    public static java.util.Date toUtilDate(java.sql.Date date) {
+        return date != null ? new java.util.Date(date.getTime()) : null;
+    }
+
+    /**
+     * Notes: Timestamp stores Date & Time
+     *
+     * @param dateTime
+     * @return
+     */
+    public static java.util.Date toUtilDate(Timestamp dateTime) {
+        return dateTime != null ? new java.util.Date(dateTime.getTime()) : null;
+    }
+
+    public static java.sql.Date toSqlDate(java.util.Date date) {
+        return date != null ? new java.sql.Date(date.getTime()) : null;
+    }
+
+    public static java.sql.Timestamp toSqlDateTime(java.util.Date date) {
+        return date != null ? new java.sql.Timestamp(date.getTime()) : null;
     }
 }

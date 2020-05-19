@@ -1,9 +1,9 @@
 package fm.api.rest.moneyflow;
 
 import fm.api.rest.moneyflow.interfaces.IMoneyFlowDao;
-import fm.common.JdbcUtils;
 import fm.common.ValidationException;
 import fm.common.dao.DaoUtils;
+import fm.utils.FmDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -189,7 +189,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         expense.setId(rs.getInt("id"));
         expense.setUserId(rs.getInt("user_id"));
         expense.setAmount(rs.getBigDecimal("amount"));
-        expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
+        expense.setDate(FmDateUtils.toUtilDate(rs.getDate("date")));
         expense.setName(rs.getString("name"));
         expense.setMoneySourceId(rs.getInt("money_source_id"));
         expense.setMoneySourceName(rs.getString("money_source_name"));
@@ -408,7 +408,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
         paramsMap.addValue("amount", item.getAmount());
-        paramsMap.addValue("date", item.getDate());
+        paramsMap.addValue("date", FmDateUtils.toSqlDate(item.getDate()));
         paramsMap.addValue("name", item.getName());
         paramsMap.addValue("is_spending", item.getSpending());
         Integer cardId = null;
