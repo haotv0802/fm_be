@@ -80,16 +80,6 @@ public class BankPromotionService implements IBankPromotion {
     public void saveCrawledData(Map<Integer, List<PromotionCrawlerModel>> data) {
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
-//                if (model.getTitle().equals("Getfit Gym&yoga")) {
-//                    logger.info(model.getTitle());
-//                }
-//                if (model.getTitle().equals("VERTU VIỆT NAM")) {
-//                    logger.info(model.getTitle());
-//                }
-                if (model.getTitle().equals("Agoda")) {
-                    logger.info(model.getTitle());
-                }
-
                 logger.info("saving promotion {}", model.toString());
                 Date endDate;
                 String pattern;

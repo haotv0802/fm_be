@@ -2,10 +2,8 @@ package fm.api.rest.promotions.crawler;
 
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotion;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
-import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
 
 import java.util.List;
@@ -34,7 +32,7 @@ public class CrawlingTask implements Runnable {
     @Override
     public void run() {
         logger.info("Start thread {}", crawler.toString());
-        Map<Integer, List<PromotionCrawlerModel>> data =  crawler.crawl();
+        Map<Integer, List<PromotionCrawlerModel>> data = crawler.crawl();
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
                 logger.info("saving promotion {}", model.toString());
