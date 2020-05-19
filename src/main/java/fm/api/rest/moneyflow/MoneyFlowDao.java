@@ -189,7 +189,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         expense.setId(rs.getInt("id"));
         expense.setUserId(rs.getInt("user_id"));
         expense.setAmount(rs.getBigDecimal("amount"));
-        expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
+        expense.setDate(rs.getDate("date").toLocalDate());
         expense.setName(rs.getString("name"));
         expense.setMoneySourceId(rs.getInt("money_source_id"));
         expense.setMoneySourceName(rs.getString("money_source_name"));
