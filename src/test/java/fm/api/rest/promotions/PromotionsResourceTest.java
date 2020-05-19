@@ -81,4 +81,51 @@ public class PromotionsResourceTest extends BaseDocumentation {
         ;
 
     }
+
+    @Test
+    public void testGetAllPromotions() throws Exception {
+
+//        mockMvc
+//            .perform(get("/svc/promotions/list?title=GRAND")
+//                .header("Accept-Language", "en")
+//                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//            )
+//            .andExpect(status().is(200))
+//        ;
+//        mockMvc
+//            .perform(get("/svc/promotions/list?title=GRAND&content=Giảm ngay")
+//                .header("Accept-Language", "en")
+//                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//                .contentType(MediaType.APPLICATION_JSON_UTF8)
+//            )
+//            .andExpect(status().is(200))
+//        ;
+
+//        mockMvc
+//            .perform(get("/svc/promotions/list?title=GRAND&start_date=2020-03-20")
+//                .header("Accept-Language", "en")
+//                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//                .contentType(MediaType.APPLICATION_JSON)
+//            )
+//            .andExpect(status().is(200))
+//        ;
+//        mockMvc
+//            .perform(get("/svc/promotions/list?title=GRAND&content=Giảm ngay&end_date=2021-09-20")
+//                .header("Accept-Language", "en")
+//                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+//                .contentType(MediaType.APPLICATION_JSON)
+//            )
+//            .andExpect(status().is(200))
+//        ;
+//
+        mockMvc
+            .perform(get("/svc/promotions/list?title=GRAND&bank_id=3&category_id=1")
+                .header("Accept-Language", "en")
+                .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                .contentType(MediaType.APPLICATION_JSON)
+            )
+            .andExpect(status().is(200))
+        ;
+    }
 }
