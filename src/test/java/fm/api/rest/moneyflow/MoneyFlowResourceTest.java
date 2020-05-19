@@ -44,7 +44,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         Item creation = new Item();
         creation.setName("new name");
         creation.setAmount(new BigDecimal(1234));
-        creation.setDate(LocalDate.now());
+        creation.setDate(new Date());
 
         MvcResult result = mockMvc
                 .perform(post("/svc/moneyflow")
@@ -114,7 +114,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         Item creation = new Item();
         creation.setName("new name");
         creation.setAmount(new BigDecimal(1234));
-        creation.setDate(LocalDate.now());
+        creation.setDate(new Date());
 
         MvcResult result = mockMvc
                 .perform(post("/svc/moneyflow")
@@ -176,7 +176,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
         Item creation = new Item();
         creation.setName("new name");
         creation.setAmount(new BigDecimal(1234));
-        creation.setDate(LocalDate.now());
+        creation.setDate(new Date());
 
         MvcResult result = mockMvc
                 .perform(post("/svc/moneyflow")

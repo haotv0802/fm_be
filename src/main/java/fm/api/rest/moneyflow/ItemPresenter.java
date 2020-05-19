@@ -14,7 +14,7 @@ public class ItemPresenter {
     private Integer userId;
     @NotNull(message = "Amount cannot be null")
     private BigDecimal amount;
-    private LocalDate date;
+    private Date date;
     private String name;
     @NotNull(message = "Money source cannot be null")
     private Integer moneySourceId;
@@ -49,11 +49,11 @@ public class ItemPresenter {
         this.amount = amount;
     }
 
-    public LocalDate getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
