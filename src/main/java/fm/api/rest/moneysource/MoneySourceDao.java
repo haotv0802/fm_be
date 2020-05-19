@@ -42,22 +42,22 @@ public class MoneySourceDao implements IMoneySourceDao {
 
     @Override
     public List<MoneySourcePresenter> getMoneySources(Integer userId) {
-        final String sql =
-                "SELECT                 "
-                        + " id,                   "
-                        + "    name,              "
-                        + "    start_date,        "
-                        + "    expiry_date,       "
-                        + "    card_number,       "
-                        + "    amount,            "
-                        + "    card_type_id,      "
-                        + "    user_id,           "
-                        + "    is_terminated,     "
-                        + "    bank_id            "
-                        + "FROM                   "
-                        + "    fm_money_source    "
-                        + "WHERE                  "
-                        + "    user_id = :userId  ";
+        final String sql = ""
+                + "SELECT                 "
+                + " id,                   "
+                + "    name,              "
+                + "    start_date,        "
+                + "    expiry_date,       "
+                + "    card_number,       "
+                + "    amount,            "
+                + "    card_type_id,      "
+                + "    user_id,           "
+                + "    is_terminated,     "
+                + "    bank_id            "
+                + "FROM                   "
+                + "    fm_money_source    "
+                + "WHERE                  "
+                + "    user_id = :userId  ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -88,24 +88,24 @@ public class MoneySourceDao implements IMoneySourceDao {
 
     @Override
     public void updateMoneySource(MoneySourcePresenter moneySource) {
-        final String sql =
-                "UPDATE                              "
-                        + "   fm_money_source                  "
-                        + "SET                                 "
-                        + "   name = :name,                    "
-                        + "   start_date = DATE(:start_date),  "
-                        + "   expiry_date = DATE(:expiry_date),"
-                        + "   card_number = :card_number,      "
-                        + "   amount = :amount,                "
-                        + "   is_terminated = :terminated,     "
-                        + "   bank_id = :bank_id               "
-                        + "WHERE                               "
-                        + "   id = :id                         ";
+        final String sql = ""
+                + "UPDATE                              "
+                + "   fm_money_source                  "
+                + "SET                                 "
+                + "   name = :name,                    "
+                + "   start_date = DATE(:start_date),  "
+                + "   expiry_date = DATE(:expiry_date),"
+                + "   card_number = :card_number,      "
+                + "   amount = :amount,                "
+                + "   is_terminated = :terminated,     "
+                + "   bank_id = :bank_id               "
+                + "WHERE                               "
+                + "   id = :id                         ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("name", moneySource.getName());
         paramsMap.addValue("start_date", moneySource.getStartDate());
-        paramsMap.addValue("expiry_date", moneySource.getExpiryDate());
+        paramsMap.addValue("expiry_date", FmDateUtils.toSqlDate(moneySource.getExpiryDate()));
         paramsMap.addValue("card_number", moneySource.getCardNumber());
         paramsMap.addValue("amount", moneySource.getCreditLimit());
         paramsMap.addValue("terminated", moneySource.getTerminated());

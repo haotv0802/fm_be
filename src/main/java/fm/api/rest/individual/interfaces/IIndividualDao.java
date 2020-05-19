@@ -8,4 +8,8 @@ import fm.api.rest.individual.IndividualPresenter;
  */
 public interface IIndividualDao {
   IndividualPresenter getIndividual(int userId);
+
+  void addIndividual(IndividualModel model);
+
+  void updateIndividual(IndividualModel model);
 }

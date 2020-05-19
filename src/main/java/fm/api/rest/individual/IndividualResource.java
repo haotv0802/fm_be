@@ -49,12 +49,6 @@ public class IndividualResource extends BaseResource {
       @HeaderLang String lang,
       @RequestBody IndividualPresenter item
   ) {
-//    MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
-//    validation.setUserId(userDetails.getUserId());
-//    validation.setExpenseId(item.getId());
-//    expenseEditValidator.validate(validation);
-
-//    this.expensesService.updateExpense(item);
     return new ResponseEntity(HttpStatus.NO_CONTENT);
   }
 

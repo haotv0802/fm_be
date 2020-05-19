@@ -1,7 +1,9 @@
 package fm.api.rest.individual;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import fm.api.rest.moneysource.MoneySourcePresenter;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
@@ -11,13 +13,21 @@ import java.util.List;
  */
 public class IndividualPresenter {
   private Long id;
+  @NotNull(message = "First Name cannot be null")
   private String firstName;
+  @NotNull(message = "Middle Name cannot be null")
   private String middleName;
+  @NotNull(message = "Last Name cannot be null")
   private String lastName;
+  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
   private Date birthday;
+  @NotNull(message = "Gender cannot be null")
   private String gender;
+  @NotNull(message = "Email cannot be null")
   private String email;
+  @NotNull(message = "Phone number cannot be null")
   private String phoneNumber;
+  @NotNull(message = "Income cannot be null")
   private BigDecimal income;
   private List<MoneySourcePresenter> moneySourcePresenters;
 

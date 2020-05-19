@@ -39,22 +39,22 @@ public class IndividualDao implements IIndividualDao {
 
     @Override
     public IndividualPresenter getIndividual(int userId) {
-        final String sql =
-                          " SELECT                "
-                        + "     i.id,             "
-                        + "     i.first_name,     "
-                        + "     i.last_name,      "
-                        + "     i.middle_name,    "
-                        + "     i.birthday,       "
-                        + "     i.gender,         "
-                        + "     i.email,          "
-                        + "     i.phone_number,   "
-                        + "     i.income,         "
-                        + "     i.user_id         "
-                        + "    FROM               "
-                        + "     fm_individuals i  "
-                        + "    WHERE              "
-                        + "    i.user_id = :userId";
+        final String sql = ""
+                + " SELECT                "
+                + "     i.id,             "
+                + "     i.first_name,     "
+                + "     i.last_name,      "
+                + "     i.middle_name,    "
+                + "     i.birthday,       "
+                + "     i.gender,         "
+                + "     i.email,          "
+                + "     i.phone_number,   "
+                + "     i.income,         "
+                + "     i.user_id         "
+                + "    FROM               "
+                + "     fm_individuals i  "
+                + "    WHERE              "
+                + "    i.user_id = :userId";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
