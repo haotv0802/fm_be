@@ -22,34 +22,40 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class IndividualResource extends BaseResource {
 
-  private IIndividualService individualService;
+    private IIndividualService individualService;
 
-  @Autowired
-  public IndividualResource(
-      @Qualifier("individualService") IIndividualService individualService
-  ) {
-    Assert.notNull(individualService);
+    @Autowired
+    public IndividualResource(
+            @Qualifier("individualService") IIndividualService individualService
+    ) {
+        Assert.notNull(individualService);
 
-    this.individualService = individualService;
-  }
+        this.individualService = individualService;
+    }
 
-  @GetMapping("/individual")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public IndividualPresenter getIndividual(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang
-  ) {
-    return this.individualService.getIndividual(userDetails.getUserId());
-  }
+    @GetMapping("/individual")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public IndividualPresenter getIndividual(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @HeaderLang String lang
+    ) {
+        return this.individualService.getIndividual(userDetails.getUserId());
+    }
 
-  @PatchMapping("/individual")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateIndividual(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
-      @RequestBody IndividualPresenter item
-  ) {
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
+    @PatchMapping("/individual")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public ResponseEntity updateIndividual(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody IndividualPresenter item
+    ) {
+        item.setUserId(userDetails.getUserId());
+
+        // Validation to make user userId is existing, ... etc....
+
+        Long id = this.individualService.saveIndividual(item);
+        return new ResponseEntity<>(new Object() {
+            public final Long expenseId = id;
+        }, HttpStatus.CREATED);
+    }
 
 }

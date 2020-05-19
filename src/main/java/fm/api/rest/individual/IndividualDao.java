@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -80,5 +82,94 @@ public class IndividualDao implements IIndividualDao {
         );
 
         return expensesList;
+    }
+
+    @Override
+    public Long addIndividual(IndividualPresenter model) {
+        final String sql = ""
+                + "INSERT INTO fm_individuals   "
+                + "        (                    "
+                + "        first_name,          "
+                + "        last_name,           "
+                + "        middle_name,         "
+                + "        birthday,            "
+                + "        gender,              "
+                + "        email,               "
+                + "        phone_number,        "
+                + "        income,              "
+                + "        user_id)             "
+                + "  VALUES      (              "
+                + "        :firstName,          "
+                + "        :lastName,           "
+                + "        :middleName,         "
+                + "        :birthday,           "
+                + "        :gender,             "
+                + "        :email,              "
+                + "        :phoneNumber,        "
+                + "        :income,             "
+                + "        :userId)             ";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("firstName", model.getFirstName());
+        paramsMap.addValue("lastName", model.getLastName());
+        paramsMap.addValue("middleName", model.getMiddleName());
+        paramsMap.addValue("birthday", FmDateUtils.toSqlDate(model.getBirthday()));
+        paramsMap.addValue("gender", model.getGender());
+        paramsMap.addValue("email", model.getEmail());
+        paramsMap.addValue("phoneNumber", model.getPhoneNumber());
+        paramsMap.addValue("income", model.getIncome());
+        paramsMap.addValue("userId", model.getUserId());
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        namedTemplate.update(sql, paramsMap);
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedTemplate.update(sql, paramsMap, keyHolder);
+        final Long id = keyHolder.getKey().longValue();
+        return id;
+    }
+
+    @Override
+    public void updateIndividual(IndividualPresenter model) {
+        final String sql = ""
+                + "UPDATE fm_individuals                    "
+                + "   SET first_name = :firstName,          "
+                + "        last_name = :lastName,           "
+                + "        middle_name = :middleName,       "
+                + "        birthday = :birthday,            "
+                + "        gender = :gender,                "
+                + "        email = :email,                  "
+                + "        phone_number = :phoneNumber,     "
+                + "        income = :income,                "
+                + "        user_id = :userId)               "
+                + "WHERE id = :id                           "
+                ;
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("firstName", model.getFirstName());
+        paramsMap.addValue("lastName", model.getLastName());
+        paramsMap.addValue("middleName", model.getMiddleName());
+        paramsMap.addValue("birthday", FmDateUtils.toSqlDate(model.getBirthday()));
+        paramsMap.addValue("gender", model.getGender());
+        paramsMap.addValue("email", model.getEmail());
+        paramsMap.addValue("phoneNumber", model.getPhoneNumber());
+        paramsMap.addValue("income", model.getIncome());
+        paramsMap.addValue("userId", model.getId());
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        namedTemplate.update(sql, paramsMap);
+    }
+
+    @Override
+    public Boolean isIndividualExisting(Long userId) {
+        final String sql = "SELECT COUNT(*) FROM finance_management.fm_individuals WHERE user_id = :userId";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("userId", userId);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
     }
 }

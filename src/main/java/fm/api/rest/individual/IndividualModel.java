@@ -16,7 +16,7 @@ public class IndividualModel {
   private String email;
   private String phoneNumber;
   private BigDecimal income;
-  private Integer userId;
+  private Long userId;
 
   public Long getId() {
     return id;
@@ -90,11 +90,11 @@ public class IndividualModel {
     this.income = income;
   }
 
-  public Integer getUserId() {
+  public Long getUserId() {
     return userId;
   }
 
-  public void setUserId(Integer userId) {
+  public void setUserId(Long userId) {
     this.userId = userId;
   }
 }

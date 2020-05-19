@@ -27,6 +27,9 @@ public class IndividualPresenter {
   private String email;
   @NotNull(message = "Phone number cannot be null")
   private String phoneNumber;
+
+  private Integer userId;
+
   @NotNull(message = "Income cannot be null")
   private BigDecimal income;
   private List<MoneySourcePresenter> moneySourcePresenters;
@@ -109,5 +112,13 @@ public class IndividualPresenter {
 
   public void setMoneySourcePresenters(List<MoneySourcePresenter> moneySourcePresenters) {
     this.moneySourcePresenters = moneySourcePresenters;
+  }
+
+  public Integer getUserId() {
+    return userId;
+  }
+
+  public void setUserId(Integer userId) {
+    this.userId = userId;
   }
 }
