@@ -2,7 +2,6 @@ package fm.api.rest.promotions;
 
 import fm.api.rest.promotions.interfaces.IPromotionDao;
 import fm.common.dao.DaoUtils;
-import fm.utils.FmDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,9 +13,6 @@ import org.springframework.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 /**
