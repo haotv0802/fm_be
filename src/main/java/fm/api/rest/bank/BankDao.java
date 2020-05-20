@@ -49,7 +49,7 @@ public class BankDao implements IBankDao {
 
         List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
                     BankPresenter bankPresenter = new BankPresenter();
-                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setId(rs.getInt("id"));
                     bankPresenter.setName(rs.getString("name"));
                     bankPresenter.setAddress(rs.getString("address"));
                     bankPresenter.setWebsite(rs.getString("website"));
@@ -77,7 +77,7 @@ public class BankDao implements IBankDao {
 
         List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
                     BankPresenter bankPresenter = new BankPresenter();
-                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setId(rs.getInt("id"));
                     bankPresenter.setName(rs.getString("name"));
                     bankPresenter.setAddress(rs.getString("address"));
                     bankPresenter.setWebsite(rs.getString("website"));
@@ -89,7 +89,7 @@ public class BankDao implements IBankDao {
     }
 
     @Override
-    public BankPresenter getBankById(Long id) {
+    public BankPresenter getBankById(Integer id) {
         final String sql = ""
                 + "SELECT      "
                 + " b.id,      "
@@ -108,7 +108,7 @@ public class BankDao implements IBankDao {
 
         BankPresenter bank = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
                     BankPresenter bankPresenter = new BankPresenter();
-                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setId(rs.getInt("id"));
                     bankPresenter.setName(rs.getString("name"));
                     bankPresenter.setAddress(rs.getString("address"));
                     bankPresenter.setWebsite(rs.getString("website"));
@@ -117,5 +117,17 @@ public class BankDao implements IBankDao {
         );
 
         return bank;
+    }
+
+    @Override
+    public Boolean isBankExisting(Integer id) {
+        final String sql = "SELECT  COUNT(*) FROM fm_banks b  WHERE b.id = :id";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("id", id);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
     }
 }

@@ -81,7 +81,7 @@ DROP
     TABLE IF EXISTS `fm_banks`;
 CREATE TABLE `fm_banks`
 (
-    `id`      BIGINT AUTO_INCREMENT,
+    `id`      INTEGER AUTO_INCREMENT,
     `name`    VARCHAR(45) NOT NULL,
     `address` VARCHAR(45) NOT NULL,
     `website` VARCHAR(45),
@@ -125,7 +125,7 @@ DROP
     TABLE IF EXISTS `fm_promotion_categories`;
 CREATE TABLE `fm_promotion_categories`
 (
-    `id`      BIGINT AUTO_INCREMENT,
+    `id`      INTEGER AUTO_INCREMENT,
     `name`    VARCHAR(30) NOT NULL,
     `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`)

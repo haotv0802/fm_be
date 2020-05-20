@@ -162,7 +162,7 @@ public class IndividualDao implements IIndividualDao {
     }
 
     @Override
-    public Boolean isIndividualExisting(Long userId) {
+    public Boolean isIndividualExisting(Integer userId) {
         final String sql = "SELECT COUNT(*) FROM finance_management.fm_individuals WHERE user_id = :userId";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

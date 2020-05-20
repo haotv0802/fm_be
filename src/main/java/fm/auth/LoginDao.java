@@ -70,7 +70,7 @@ public class LoginDao {
             userDetails = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
 
                 //TODO geting lang from authentication object is plain stupid. So, AN by default
-                UserDetailsImpl ud = new UserDetailsImpl(rs.getLong("id"), rs.getString("user_name"), rs.getString("password"), authorities);
+                UserDetailsImpl ud = new UserDetailsImpl(rs.getInt("id"), rs.getString("user_name"), rs.getString("password"), authorities);
 
                 return ud;
             });

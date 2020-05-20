@@ -13,5 +13,5 @@ public interface IIndividualDao {
 
   void updateIndividual(IndividualPresenter model);
 
-  Boolean isIndividualExisting(Long userId);
+  Boolean isIndividualExisting(Integer userId);
 }

@@ -3,6 +3,7 @@ package fm.api.rest.individual;
 import fm.api.rest.BaseResource;
 import fm.api.rest.individual.interfaces.IIndividualService;
 import fm.auth.UserDetailsImpl;
+import fm.common.Validator;
 import fm.common.beans.HeaderLang;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * Created by haoho on 2/28/20 13:46.
  */
@@ -24,9 +27,12 @@ public class IndividualResource extends BaseResource {
 
     private IIndividualService individualService;
 
+    private Validator<IndividualPresenter> individualUpdateValidator;
+
     @Autowired
     public IndividualResource(
-            @Qualifier("individualService") IIndividualService individualService
+            @Qualifier("individualService") IIndividualService individualService,
+            @Qualifier("individualService") Validator<IndividualPresenter> individualUpdateValidator
     ) {
         Assert.notNull(individualService);
 
@@ -46,11 +52,11 @@ public class IndividualResource extends BaseResource {
     @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
     public ResponseEntity updateIndividual(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody IndividualPresenter item
+            @Valid @RequestBody IndividualPresenter item
     ) {
         item.setUserId(userDetails.getUserId());
 
-        // Validation to make user userId is existing, ... etc....
+        individualUpdateValidator.validate(item);
 
         Long id = this.individualService.saveIndividual(item);
         return new ResponseEntity<>(new Object() {

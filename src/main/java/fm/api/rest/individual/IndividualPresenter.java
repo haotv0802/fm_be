@@ -3,6 +3,7 @@ package fm.api.rest.individual;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import fm.api.rest.moneysource.MoneySourcePresenter;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -12,113 +13,115 @@ import java.util.List;
  * Created by haoho on 2/28/20 14:16.
  */
 public class IndividualPresenter {
-  private Long id;
-  @NotNull(message = "First Name cannot be null")
-  private String firstName;
-  @NotNull(message = "Middle Name cannot be null")
-  private String middleName;
-  @NotNull(message = "Last Name cannot be null")
-  private String lastName;
-  @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-  private Date birthday;
-  @NotNull(message = "Gender cannot be null")
-  private String gender;
-  @NotNull(message = "Email cannot be null")
-  private String email;
-  @NotNull(message = "Phone number cannot be null")
-  private String phoneNumber;
+    private Long id;
+    @NotNull(message = "First Name cannot be null")
+    private String firstName;
+    @NotNull(message = "Middle Name cannot be null")
+    private String middleName;
+    @NotNull(message = "Last Name cannot be null")
+    private String lastName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date birthday;
+    @NotNull(message = "Gender cannot be null")
+    private String gender;
+    @NotNull(message = "Email cannot be null")
+    private String email;
+    @NotNull(message = "Phone number cannot be null")
+    private String phoneNumber;
 
-  private Integer userId;
+    private Integer userId;
 
-  @NotNull(message = "Income cannot be null")
-  private BigDecimal income;
-  private List<MoneySourcePresenter> moneySourcePresenters;
+    @NotNull(message = "Income cannot be null")
+    private BigDecimal income;
 
-  public Long getId() {
-    return id;
-  }
+    @Valid
+    private List<MoneySourcePresenter> moneySourcePresenters;
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+    public Long getId() {
+        return id;
+    }
 
-  public String getFirstName() {
-    return firstName;
-  }
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+    public String getFirstName() {
+        return firstName;
+    }
 
-  public String getMiddleName() {
-    return middleName;
-  }
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
 
-  public void setMiddleName(String middleName) {
-    this.middleName = middleName;
-  }
+    public String getMiddleName() {
+        return middleName;
+    }
 
-  public String getLastName() {
-    return lastName;
-  }
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+    public String getLastName() {
+        return lastName;
+    }
 
-  public Date getBirthday() {
-    return birthday;
-  }
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
 
-  public void setBirthday(Date birthday) {
-    this.birthday = birthday;
-  }
+    public Date getBirthday() {
+        return birthday;
+    }
 
-  public String getGender() {
-    return gender;
-  }
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
 
-  public void setGender(String gender) {
-    this.gender = gender;
-  }
+    public String getGender() {
+        return gender;
+    }
 
-  public String getEmail() {
-    return email;
-  }
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+    public String getEmail() {
+        return email;
+    }
 
-  public String getPhoneNumber() {
-    return phoneNumber;
-  }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-  public void setPhoneNumber(String phoneNumber) {
-    this.phoneNumber = phoneNumber;
-  }
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
-  public BigDecimal getIncome() {
-    return income;
-  }
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
 
-  public void setIncome(BigDecimal income) {
-    this.income = income;
-  }
+    public BigDecimal getIncome() {
+        return income;
+    }
 
-  public List<MoneySourcePresenter> getMoneySourcePresenters() {
-    return moneySourcePresenters;
-  }
+    public void setIncome(BigDecimal income) {
+        this.income = income;
+    }
 
-  public void setMoneySourcePresenters(List<MoneySourcePresenter> moneySourcePresenters) {
-    this.moneySourcePresenters = moneySourcePresenters;
-  }
+    public List<MoneySourcePresenter> getMoneySourcePresenters() {
+        return moneySourcePresenters;
+    }
 
-  public Integer getUserId() {
-    return userId;
-  }
+    public void setMoneySourcePresenters(List<MoneySourcePresenter> moneySourcePresenters) {
+        this.moneySourcePresenters = moneySourcePresenters;
+    }
 
-  public void setUserId(Integer userId) {
-    this.userId = userId;
-  }
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
+    }
 }
