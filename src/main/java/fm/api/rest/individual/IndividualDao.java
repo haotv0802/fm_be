@@ -125,7 +125,6 @@ public class IndividualDao implements IIndividualDao {
 
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-        namedTemplate.update(sql, paramsMap);
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedTemplate.update(sql, paramsMap, keyHolder);
         final Long id = keyHolder.getKey().longValue();
@@ -144,7 +143,8 @@ public class IndividualDao implements IIndividualDao {
                 + "        email = :email,                  "
                 + "        phone_number = :phoneNumber,     "
                 + "        income = :income,                "
-                + "        user_id = :userId                "
+                + "        user_id = :userId,               "
+                + "        updated = now()                  "
                 + "WHERE id = :id                           ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

@@ -44,8 +44,39 @@ public class IndividualResourceTest extends BaseDocumentation {
     }
 
     @Test
-    @Rollback(false)
-    public void testUpdateIndividual() throws Exception {
+    public void testUpdateWithIndividual() throws Exception {
+
+        IndividualPresenter individual = new IndividualPresenter();
+        individual.setEmail("admin@gmail.com");
+        individual.setFirstName("admin first");
+        individual.setLastName("admin last");
+        individual.setMiddleName("admin Middle");
+        individual.setBirthday(FmDateUtils.parseDate("1988-04-19"));
+        individual.setGender("male");
+        individual.setPhoneNumber("0916516697");
+        individual.setIncome(new BigDecimal(10000000));
+
+        MvcResult result = mockMvc
+                .perform(patch("/svc/individual")
+                        .header("Accept-Language", "en")
+                        .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(individual))
+                )
+                .andExpect(status().is(201))
+                .andReturn();
+
+        // result example: {"individualId":6}
+        Assert.notNull(result.getResponse().getContentAsString());
+        JSONObject data = new JSONObject(result.getResponse().getContentAsString());
+
+        Integer individualId = (Integer) data.get("individualId");
+        Assert.notNull(individualId);
+        Assert.isTrue(individualId > 0);
+    }
+
+    @Test
+    public void testUpdateWithoutIndividual() throws Exception {
 
         IndividualPresenter individual = new IndividualPresenter();
         individual.setEmail("admin@gmail.com");
@@ -75,5 +106,4 @@ public class IndividualResourceTest extends BaseDocumentation {
         Assert.notNull(individualId);
         Assert.isTrue(individualId > 0);
     }
-
 }

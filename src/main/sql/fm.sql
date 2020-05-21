@@ -109,6 +109,7 @@ CREATE TABLE `fm_individuals`
     `income`       DOUBLE,
     `user_id`      BIGINT       NOT NULL,
     `created`      DATETIME DEFAULT now(),
+    `updated`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_individuals_id_unique` (`id`),
     UNIQUE KEY `fm_individuals_user_id_unique` (`user_id`), #  An individual has ONLY 1 user account.
