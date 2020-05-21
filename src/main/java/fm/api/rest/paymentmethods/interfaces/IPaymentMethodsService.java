@@ -9,4 +9,8 @@ import java.util.List;
  */
 public interface IPaymentMethodsService {
     List<PaymentMethodPresenter> getAllPaymentMethods();
+
+    Integer addPaymentMethod(PaymentMethodPresenter paymentMethod);
+
+    void updatePaymentMethod(PaymentMethodPresenter paymentMethod);
 }

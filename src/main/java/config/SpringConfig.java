@@ -266,7 +266,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
                     "i18n.LoginResource",
                     "i18n.admin_image",
                     "i18n.admin_messages",
-                    "i18n.moneyflow"
+                    "i18n.individual",
+                    "i18n.paymentmethod"
             );
             messageSource.setUseCodeAsDefaultMessage(true);
             return messageSource;

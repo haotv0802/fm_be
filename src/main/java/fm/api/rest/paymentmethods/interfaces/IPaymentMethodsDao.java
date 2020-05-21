@@ -9,4 +9,12 @@ import java.util.List;
  */
 public interface IPaymentMethodsDao {
     List<PaymentMethodPresenter> getAllPaymentMethods();
+
+    Integer addPaymentMethod(PaymentMethodPresenter paymentMethod);
+
+    void updatePaymentMethod(PaymentMethodPresenter paymentMethod);
+
+    Boolean isPaymentNameExisting(String name);
+
+    Boolean isPaymentNameExisting(Integer id, String name);
 }

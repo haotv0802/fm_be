@@ -4,15 +4,15 @@ package fm.api.rest.paymentmethods.beans;
  * Created by haoho on 3/5/20 16:23.
  */
 public class PaymentMethodPresenter {
-    private Long id;
+    private Integer id;
     private String name;
     private String logo;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

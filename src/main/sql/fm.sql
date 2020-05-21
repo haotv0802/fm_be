@@ -164,11 +164,13 @@ CREATE TABLE `fm_promotions`
 DROP TABLE IF EXISTS `fm_payment_methods`;
 CREATE TABLE `fm_payment_methods`
 (
-    `id`      BIGINT      NOT NULL AUTO_INCREMENT,
+    `id`      INTEGER     NOT NULL AUTO_INCREMENT,
     `name`    VARCHAR(50) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
     `logo`    VARCHAR(50) NULL, # TODO: it should be binary type to store an image.
     `created` DATETIME DEFAULT now(),
     `updated` DATETIME DEFAULT now(),
+    UNIQUE KEY `fm_payment_methods_name_unique` (`name`),
+    INDEX (`name`),
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB
@@ -183,7 +185,7 @@ CREATE TABLE `fm_money_source`
     `expiry_date`   DATE        NULL,
     `card_number`   VARCHAR(50) NULL, # last 6 digits
     `amount`        DOUBLE      NOT NULL,
-    `card_type_id`  BIGINT      NULL,
+    `card_type_id`  INTEGER     NULL,
     `user_id`       BIGINT      NULL,
     `is_terminated` BOOLEAN  DEFAULT FALSE,
     `bank_id`       INTEGER     NOT NULL,
