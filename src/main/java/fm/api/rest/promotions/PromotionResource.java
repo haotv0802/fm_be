@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Quy created on 3/11/2020
@@ -82,14 +84,14 @@ public class PromotionResource extends BaseResource {
 
   @GetMapping(value = "/promotions/list", produces = "application/json;charset=UTF-8")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public void getAllPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
-                              @RequestParam(required = false, defaultValue = "") String title,
-                              @RequestParam(required = false) String content,
-                              @RequestParam(required = false) String start_date,
-                              @RequestParam(required = false) String end_date,
-                              @RequestParam(required = false) Integer bank_id,
-                              @RequestParam(required = false) Integer category_id) {
-    this.promotionService.getAllPromotions(title, content, start_date, end_date, bank_id, category_id);
-
+  public List<PromotionPresenter> getAllPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
+                                                  @RequestParam(required = false, defaultValue = "") String title,
+                                                  @RequestParam(required = false) String content,
+                                                  @RequestParam(required = false) String start_date,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String end_date,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Integer bank_id,
+                                                  @RequestParam(required = false) Integer category_id) {
+    List<PromotionPresenter> listResult =  this.promotionService.getAllPromotions(title, content, start_date, end_date, bank_id, category_id);
+    return listResult;
   }
 }

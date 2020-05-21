@@ -46,21 +46,16 @@ public class PromotionDao implements IPromotionDao {
                         + "  category_id                         "
                         + "FROM fm_promotions                    "
                         + "WHERE title LIKE :title               "
-                        + (content != null || !StringUtils.isEmpty(content) ? "AND content LIKE :content" : "")
-                        + (start_date != null || !StringUtils.isEmpty(start_date) ? "AND  start_date >= :start_date" : "")
-                        + (end_date != null || !StringUtils.isEmpty(end_date) ? "AND end_date <=:end_date" : "")
+                        + (content != null || !StringUtils.isEmpty(content) ? " AND content LIKE :content " : "")
+                        + (start_date != null || !StringUtils.isEmpty(start_date) ? " AND  start_date >= :start_date " : "")
+                        + (end_date != null || !StringUtils.isEmpty(end_date) ? " AND end_date <=:end_date " : "")
                         + (bank_id != null ? " AND bank_id = :bank_id" : "")
                         + (category_id != null ? " AND category_id = :category_id" : "");
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("title", "%" + title + "%");
         paramsMap.addValue("content", "%" + content + "%");
-        if (!StringUtils.isEmpty(start_date)) {
-            paramsMap.addValue("start_date", start_date.replaceAll("/", "-"));
-        }
-        if (!StringUtils.isEmpty(end_date)) {
-            paramsMap.addValue("end_date", end_date.replaceAll("/", "-"));
-
-        }
+        paramsMap.addValue("start_date", start_date);
+        paramsMap.addValue("end_date", end_date);
         paramsMap.addValue("bank_id", bank_id);
         paramsMap.addValue("category_id", category_id);
 
