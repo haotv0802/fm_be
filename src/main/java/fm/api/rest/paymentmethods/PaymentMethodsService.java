@@ -1,7 +1,6 @@
 package fm.api.rest.paymentmethods;
 
-import fm.api.rest.paymentmethods.beans.CardInformation;
-import fm.api.rest.paymentmethods.beans.PaymentMethod;
+import fm.api.rest.paymentmethods.beans.PaymentMethodPresenter;
 import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsDao;
 import fm.api.rest.paymentmethods.interfaces.IPaymentMethodsService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,21 +15,16 @@ import java.util.List;
 @Service("paymentMethodsService")
 public class PaymentMethodsService implements IPaymentMethodsService {
 
-  private final IPaymentMethodsDao paymentMethodsDao;
+    private final IPaymentMethodsDao paymentMethodsDao;
 
-  public PaymentMethodsService(@Qualifier("paymentMethodsDao") IPaymentMethodsDao paymentMethodsDao) {
-    Assert.notNull(paymentMethodsDao);
+    public PaymentMethodsService(@Qualifier("paymentMethodsDao") IPaymentMethodsDao paymentMethodsDao) {
+        Assert.notNull(paymentMethodsDao);
 
-    this.paymentMethodsDao = paymentMethodsDao;
-  }
+        this.paymentMethodsDao = paymentMethodsDao;
+    }
 
-  @Override
-  public List<CardInformation> getCardsInformation(int userId) {
-    return this.paymentMethodsDao.getCardsInformation(userId);
-  }
-
-  @Override
-  public List<PaymentMethod> getAllPaymentMethods() {
-    return this.paymentMethodsDao.getAllPaymentMethods();
-  }
+    @Override
+    public List<PaymentMethodPresenter> getAllPaymentMethods() {
+        return this.paymentMethodsDao.getAllPaymentMethods();
+    }
 }

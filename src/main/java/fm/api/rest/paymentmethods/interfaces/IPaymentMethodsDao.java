@@ -1,7 +1,6 @@
 package fm.api.rest.paymentmethods.interfaces;
 
-import fm.api.rest.paymentmethods.beans.CardInformation;
-import fm.api.rest.paymentmethods.beans.PaymentMethod;
+import fm.api.rest.paymentmethods.beans.PaymentMethodPresenter;
 
 import java.util.List;
 
@@ -9,7 +8,5 @@ import java.util.List;
  * Created by haho on 6/26/2017.
  */
 public interface IPaymentMethodsDao {
-  List<CardInformation> getCardsInformation(int userId);
-
-  List<PaymentMethod> getAllPaymentMethods();
+    List<PaymentMethodPresenter> getAllPaymentMethods();
 }

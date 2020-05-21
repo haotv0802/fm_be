@@ -168,6 +168,7 @@ CREATE TABLE `fm_payment_methods`
     `name`    VARCHAR(50) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
     `logo`    VARCHAR(50) NULL, # TODO: it should be binary type to store an image.
     `created` DATETIME DEFAULT now(),
+    `updated` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB
@@ -185,7 +186,7 @@ CREATE TABLE `fm_money_source`
     `card_type_id`  BIGINT      NULL,
     `user_id`       BIGINT      NULL,
     `is_terminated` BOOLEAN  DEFAULT FALSE,
-    `bank_id`       INTEGER      NOT NULL,
+    `bank_id`       INTEGER     NOT NULL,
     `created`       DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_money_source_id_unique` (`id`, `card_number`, `user_id`),
