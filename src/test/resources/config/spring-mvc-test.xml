@@ -11,4 +11,8 @@
   <context:annotation-config/>
   <bean class="config.SpringConfigTest"/>
 
+  <!--<bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">-->
+    <!--<property name="contentType" value="text/html;charset=UTF-8" />-->
+  <!--</bean>-->
+
 </beans>

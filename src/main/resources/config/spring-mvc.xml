@@ -29,5 +29,4 @@
                 id="fooServiceOperation" expression="execution(* fm..*.*(..))"/>
         <aop:advisor advice-ref="txAdvice" pointcut-ref="fooServiceOperation"/>
     </aop:config>
-
 </beans>

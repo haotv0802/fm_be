@@ -3,6 +3,7 @@ package fm.api.rest.promotions;
 import fm.api.rest.promotions.interfaces.IPromotionDao;
 import fm.common.dao.DaoUtils;
 import fm.utils.FmDateUtils;
+import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -75,14 +76,16 @@ public class PromotionDao implements IPromotionDao {
 
 
   private PromotionPresenter buildPromotionPresenter(ResultSet rs) throws SQLException {
+    FmLocalDateUtils fmLocalDateUtils = new FmLocalDateUtils();
     PromotionPresenter presenter = new PromotionPresenter();
     presenter.setId(rs.getLong("id"));
     presenter.setTitle(rs.getString("title"));
     presenter.setContent(rs.getString("content"));
     presenter.setDiscount(rs.getString("discount"));
     presenter.setInstallmentPeriod(rs.getString("installment"));
-    presenter.setStartDate(rs.getString("start_date"));
-    presenter.setEndDate(rs.getString("end_date"));
+//    presenter.setStartDate(rs.getDate("start_date"));
+//    presenter.setStartDate(FmLocalDateUtils.(rs.getDate("start_date")));
+//    presenter.setEndDate(rs.getDate("end_date"));
     presenter.setCategoryId(rs.getInt("category_Id"));
     presenter.setBankId(rs.getInt("bank_id"));
     return presenter;
