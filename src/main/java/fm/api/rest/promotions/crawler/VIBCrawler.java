@@ -6,6 +6,7 @@ import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.utils.PromotionUtils;
 import fm.common.FmConstants;
+import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -19,6 +20,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service("vibCrawler")
@@ -86,7 +89,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @param categoryId : categories id
      * @return PromotionCrawlerModel
      */
-    private PromotionCrawlerModel getPromotionFromLink(String link, int categoryId) {
+    private PromotionCrawlerModel getPromotionFromLink(String link, int categoryId, boolean isPromotion) {
         try {
             Document promotionPage = Jsoup.connect(link).timeout(1000 * 3).get();
             Elements promotionPageEls = promotionPage.getElementsByClass("vib-v2-wrapper_new");
@@ -95,15 +98,19 @@ public class VIBCrawler implements IBankPromotionCrawler {
             String content = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "Content");
             List<String> location = getLocations(promotionPageEls);
             String htmlText = getDetail(promotionPageEls, ".vib-v2-left-body-world-detail", "HTML");
-            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content, promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0", promotionUtils.getPeriod(content) + " tháng", "", endDate, categoryId, bankId, htmlText, link, "IMG", "CARD TYPE", "CONDITION", "LOCATION");
+            PromotionCrawlerModel model = new PromotionCrawlerModel(title, content,
+                    isPromotion ? (promotionUtils.getProvision(content) != null ? promotionUtils.getProvision(content) : "0") : null,
+                    !isPromotion ? (promotionUtils.getPeriod(content) != null ? (promotionUtils.getPeriod(content) + " tháng") : null) : null,
+                    LocalDate.now(), FmLocalDateUtils.parseDateWithPattern(endDate, "dd-MM-yyyy"), categoryId, bankId, htmlText, link, null, null, null, null);
             if (content != null) {
                 return model;
             } else {
-                logger.info("ERROR LINK PROMTION : " + link);
+                logger.info("ERROR getting content of promotion, {}", link);
             }
-        } catch (Exception e) {
-//            e.printStackTrace();
-            logger.info("Bank Promotion Read time out - Link  : " + link);
+        } catch (SocketTimeoutException ex) {
+            logger.error("Bank Promotion Read time out - Link: {}", link);
+        } catch (IOException ex) {
+            logger.error("Can NOT get info from link: {}", link);
         }
         return null;
     }
@@ -156,11 +163,10 @@ public class VIBCrawler implements IBankPromotionCrawler {
      * @return List<PromotionCrawlerModel>
      * @throws InterruptedException
      */
-
     private List<PromotionCrawlerModel> getEducationPromotion() {
         try {
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
-            List<PromotionCrawlerModel> educationPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_EDUCATION);
+            List<PromotionCrawlerModel> educationPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_EDUCATION, true);
             return educationPromotionCrawlinData;
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -178,7 +184,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
         try {
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
 
-            List<PromotionCrawlerModel> travelPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_TRAVEL);
+            List<PromotionCrawlerModel> travelPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_TRAVEL, true);
 
             return travelPromotionCrawlinData;
         } catch (Exception ex) {
@@ -197,7 +203,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
         try {
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_FOOD);
 
-            List<PromotionCrawlerModel> foodPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_FOOD);
+            List<PromotionCrawlerModel> foodPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_FOOD, true);
 
             return foodPromotionCrawlinData;
         } catch (Exception ex) {
@@ -216,7 +222,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
         try {
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
 
-            List<PromotionCrawlerModel> healthPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_HEALTHCARE);
+            List<PromotionCrawlerModel> healthPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_HEALTHCARE, true);
 
             return healthPromotionCrawlinData;
         } catch (Exception ex) {
@@ -236,7 +242,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
 
-            List<PromotionCrawlerModel> shoppingPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_SHOPPING);
+            List<PromotionCrawlerModel> shoppingPromotionCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_PROMOTION_SHOPPING, true);
 
             return shoppingPromotionCrawlinData;
         } catch (Exception ex) {
@@ -256,7 +262,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_SHOPPING);
 
-            List<PromotionCrawlerModel> shoppingInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_SHOPPING);
+            List<PromotionCrawlerModel> shoppingInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_SHOPPING, false);
 
             return shoppingInstallmentCrawlinData;
         } catch (Exception ex) {
@@ -276,7 +282,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
 
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_HEALTH);
 
-            List<PromotionCrawlerModel> heanlthInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_HEALTHCARE);
+            List<PromotionCrawlerModel> heanlthInstallmentCrawlinData = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_HEALTHCARE, false);
 
             return heanlthInstallmentCrawlinData;
         } catch (Exception ex) {
@@ -295,7 +301,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
         try {
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_ELECTRONICS);
 
-            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE);
+            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_ELECTRICATE, false);
 
             return data;
         } catch (Exception ex) {
@@ -314,7 +320,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
         try {
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_EDUCATION);
 
-            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION);
+            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_EDUCATION, false);
 
             return data;
         } catch (Exception ex) {
@@ -332,7 +338,7 @@ public class VIBCrawler implements IBankPromotionCrawler {
     private List<PromotionCrawlerModel> getTravelInstallment() {
         try {
             int cateID = categoriesDB.get(FmConstants.PROMOTION_CATEGORY_TRAVEL);
-            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL);
+            List<PromotionCrawlerModel> data = doCrawling(cateID, BankLinkPromotion.VIB_INSTALLMENT_TRAVEL, false);
             return data;
         } catch (Exception ex) {
             logger.error(ex.getMessage(), ex);
@@ -369,36 +375,30 @@ public class VIBCrawler implements IBankPromotionCrawler {
     }
 
     /**
-     * This service is to get detai infomation from detail Link
+     * This service is to get detail information from detail Link
      *
      * @param cateID
      * @param url:   detail Link
+     * @param cateID
+     * @param isPromotion: true if it is promotion, otherwise it is installment.
      * @return list of promotion/installment data
      * @throws InterruptedException
      */
-    private List<PromotionCrawlerModel> doCrawling(int cateID, String url) throws InterruptedException {
-        List<PromotionCrawlerModel> promotionCrawlinData = new ArrayList<>();
-
-        List<PromotionPresenter> listPromoBankData = this.iPromotionCrawlerDAO.getPromotionByBankId(bankId, cateID);
+    private List<PromotionCrawlerModel> doCrawling(int cateID, String url, boolean isPromotion) throws InterruptedException {
+        List<PromotionCrawlerModel> promotionsCrawled = new ArrayList<>();
 
         List<String> linkPromotionsLinks = getAllListFromCateMainLink(url);
 
         for (String link : linkPromotionsLinks) {
             logger.info("Sleep time: {}", sleepTime);
             Thread.sleep(sleepTime);
-            PromotionCrawlerModel model = getPromotionFromLink(link, cateID);
+            PromotionCrawlerModel model = getPromotionFromLink(link, cateID, isPromotion);
             if (model != null) {
-//                if (this.promotionUtils.checkIfPromotionExisting(model, listPromoBankData)) {
-//                    logger.info("VIB Bank Promotion Data is Existed");
-//                } else {
-//                    promotionCrawlinData.add(model);
-//                }
-
-                promotionCrawlinData.add(model);
+                promotionsCrawled.add(model);
             }
         }
         listDetailPromoLink.clear();
-        return promotionCrawlinData;
+        return promotionsCrawled;
     }
 
     @Override

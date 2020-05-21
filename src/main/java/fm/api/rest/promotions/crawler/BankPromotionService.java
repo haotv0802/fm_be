@@ -17,6 +17,7 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
@@ -72,40 +73,16 @@ public class BankPromotionService implements IBankPromotion {
     }
 
     @Override
-    public void crawlAllByMultiThreads() {
-        Collection<IBankPromotionCrawler> crawlers = beanFactory.getBeansOfType(IBankPromotionCrawler.class).values();
-        Iterator<IBankPromotionCrawler> iterator = crawlers.iterator();
-
-        while (iterator.hasNext()) {
-            IBankPromotionCrawler crawler = iterator.next();
-            this.executor.execute(new CrawlingTask(promotionCrawlerService, crawler));
-        }
-    }
-
-    @Override
     public List<PromotionPresenter> getCrawledData() {
         return null;
     }
 
-    private void saveCrawledData(Map<Integer, List<PromotionCrawlerModel>> data) {
+    @Override
+    public void saveCrawledData(Map<Integer, List<PromotionCrawlerModel>> data) {
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
-                if (model.getTitle().equals("Getfit Gym&yoga")) {
-                    logger.info(model.getTitle());
-                }
-                if (model.getTitle().equals("VERTU VIỆT NAM")) {
-                    logger.info(model.getTitle());
-                }
                 logger.info("saving promotion {}", model.toString());
-                Date endDate;
-                String pattern;
-                if (model.getEndDate().contains("-")) {
-                    pattern = "dd-MM-yyyy";
-                } else {
-                    pattern = "dd/MM/yyyy";
-                }
-                endDate = StringUtils.isEmpty(model.getEndDate()) ? FmDateUtils.getLastDateOfNextYear() : FmDateUtils.parseDateWithPattern(model.getEndDate(), pattern);
-                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl(), model.getTitle(), endDate);
+                PromotionPresenter promotion = promotionCrawlerDAO.getPromotion(model.getUrl(), model.getTitle(), model.getEndDate());
 
                 if (promotion == null) {
                     promotionCrawlerDAO.addPromotion(model);

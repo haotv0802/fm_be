@@ -232,7 +232,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
         t.setMaxPoolSize(10);
         t.setAllowCoreThreadTimeOut(true);
         t.setKeepAliveSeconds(120);
-        t.setThreadNamePrefix("Hanjin schedule-");
+        t.setThreadNamePrefix("fm schedule-");
         return t;
     }
 

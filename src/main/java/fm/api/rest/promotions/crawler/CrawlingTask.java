@@ -1,7 +1,7 @@
 package fm.api.rest.promotions.crawler;
 
+import fm.api.rest.promotions.crawler.interfaces.IBankPromotion;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
-import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.util.Assert;
@@ -16,25 +16,27 @@ public class CrawlingTask implements Runnable {
 
     private static final Logger logger = LogManager.getLogger(CrawlingTask.class);
 
-    private IPromotionCrawlerService promotionCrawlerService;
     private IBankPromotionCrawler crawler;
 
-    public CrawlingTask(IPromotionCrawlerService promotionCrawlerService, IBankPromotionCrawler crawler) {
-        Assert.notNull(promotionCrawlerService);
-        Assert.notNull(crawler);
+    private final IBankPromotion bankPromotion;
 
-        this.promotionCrawlerService = promotionCrawlerService;
+    public CrawlingTask(IBankPromotion bankPromotion,
+                        IBankPromotionCrawler crawler) {
+        Assert.notNull(crawler);
+        Assert.notNull(bankPromotion);
+
         this.crawler = crawler;
+        this.bankPromotion = bankPromotion;
     }
 
     @Override
     public void run() {
         logger.info("Start thread {}", crawler.toString());
-        Map<Integer, List<PromotionCrawlerModel>> data =  crawler.crawl();
+        Map<Integer, List<PromotionCrawlerModel>> data = crawler.crawl();
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
                 logger.info("saving promotion {}", model.toString());
-                this.promotionCrawlerService.saveBankPromotion(model);
+                this.bankPromotion.saveCrawledData(data);
             }
         }
         logger.info("End thread {}", crawler.toString());

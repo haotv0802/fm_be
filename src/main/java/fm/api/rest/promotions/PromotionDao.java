@@ -28,10 +28,10 @@ public class PromotionDao implements IPromotionDao {
 
   private final NamedParameterJdbcTemplate namedTemplate;
 
-  public PromotionDao(NamedParameterJdbcTemplate namedTemplate) {
-    Assert.notNull(namedTemplate);
-    this.namedTemplate = namedTemplate;
-  }
+    public PromotionDao(NamedParameterJdbcTemplate namedTemplate) {
+        Assert.notNull(namedTemplate);
+        this.namedTemplate = namedTemplate;
+    }
 
 
   @Override

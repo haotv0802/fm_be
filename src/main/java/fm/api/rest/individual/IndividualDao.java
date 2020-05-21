@@ -2,8 +2,8 @@ package fm.api.rest.individual;
 
 import fm.api.rest.individual.interfaces.IIndividualDao;
 import fm.api.rest.moneysource.interfaces.IMoneySourceDao;
-import fm.common.JdbcUtils;
 import fm.common.dao.DaoUtils;
+import fm.utils.FmDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,7 +67,7 @@ public class IndividualDao implements IIndividualDao {
                     individualPresenter.setFirstName(rs.getString("first_name"));
                     individualPresenter.setLastName(rs.getString("last_name"));
                     individualPresenter.setMiddleName(rs.getString("middle_name"));
-                    individualPresenter.setBirthday(JdbcUtils.toUtilDate(rs.getDate("birthday")));
+                    individualPresenter.setBirthday(FmDateUtils.toUtilDate(rs.getDate("birthday")));
                     individualPresenter.setGender(rs.getString("gender"));
                     individualPresenter.setEmail(rs.getString("email"));
                     individualPresenter.setPhoneNumber(rs.getString("phone_number"));

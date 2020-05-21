@@ -1,9 +1,9 @@
 package fm.api.rest.moneyflow;
 
 import fm.api.rest.moneyflow.interfaces.IMoneyFlowDao;
-import fm.common.JdbcUtils;
 import fm.common.ValidationException;
 import fm.common.dao.DaoUtils;
+import fm.utils.FmDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -41,31 +41,31 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     @Override
     @Deprecated
     public List<ItemPresenter> getExpenses(int userId) {
-        final String sql =
-                          "SELECT                                                        "
-                        + "	e.id,                                                        "
-                        + "	e.user_id,                                                   "
-                        + "	e.amount,                                                    "
-                        + "	e.date,                                                      "
-                        + "	e.name,                                                      "
-                        + "	e.money_source_id,                                           "
-                        + "	CASE                                                         "
-                        + "	  WHEN c.name IS NULL THEN 'CASH'                            "
-                        + "	  ELSE c.name                                                "
-                        + "	END money_source_name,                                       "
-                        + "	e.is_spending,                                               "
-                        + "	c.card_number,                                               "
-                        + "	c.name card_info,                                            "
-                        + "	p.name payment_method                                        "
-                        + "FROM                                                          "
-                        + "	(fm_money_flow e                                             "
-                        + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)     "
-                        + "		LEFT JOIN                                                "
-                        + "	fm_payment_methods p ON c.card_type_id = p.id                "
-                        + "WHERE                                                         "
-                        + "	e.user_id = :userId                                          "
-                        + "        AND is_deleted = FALSE                                "
-                        + "ORDER BY id ASC                                               ";
+        final String sql = ""
+                + "SELECT                                                        "
+                + "	e.id,                                                        "
+                + "	e.user_id,                                                   "
+                + "	e.amount,                                                    "
+                + "	e.date,                                                      "
+                + "	e.name,                                                      "
+                + "	e.money_source_id,                                           "
+                + "	CASE                                                         "
+                + "	  WHEN c.name IS NULL THEN 'CASH'                            "
+                + "	  ELSE c.name                                                "
+                + "	END money_source_name,                                       "
+                + "	e.is_spending,                                               "
+                + "	c.card_number,                                               "
+                + "	c.name card_info,                                            "
+                + "	p.name payment_method                                        "
+                + "FROM                                                          "
+                + "	(fm_money_flow e                                             "
+                + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)     "
+                + "		LEFT JOIN                                                "
+                + "	fm_payment_methods p ON c.card_type_id = p.id                "
+                + "WHERE                                                         "
+                + "	e.user_id = :userId                                          "
+                + "        AND is_deleted = FALSE                                "
+                + "ORDER BY id ASC                                               ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -85,15 +85,15 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      */
     @Override
     public List<Integer> getYearsList(int userId) {
-        final String sql =
-                          "SELECT DISTINCT                "
-                        + "	DATE_FORMAT(date, '%Y') year  "
-                        + "FROM                           "
-                        + "	fm_money_flow                 "
-                        + "WHERE                          "
-                        + "	user_id = :userId             "
-                        + "	AND is_deleted = FALSE        "
-                        + "ORDER BY year DESC             ";
+        final String sql = ""
+                + "SELECT DISTINCT                "
+                + "	DATE_FORMAT(date, '%Y') year  "
+                + "FROM                           "
+                + "	fm_money_flow                 "
+                + "WHERE                          "
+                + "	user_id = :userId             "
+                + "	AND is_deleted = FALSE        "
+                + "ORDER BY year DESC             ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -110,15 +110,15 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      * @return list of months.
      */
     private List<String> getMonthsWithYear(int userId) {
-        final String sql =
-                          "SELECT DISTINCT                                                    "
-                        + "	DATE_FORMAT(date, '%Y-%m') month                                  "
-                        + "FROM                                                               "
-                        + "	fm_money_flow                                                     "
-                        + "WHERE                                                              "
-                        + "	user_id = :userId                                                 "
-                        + "	AND is_deleted = FALSE                                            "
-                        + "ORDER BY month DESC                                                ";
+        final String sql = ""
+                + "SELECT DISTINCT                   "
+                + "	DATE_FORMAT(date, '%Y-%m') month "
+                + "FROM                              "
+                + "	fm_money_flow                    "
+                + "WHERE                             "
+                + "	user_id = :userId                "
+                + "	AND is_deleted = FALSE           "
+                + "ORDER BY month DESC               ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -135,17 +135,17 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      * @return list of months.
      */
     private List<String> getMonthsInCurrentYear(int userId) {
-        final String sql =
-                          "SELECT DISTINCT                                                    "
-                        + "	DATE_FORMAT(date, '%Y-%m') month                                  "
-                        + "FROM                                                               "
-                        + "	fm_money_flow                                                     "
-                        + "WHERE                                                              "
-                        + "	user_id = :userId                                                 "
-                        + "	AND is_deleted = FALSE                                            "
-                        + "	AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(date, '%Y-%m') "
-                        + "	AND YEAR(date) = YEAR(CURDATE())                                  "
-                        + "ORDER BY month DESC                                                ";
+        final String sql = ""
+                + "SELECT DISTINCT                                                    "
+                + "	DATE_FORMAT(date, '%Y-%m') month                                  "
+                + "FROM                                                               "
+                + "	fm_money_flow                                                     "
+                + "WHERE                                                              "
+                + "	user_id = :userId                                                 "
+                + "	AND is_deleted = FALSE                                            "
+                + "	AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(date, '%Y-%m') "
+                + "	AND YEAR(date) = YEAR(CURDATE())                                  "
+                + "ORDER BY month DESC                                                ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -163,17 +163,17 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      * @return list of months and years.
      */
     private List<String> getMonthsWithYear(int userId, int year) {
-        final String sql =
-                          "SELECT DISTINCT                                                    "
-                        + "	DATE_FORMAT(date, '%Y-%m') month                                  "
-                        + "FROM                                                               "
-                        + "	fm_money_flow                                                     "
-                        + "WHERE                                                              "
-                        + "	user_id = :userId                                                 "
-                        + "	AND is_deleted = FALSE                                            "
-                        + "	AND DATE_FORMAT(date, '%Y') = :year                               "
-                        + "	AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(date, '%Y-%m') "
-                        + "ORDER BY month DESC                                                ";
+        final String sql = ""
+                + "SELECT DISTINCT                                                    "
+                + "	DATE_FORMAT(date, '%Y-%m') month                                  "
+                + "FROM                                                               "
+                + "	fm_money_flow                                                     "
+                + "WHERE                                                              "
+                + "	user_id = :userId                                                 "
+                + "	AND is_deleted = FALSE                                            "
+                + "	AND DATE_FORMAT(date, '%Y') = :year                               "
+                + "	AND DATE_FORMAT(CURDATE(), '%Y-%m') != DATE_FORMAT(date, '%Y-%m') "
+                + "ORDER BY month DESC                                                ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -189,7 +189,7 @@ public class MoneyFlowDao implements IMoneyFlowDao {
         expense.setId(rs.getInt("id"));
         expense.setUserId(rs.getInt("user_id"));
         expense.setAmount(rs.getBigDecimal("amount"));
-        expense.setDate(JdbcUtils.toUtilDate(rs.getDate("date")));
+        expense.setDate(FmDateUtils.toUtilDate(rs.getDate("date")));
         expense.setName(rs.getString("name"));
         expense.setMoneySourceId(rs.getInt("money_source_id"));
         expense.setMoneySourceName(rs.getString("money_source_name"));
@@ -232,33 +232,33 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      */
     @Override
     public ItemDetailsPresenter getExpensesDetailsByYearAndMonth(int userId, int year, int month) {
-        final String sql =
-                          "SELECT                                                   "
-                        + "	e.id,                                                   "
-                        + "	e.user_id,                                              "
-                        + "	e.amount,                                               "
-                        + "	e.date,                                                 "
-                        + "	e.name,                                                 "
-                        + "	e.is_spending,                                          "
-                        + "	c.card_number,                                          "
-                        + "	e.money_source_id,                                      "
-                        + "	CASE                                                    "
-                        + "	  WHEN c.name IS NULL THEN 'CASH'                       "
-                        + "	  ELSE c.name                                           "
-                        + "	END money_source_name,                                  "
-                        + "	c.name card_info,                                       "
-                        + "	p.name payment_method                                   "
-                        + "FROM                                                     "
-                        + "	(fm_money_flow e                                        "
-                        + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)"
-                        + "		LEFT JOIN                                           "
-                        + "	fm_payment_methods p ON c.card_type_id = p.id           "
-                        + "WHERE                                                    "
-                        + "	e.user_id = :userId                                     "
-                        + "        AND DATE_FORMAT(date, '%Y') = :year              "
-                        + "        AND DATE_FORMAT(date, '%m') = :month             "
-                        + "        AND is_deleted = FALSE                           "
-                        + "ORDER BY e.date DESC                                     ";
+        final String sql = ""
+                + "SELECT                                                   "
+                + "	e.id,                                                   "
+                + "	e.user_id,                                              "
+                + "	e.amount,                                               "
+                + "	e.date,                                                 "
+                + "	e.name,                                                 "
+                + "	e.is_spending,                                          "
+                + "	c.card_number,                                          "
+                + "	e.money_source_id,                                      "
+                + "	CASE                                                    "
+                + "	  WHEN c.name IS NULL THEN 'CASH'                       "
+                + "	  ELSE c.name                                           "
+                + "	END money_source_name,                                  "
+                + "	c.name card_info,                                       "
+                + "	p.name payment_method                                   "
+                + "FROM                                                     "
+                + "	(fm_money_flow e                                        "
+                + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)"
+                + "		LEFT JOIN                                           "
+                + "	fm_payment_methods p ON c.card_type_id = p.id           "
+                + "WHERE                                                    "
+                + "	e.user_id = :userId                                     "
+                + "        AND DATE_FORMAT(date, '%Y') = :year              "
+                + "        AND DATE_FORMAT(date, '%m') = :month             "
+                + "        AND is_deleted = FALSE                           "
+                + "ORDER BY e.date DESC                                     ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -279,33 +279,33 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      * @return list of expenses.
      */
     private ItemDetailsPresenter getExpensesDetailsByMonth(int userId, String month, String name) {
-        final String sql =
-                          "SELECT                                                   "
-                        + "	e.id,                                                   "
-                        + "	e.user_id,                                              "
-                        + "	e.amount,                                               "
-                        + "	e.date,                                                 "
-                        + "	e.name,                                                 "
-                        + "	e.is_spending,                                          "
-                        + "	c.card_number,                                          "
-                        + "	e.money_source_id,                                      "
-                        + "	CASE                                                    "
-                        + "	  WHEN c.name IS NULL THEN 'CASH'                       "
-                        + "	  ELSE c.name                                           "
-                        + "	END money_source_name,                                  "
-                        + "	c.name card_info,                                       "
-                        + "	p.name payment_method                                   "
-                        + "FROM                                                     "
-                        + "	(fm_money_flow e                                        "
-                        + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)"
-                        + "		LEFT JOIN                                           "
-                        + "	fm_payment_methods p ON c.card_type_id = p.id           "
-                        + "WHERE                                                    "
-                        + "	e.user_id = :userId                                     "
-                        + "        AND DATE_FORMAT(date, '%Y-%m') = :month          "
-                        + "        AND is_deleted = FALSE                           "
-                        + ((null != name && !StringUtils.isEmpty(name)) ? "AND e.name LIKE :name " : "")
-                        + "ORDER BY e.date DESC                                     ";
+        final String sql = ""
+                + "SELECT                                                   "
+                + "	e.id,                                                   "
+                + "	e.user_id,                                              "
+                + "	e.amount,                                               "
+                + "	e.date,                                                 "
+                + "	e.name,                                                 "
+                + "	e.is_spending,                                          "
+                + "	c.card_number,                                          "
+                + "	e.money_source_id,                                      "
+                + "	CASE                                                    "
+                + "	  WHEN c.name IS NULL THEN 'CASH'                       "
+                + "	  ELSE c.name                                           "
+                + "	END money_source_name,                                  "
+                + "	c.name card_info,                                       "
+                + "	p.name payment_method                                   "
+                + "FROM                                                     "
+                + "	(fm_money_flow e                                        "
+                + "	LEFT JOIN fm_money_source c ON e.money_source_id = c.id)"
+                + "		LEFT JOIN                                           "
+                + "	fm_payment_methods p ON c.card_type_id = p.id           "
+                + "WHERE                                                    "
+                + "	e.user_id = :userId                                     "
+                + "        AND DATE_FORMAT(date, '%Y-%m') = :month          "
+                + "        AND is_deleted = FALSE                           "
+                + ((null != name && !StringUtils.isEmpty(name)) ? "AND e.name LIKE :name " : "")
+                + "ORDER BY e.date DESC                                     ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -401,14 +401,14 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      */
     @Override
     public Long addExpense(Item item, int userId) {
-        final String sql =
-                          "INSERT INTO fm_money_flow (user_id, amount, date, name, money_source_id, is_spending) "
-                        + "VALUES (:userId, :amount, :date, :name, :money_source_id, :is_spending)               ";
+        final String sql = ""
+                + "INSERT INTO fm_money_flow (user_id, amount, date, name, money_source_id, is_spending) "
+                + "VALUES (:userId, :amount, :date, :name, :money_source_id, :is_spending)               ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
         paramsMap.addValue("amount", item.getAmount());
-        paramsMap.addValue("date", item.getDate());
+        paramsMap.addValue("date", FmDateUtils.toSqlDate(item.getDate()));
         paramsMap.addValue("name", item.getName());
         paramsMap.addValue("is_spending", item.getSpending());
         Integer cardId = null;
@@ -432,16 +432,16 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      */
     @Override
     public void updateExpense(Item item) {
-        final String sql =
-                          "UPDATE fm_money_flow              "
-                        + "SET                               "
-                        + "	amount = :amount,                "
-                        + "	date = DATE(:date),              "
-                        + "	name = :name,                    "
-                        + "	is_spending = :isSpending,       "
-                        + "	money_source_id = :moneySourceId "
-                        + "WHERE                             "
-                        + "	id = :id                         ";
+        final String sql = ""
+                + "UPDATE fm_money_flow              "
+                + "SET                               "
+                + "	amount = :amount,                "
+                + "	date = DATE(:date),              "
+                + "	name = :name,                    "
+                + "	is_spending = :isSpending,       "
+                + "	money_source_id = :moneySourceId "
+                + "WHERE                             "
+                + "	id = :id                         ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("id", item.getId());
@@ -463,12 +463,12 @@ public class MoneyFlowDao implements IMoneyFlowDao {
     @Deprecated
     @Override
     public void updateExpense(BigDecimal amount, int userId, int expenseId) {
-        final String sql =
-                          "UPDATE fm_money_flow                   "
-                        + "SET                                    "
-                        + "	amount = :amount                      "
-                        + "WHERE                                  "
-                        + "	user_id = :userId AND id = :expenseId ";
+        final String sql = ""
+                + "UPDATE fm_money_flow                   "
+                + "SET                                    "
+                + "	amount = :amount                      "
+                + "WHERE                                  "
+                + "	user_id = :userId AND id = :expenseId ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("amount", amount);
@@ -487,12 +487,12 @@ public class MoneyFlowDao implements IMoneyFlowDao {
      */
     @Override
     public void deleteExpense(int expenseId) {
-        final String sql =
-                          "UPDATE fm_money_flow "
-                        + "SET                  "
-                        + "	is_deleted = TRUE   "
-                        + "WHERE                "
-                        + "	id = :id            ";
+        final String sql = ""
+                + "UPDATE fm_money_flow "
+                + "SET                  "
+                + "	is_deleted = TRUE   "
+                + "WHERE                "
+                + "	id = :id            ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("id", expenseId);

@@ -3,7 +3,6 @@ package fm.api.rest.promotions.crawler;
 import fm.api.rest.promotions.PromotionPresenter;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.common.dao.DaoUtils;
-import fm.utils.FmDateUtils;
 import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
@@ -14,11 +13,11 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,50 +38,47 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     }
 
     /**
-     *
      * @param promoModel
      * @return
      */
     @Override
     public void addPromotion(PromotionCrawlerModel promoModel) {
-        final String sqlStatement =
-                          "INSERT INTO                           "
-                        + "fm_promotions                         "
-                        + "(title,                               "
-                        + "content,                              "
-                        + "discount,                             "
-                        + "installment,                          "
-                        + "start_date,                           "
-                        + "end_date,                             "
-                        + "category_id,                          "
-                        + "url ,                                 "
-                        + "bank_id)                              "
-                        + " VALUES                               "
-                        + "(:title,                              "
-                        + ":content,                             "
-                        + ":discount,                            "
-                        + ":installment ,                        "
-                        + ":start_date, "
-                        + ":end_date,   "
-                        + ":category_id,                         "
-                        + ":url,                                 "
-                        + ":bank_id)                             ";
+        final String sqlStatement = ""
+                + "INSERT INTO      "
+                + " fm_promotions   "
+                + "    (title,      "
+                + "    content,     "
+                + "    discount,    "
+                + "    installment, "
+                + "    start_date,  "
+                + "    end_date,    "
+                + "    category_id, "
+                + "    url ,        "
+                + "    bank_id)     "
+                + " VALUES          "
+                + "   (:title,      "
+                + "   :content,     "
+                + "   :discount,    "
+                + "   :installment ,"
+                + "   :start_date,  "
+                + "   :end_date,    "
+                + "   :category_id, "
+                + "   :url,         "
+                + "   :bank_id)     ";
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("title", promoModel.getTitle());
         paramsMap.addValue("content", promoModel.getContent());
         paramsMap.addValue("discount", promoModel.getDiscount());
         paramsMap.addValue("installment", promoModel.getInstallmentPeriod());
-        if (promoModel.getStartDate().equals("") || promoModel.getStartDate().equals("T? nay")) {
-            paramsMap.addValue("start_date", LocalDate.now());
+        if (promoModel.getStartDate() == null) {
+            paramsMap.addValue("start_date", Date.valueOf(LocalDate.now()));
         } else {
-//            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
-            paramsMap.addValue("start_date", FmDateUtils.parseDateWithPattern(promoModel.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
+            paramsMap.addValue("start_date", Date.valueOf(promoModel.getStartDate()));
         }
-        if (promoModel.getEndDate().equals("")) {
-            paramsMap.addValue("end_date", FmLocalDateUtils.getLastDateOfNextYear());
+        if (promoModel.getEndDate() == null) {
+            paramsMap.addValue("end_date", Date.valueOf(FmLocalDateUtils.getLastDateOfNextYear()));
         } else {
-//            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
-            paramsMap.addValue("end_date", FmDateUtils.parseDateWithPattern(promoModel.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy"));
+            paramsMap.addValue("end_date", Date.valueOf(promoModel.getEndDate()));
         }
         paramsMap.addValue("url", promoModel.getUrl());
         paramsMap.addValue("category_id", promoModel.getCategoryId());
@@ -95,39 +91,35 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
 
     @Override
     public void updatePromotion(PromotionPresenter promotion) {
-        final String sql =
-                          "UPDATE                       "
-                        + " fm_promotions               "
-                        + "SET title = :title,          "
-                        + "  content = :content,        "
-                        + "  discount = :discount,      "
-                        + "  installment = :installment,"
-                        + "  start_date = :start_date,  "
-                        + "  end_date = :end_date,      "
-                        + "  category_id = :category_id,"
-                        + "  url = :url,                "
-                        + "  bank_id = :bank_id,        "
-                        + "  updated = :updated         "
-                        + "WHERE                        "
-                        + " id = :id                    "
-                ;
+        final String sql = ""
+                + "UPDATE                       "
+                + " fm_promotions               "
+                + "SET title = :title,          "
+                + "  content = :content,        "
+                + "  discount = :discount,      "
+                + "  installment = :installment,"
+                + "  start_date = :start_date,  "
+                + "  end_date = :end_date,      "
+                + "  category_id = :category_id,"
+                + "  url = :url,                "
+                + "  bank_id = :bank_id,        "
+                + "  updated = :updated         "
+                + "WHERE                        "
+                + " id = :id                    ";
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("title", promotion.getTitle());
         paramsMap.addValue("content", promotion.getContent());
         paramsMap.addValue("discount", promotion.getDiscount());
         paramsMap.addValue("installment", promotion.getInstallmentPeriod());
         if (promotion.getStartDate().equals("") || promotion.getStartDate().equals("T? nay")) {
-            paramsMap.addValue("start_date", LocalDate.now());
+            paramsMap.addValue("start_date", Date.valueOf(LocalDate.now()));
         } else {
-//            paramsMap.addValue("start_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
-            paramsMap.addValue("start_date", FmDateUtils.parseDateWithPattern(promotion.getStartDate().replaceAll("/", "-"), "dd-MM-yyyy"));
+            paramsMap.addValue("start_date", Date.valueOf(promotion.getStartDate()));
         }
         if (promotion.getEndDate().equals("")) {
-            LocalDate currentTime = LocalDate.now();
-            paramsMap.addValue("end_date", FmLocalDateUtils.getLastDateOfNextYear());
+            paramsMap.addValue("end_date", Date.valueOf(FmLocalDateUtils.getLastDateOfNextYear()));
         } else {
-//            paramsMap.addValue("end_date", FmLocalDateUtils.parseDateTimeWithPattern(promotion.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy")); // TODO Work later
-            paramsMap.addValue("end_date", FmDateUtils.parseDateWithPattern(promotion.getEndDate().replaceAll("/", "-"), "dd-MM-yyyy"));
+            paramsMap.addValue("end_date", Date.valueOf(promotion.getEndDate()));
         }
         paramsMap.addValue("url", promotion.getUrl());
         paramsMap.addValue("category_id", promotion.getCategoryId());
@@ -142,20 +134,20 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
 
     @Override
     public List<PromotionPresenter> getPromotionByBankId(int bankID, int categoryId) {
-        final String sqlQuery =
-                          "SELECT    "
-                        + "id,                              "
-                        + "title,                                  "
-                        + "content,                                "
-                        + "discount,                               "
-                        + "installment,                            "
-                        + "DATE_FORMAT(start_date, '%d-%m-%Y'),   "
-                        + "DATE_FORMAT(end_date, '%d-%m-%Y'),      "
-                        + "category_id,                            "
-                        + "bank_id                                 "
-                        + "FROM fm_promotions                      "
-                        + "WHERE bank_id=:bank_id                  "
-                        + "AND category_id=:categoryId             ";
+        final String sqlQuery = ""
+                + "SELECT                          "
+                + "     id,                        "
+                + "     title,                     "
+                + "     content,                   "
+                + "     discount,                  "
+                + "     installment,               "
+                + "     start_date,                "
+                + "     end_date,                  "
+                + "     category_id,               "
+                + "     bank_id                    "
+                + "FROM fm_promotions              "
+                + "     WHERE bank_id=:bank_id     "
+                + "AND category_id=:categoryId     ";
         try {
             final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
             paramsMap.addValue("bank_id", bankID);
@@ -178,23 +170,15 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
 
         List<Map<String, Object>> results = namedTemplate.queryForList(sqlQuery, paramsMap);
 
-//    Iterator<String> iterator = results.iterator();
-
         Map<String, Integer> categoriesAndIdlist = new HashMap<>();
         for (Map row : results) {
             categoriesAndIdlist.put((String) row.get("name"), Math.toIntExact((Long) row.get("id")));
         }
-//    categoriesAndIdlist.put((String) results.get("name"), Math.toIntExact((Long) results.get("id")));
-//    while (iterator.hasNext()) {
-//      String key = iterator.next();
-//      categoriesAndIdlist.put(key, (Integer) results.get(key));
-//    }
-
         return categoriesAndIdlist;
     }
 
     @Override
-    public Boolean isPromotionExisting(String url, String title, Date endDate) {
+    public Boolean isPromotionExisting(String url, String title, LocalDate endDate) {
         final String sql = "SELECT COUNT(*) FROM fm_promotions WHERE url = :url AND title = :title AND end_date = :end_date";
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("url", url);
@@ -207,25 +191,23 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
     }
 
     @Override
-    public PromotionPresenter getPromotion(String url, String title, Date endDate) {
-//    public PromotionPresenter getPromotion(String url) {
-        final String sql =
-                          "SELECT                                "
-                        + "  id,                                 "
-                        + "  title,                              "
-                        + "  content,                            "
-                        + "  discount,                           "
-                        + "  installment,                        "
-                        + "  DATE_FORMAT(start_date, '%d-%m-%Y'),"
-                        + "  DATE_FORMAT(end_date, '%d-%m-%Y'),  "
-                        + "  category_id,                        "
-                        + "  bank_id,                            "
-                        + "  category_id                         "
-                        + "FROM fm_promotions                    "
-                        + "WHERE url = :url                      "
-                        + "AND title = :title                    "
-                        + "AND end_date = :endDate               "
-                ;
+    public PromotionPresenter getPromotion(String url, String title, LocalDate endDate) {
+        final String sql = ""
+                + "SELECT                                "
+                + "  id,                                 "
+                + "  title,                              "
+                + "  content,                            "
+                + "  discount,                           "
+                + "  installment,                        "
+                + "  start_date,                         "
+                + "  end_date,                           "
+                + "  category_id,                        "
+                + "  bank_id,                            "
+                + "  category_id                         "
+                + "FROM fm_promotions                    "
+                + "WHERE url = :url                      "
+                + "AND title = :title                    "
+                + "AND end_date = :endDate               ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("url", url);
@@ -248,8 +230,8 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         presenter.setContent(rs.getString("content"));
         presenter.setDiscount(rs.getString("discount"));
         presenter.setInstallmentPeriod(rs.getString("installment"));
-        presenter.setStartDate(rs.getString("DATE_FORMAT(start_date, '%d-%m-%Y')"));
-        presenter.setEndDate(rs.getString("DATE_FORMAT(end_date, '%d-%m-%Y')"));
+        presenter.setStartDate(rs.getDate("start_date").toLocalDate());
+        presenter.setEndDate(rs.getDate("end_date").toLocalDate());
         presenter.setCategoryId(rs.getInt("category_Id"));
         presenter.setBankId(rs.getInt("bank_id"));
         return presenter;

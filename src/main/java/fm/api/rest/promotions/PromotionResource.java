@@ -2,20 +2,24 @@ package fm.api.rest.promotions;
 
 
 import fm.api.rest.BaseResource;
+import fm.api.rest.promotions.crawler.CrawlingTask;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotion;
+import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.interfaces.IPromotionService;
 import fm.auth.UserDetailsImpl;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Collection;
+import java.util.Iterator;
 
 /**
  * Quy created on 3/11/2020
@@ -29,12 +33,25 @@ public class PromotionResource extends BaseResource {
 
   private final IPromotionService promotionService;
 
+  private final ListableBeanFactory beanFactory; // use to load all implementations of IBankPromotionCrawler interfaces
+
+  private final ThreadPoolTaskExecutor executor;
+
   @Autowired
-  public PromotionResource(@Qualifier("bankPromotion") IBankPromotion bankPromotion, @Qualifier("promotionService") IPromotionService promotionService) {
+  public PromotionResource(@Qualifier("bankPromotion") IBankPromotion bankPromotion,
+                           @Qualifier("promotionService") IPromotionService promotionService,
+                           ListableBeanFactory beanFactory,
+                           ThreadPoolTaskExecutor executor
+                           ) {
     Assert.notNull(bankPromotion);
     Assert.notNull(promotionService);
+    Assert.notNull(beanFactory);
+    Assert.notNull(executor);
+
     this.bankPromotion = bankPromotion;
     this.promotionService = promotionService;
+    this.beanFactory = beanFactory;
+    this.executor = executor;
   }
 
   @GetMapping("/promotions/crawler/{bankID}")
@@ -54,25 +71,25 @@ public class PromotionResource extends BaseResource {
   @GetMapping("/promotions/crawlall/threads")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   public void crawlAllByMultiThreads(@AuthenticationPrincipal UserDetailsImpl userDetails) {
-    this.bankPromotion.crawlAllByMultiThreads();
+    Collection<IBankPromotionCrawler> crawlers = beanFactory.getBeansOfType(IBankPromotionCrawler.class).values();
+    Iterator<IBankPromotionCrawler> iterator = crawlers.iterator();
+
+    while (iterator.hasNext()) {
+      IBankPromotionCrawler crawler = iterator.next();
+      this.executor.execute(new CrawlingTask(bankPromotion, crawler));
+    }
   }
 
-  @GetMapping(value = "/promotions/list", produces = "text/plain;charset=UTF-8")
+  @GetMapping(value = "/promotions/list", produces = "application/json;charset=UTF-8")
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public List<PromotionPresenter> getAllPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
+  public void getAllPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
                               @RequestParam(required = false, defaultValue = "") String title,
                               @RequestParam(required = false) String content,
-                              @RequestParam (required = false)  @DateTimeFormat(pattern = "yyyy-MM-dd")String start_date,
-                              @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String end_date,
+                              @RequestParam(required = false) String start_date,
+                              @RequestParam(required = false) String end_date,
                               @RequestParam(required = false) Integer bank_id,
                               @RequestParam(required = false) Integer category_id) {
-    String text = "Giảm ngay";
-    if(text.equals("content")){
-      String text2 = "Giảm ngay";
-    }
-    List<PromotionPresenter> listResult = this.promotionService.getAllPromotions(title, content, start_date, end_date, bank_id, category_id);
-
-    return listResult;
+    this.promotionService.getAllPromotions(title, content, start_date, end_date, bank_id, category_id);
 
   }
 }

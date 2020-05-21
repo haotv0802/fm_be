@@ -13,6 +13,7 @@ import org.springframework.util.Assert;
 import org.testng.annotations.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -171,7 +172,6 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
     @Test
     @Rollback(false)
     public void testUpdateExpense() throws Exception {
-
         // Firstly, add expense into DB
         Item creation = new Item();
         creation.setName("new name");
