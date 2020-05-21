@@ -1,5 +1,6 @@
 package fm.api.rest.individual.interfaces;
 
+import fm.api.rest.individual.IndividualModel;
 import fm.api.rest.individual.IndividualPresenter;
 
 /**
@@ -8,4 +9,6 @@ import fm.api.rest.individual.IndividualPresenter;
 public interface IIndividualService {
 
   IndividualPresenter getIndividual(int userId);
+
+  Long saveIndividual(IndividualPresenter model);
 }

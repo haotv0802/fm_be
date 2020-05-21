@@ -81,7 +81,7 @@ DROP
     TABLE IF EXISTS `fm_banks`;
 CREATE TABLE `fm_banks`
 (
-    `id`      BIGINT AUTO_INCREMENT,
+    `id`      INTEGER AUTO_INCREMENT,
     `name`    VARCHAR(45) NOT NULL,
     `address` VARCHAR(45) NOT NULL,
     `website` VARCHAR(45),
@@ -109,6 +109,7 @@ CREATE TABLE `fm_individuals`
     `income`       DOUBLE,
     `user_id`      BIGINT       NOT NULL,
     `created`      DATETIME DEFAULT now(),
+    `updated`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_individuals_id_unique` (`id`),
     UNIQUE KEY `fm_individuals_user_id_unique` (`user_id`), #  An individual has ONLY 1 user account.
@@ -125,7 +126,7 @@ DROP
     TABLE IF EXISTS `fm_promotion_categories`;
 CREATE TABLE `fm_promotion_categories`
 (
-    `id`      BIGINT AUTO_INCREMENT,
+    `id`      INTEGER AUTO_INCREMENT,
     `name`    VARCHAR(30) NOT NULL,
     `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`)
@@ -147,8 +148,8 @@ CREATE TABLE `fm_promotions`
     `start_date`  DATE           NOT NULL,
     `end_date`    DATE           NOT NULL,
     `url`         VARCHAR(200)   NOT NULL,
-    `category_id` BIGINT         NOT NULL,
-    `bank_id`     BIGINT         NOT NULL,
+    `category_id` INTEGER        NOT NULL,
+    `bank_id`     INTEGER        NOT NULL,
     `created`     DATETIME DEFAULT now(),
     `updated`     DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
@@ -163,10 +164,13 @@ CREATE TABLE `fm_promotions`
 DROP TABLE IF EXISTS `fm_payment_methods`;
 CREATE TABLE `fm_payment_methods`
 (
-    `id`      BIGINT      NOT NULL AUTO_INCREMENT,
+    `id`      INTEGER     NOT NULL AUTO_INCREMENT,
     `name`    VARCHAR(50) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
     `logo`    VARCHAR(50) NULL, # TODO: it should be binary type to store an image.
     `created` DATETIME DEFAULT now(),
+    `updated` DATETIME DEFAULT now(),
+    UNIQUE KEY `fm_payment_methods_name_unique` (`name`),
+    INDEX (`name`),
     PRIMARY KEY (`id`)
 )
     ENGINE = InnoDB
@@ -181,10 +185,10 @@ CREATE TABLE `fm_money_source`
     `expiry_date`   DATE        NULL,
     `card_number`   VARCHAR(50) NULL, # last 6 digits
     `amount`        DOUBLE      NOT NULL,
-    `card_type_id`  BIGINT      NULL,
+    `card_type_id`  INTEGER     NULL,
     `user_id`       BIGINT      NULL,
     `is_terminated` BOOLEAN  DEFAULT FALSE,
-    `bank_id`       BIGINT      NOT NULL,
+    `bank_id`       INTEGER     NOT NULL,
     `created`       DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_money_source_id_unique` (`id`, `card_number`, `user_id`),
@@ -226,12 +230,12 @@ CREATE TABLE `fm_money_flow`
 DROP TABLE IF EXISTS `fm_error_tracking`;
 CREATE TABLE `fm_error_tracking`
 (
-    `id`            BIGINT        NOT NULL AUTO_INCREMENT,
-    `error_message` VARCHAR(100)  NOT NULL,
-    `stack_trace`   VARCHAR(9000) NOT NULL,
-    `exception`     VARCHAR(100)  NOT NULL,
+    `id`            BIGINT       NOT NULL AUTO_INCREMENT,
+    `error_message` VARCHAR(100) NOT NULL,
+    `stack_trace`   TEXT         NOT NULL,
+    `exception`     VARCHAR(100) NOT NULL,
     `user`          VARCHAR(50),
-    `error_date`    DATETIME      NOT NULL DEFAULT now(),
+    `error_date`    DATETIME     NOT NULL DEFAULT now(),
     PRIMARY KEY (`id`),
     INDEX (`exception`),
     INDEX (`error_date`),

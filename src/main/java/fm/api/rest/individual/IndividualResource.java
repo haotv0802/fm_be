@@ -3,6 +3,7 @@ package fm.api.rest.individual;
 import fm.api.rest.BaseResource;
 import fm.api.rest.individual.interfaces.IIndividualService;
 import fm.auth.UserDetailsImpl;
+import fm.common.Validator;
 import fm.common.beans.HeaderLang;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,46 +17,53 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * Created by haoho on 2/28/20 13:46.
  */
 @RestController
 public class IndividualResource extends BaseResource {
 
-  private IIndividualService individualService;
+    private IIndividualService individualService;
 
-  @Autowired
-  public IndividualResource(
-      @Qualifier("individualService") IIndividualService individualService
-  ) {
-    Assert.notNull(individualService);
+    private Validator<IndividualPresenter> individualUpdateValidator;
 
-    this.individualService = individualService;
-  }
+    @Autowired
+    public IndividualResource(
+            @Qualifier("individualService") IIndividualService individualService,
+            @Qualifier("individualUpdateValidator") Validator<IndividualPresenter> individualUpdateValidator
+    ) {
+        Assert.notNull(individualService);
+        Assert.notNull(individualUpdateValidator);
 
-  @GetMapping("/individual")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public IndividualPresenter getIndividual(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang
-  ) {
-    return this.individualService.getIndividual(userDetails.getUserId());
-  }
+        this.individualService = individualService;
+        this.individualUpdateValidator = individualUpdateValidator;
+    }
 
-  @PatchMapping("/individual")
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
-  public ResponseEntity updateIndividual(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
-      @RequestBody IndividualPresenter item
-  ) {
-//    MoneyFlowEditValidation validation = new MoneyFlowEditValidation();
-//    validation.setUserId(userDetails.getUserId());
-//    validation.setExpenseId(item.getId());
-//    expenseEditValidator.validate(validation);
+    @GetMapping("/individual")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public IndividualPresenter getIndividual(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @HeaderLang String lang
+    ) {
+        return this.individualService.getIndividual(userDetails.getUserId());
+    }
 
-//    this.expensesService.updateExpense(item);
-    return new ResponseEntity(HttpStatus.NO_CONTENT);
-  }
+    @PatchMapping("/individual")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public ResponseEntity updateIndividual(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @Valid @RequestBody IndividualPresenter item
+    ) {
+        item.setUserId(userDetails.getUserId());
+
+        individualUpdateValidator.validate(item);
+
+        Long id = this.individualService.saveIndividual(item);
+        return new ResponseEntity<>(new Object() {
+            public final Long individualId = id;
+        }, HttpStatus.CREATED);
+    }
 
 }

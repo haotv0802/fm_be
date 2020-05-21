@@ -4,16 +4,16 @@ package fm.api.rest.bank;
  * Created by haoho on 3/2/20 10:57.
  */
 public class BankPresenter {
-  private Long id;
+  private Integer id;
   private String name;
   private String address;
   private String website;
 
-  public Long getId() {
+  public Integer getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(Integer id) {
     this.id = id;
   }
 

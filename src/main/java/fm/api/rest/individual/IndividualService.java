@@ -13,19 +13,33 @@ import org.springframework.util.Assert;
 @Service("individualService")
 public class IndividualService implements IIndividualService {
 
-  private IIndividualDao individualDao;
+    private IIndividualDao individualDao;
 
-  @Autowired
-  public IndividualService(
-      @Qualifier("individualDao") IIndividualDao individualDao
-  ) {
-    Assert.notNull(individualDao);
+    @Autowired
+    public IndividualService(
+            @Qualifier("individualDao") IIndividualDao individualDao
+    ) {
+        Assert.notNull(individualDao);
 
-    this.individualDao = individualDao;
-  }
+        this.individualDao = individualDao;
+    }
 
-  @Override
-  public IndividualPresenter getIndividual(int userId) {
-    return this.individualDao.getIndividual(userId);
-  }
+    @Override
+    public IndividualPresenter getIndividual(int userId) {
+        return this.individualDao.getIndividual(userId);
+    }
+
+    @Override
+    public Long saveIndividual(IndividualPresenter model) {
+        IndividualPresenter individual = individualDao.getIndividual(model.getUserId());
+        if (individual != null) {
+            individual.updateIndividual(model);
+
+            this.individualDao.updateIndividual(individual);
+            return individual.getId();
+        } else {
+            return this.individualDao.addIndividual(model);
+        }
+    }
+
 }

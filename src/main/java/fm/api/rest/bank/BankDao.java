@@ -1,7 +1,6 @@
 package fm.api.rest.bank;
 
 import fm.api.rest.bank.interfaces.IBankDao;
-import fm.api.rest.individual.IndividualDao;
 import fm.common.dao.DaoUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
@@ -31,17 +30,17 @@ public class BankDao implements IBankDao {
 
     @Override
     public List<BankPresenter> getBanksByUserId(Integer userId) {
-        final String sql =
-                "SELECT                                            "
-                        + " b.id,                                            "
-                        + " b.name,                                          "
-                        + " b.address,                                       "
-                        + " b.website                                        "
-                        + "FROM                                              "
-                        + " fm_banks b                                       "
-                        + " inner join fm_money_source m on m.bank_id = b.id "
-                        + "WHERE                                             "
-                        + " m.user_id = :userId                              ";
+        final String sql = ""
+                + "SELECT                                            "
+                + " b.id,                                            "
+                + " b.name,                                          "
+                + " b.address,                                       "
+                + " b.website                                        "
+                + "FROM                                              "
+                + " fm_banks b                                       "
+                + " inner join fm_money_source m on m.bank_id = b.id "
+                + "WHERE                                             "
+                + " m.user_id = :userId                              ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);
@@ -50,7 +49,7 @@ public class BankDao implements IBankDao {
 
         List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
                     BankPresenter bankPresenter = new BankPresenter();
-                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setId(rs.getInt("id"));
                     bankPresenter.setName(rs.getString("name"));
                     bankPresenter.setAddress(rs.getString("address"));
                     bankPresenter.setWebsite(rs.getString("website"));
@@ -63,14 +62,14 @@ public class BankDao implements IBankDao {
 
     @Override
     public List<BankPresenter> getAllBanks() {
-        final String sql =
-                "SELECT      "
-                        + " b.id,      "
-                        + " b.name,    "
-                        + " b.address, "
-                        + " b.website  "
-                        + "FROM        "
-                        + " fm_banks b ";
+        final String sql = ""
+                + "SELECT      "
+                + " b.id,      "
+                + " b.name,    "
+                + " b.address, "
+                + " b.website  "
+                + "FROM        "
+                + " fm_banks b ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
@@ -78,7 +77,7 @@ public class BankDao implements IBankDao {
 
         List<BankPresenter> bankPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
                     BankPresenter bankPresenter = new BankPresenter();
-                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setId(rs.getInt("id"));
                     bankPresenter.setName(rs.getString("name"));
                     bankPresenter.setAddress(rs.getString("address"));
                     bankPresenter.setWebsite(rs.getString("website"));
@@ -90,17 +89,17 @@ public class BankDao implements IBankDao {
     }
 
     @Override
-    public BankPresenter getBankById(Long id) {
-        final String sql =
-                "SELECT      "
-                        + " b.id,      "
-                        + " b.name,    "
-                        + " b.address, "
-                        + " b.website  "
-                        + "FROM        "
-                        + " fm_banks b "
-                        + "WHERE       "
-                        + " b.id = :id ";
+    public BankPresenter getBankById(Integer id) {
+        final String sql = ""
+                + "SELECT      "
+                + " b.id,      "
+                + " b.name,    "
+                + " b.address, "
+                + " b.website  "
+                + "FROM        "
+                + " fm_banks b "
+                + "WHERE       "
+                + " b.id = :id ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("id", id);
@@ -109,7 +108,7 @@ public class BankDao implements IBankDao {
 
         BankPresenter bank = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
                     BankPresenter bankPresenter = new BankPresenter();
-                    bankPresenter.setId(rs.getLong("id"));
+                    bankPresenter.setId(rs.getInt("id"));
                     bankPresenter.setName(rs.getString("name"));
                     bankPresenter.setAddress(rs.getString("address"));
                     bankPresenter.setWebsite(rs.getString("website"));
@@ -118,5 +117,17 @@ public class BankDao implements IBankDao {
         );
 
         return bank;
+    }
+
+    @Override
+    public Boolean isBankExisting(Integer id) {
+        final String sql = "SELECT  COUNT(*) FROM fm_banks b  WHERE b.id = :id";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("id", id);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
     }
 }

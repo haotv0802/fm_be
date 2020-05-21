@@ -72,6 +72,10 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
     protected IAuthTokenService authTokenService;
 
     @Autowired
+    @Qualifier("authToken2Service")
+    protected IAuthTokenService authToken2Service;
+
+    @Autowired
     @Qualifier("authTokenServiceForAdmin")
     protected IAuthTokenService authTokenServiceForAdmin;
 
