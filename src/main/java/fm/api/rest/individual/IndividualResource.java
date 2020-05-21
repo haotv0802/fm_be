@@ -32,11 +32,13 @@ public class IndividualResource extends BaseResource {
     @Autowired
     public IndividualResource(
             @Qualifier("individualService") IIndividualService individualService,
-            @Qualifier("individualService") Validator<IndividualPresenter> individualUpdateValidator
+            @Qualifier("individualUpdateValidator") Validator<IndividualPresenter> individualUpdateValidator
     ) {
         Assert.notNull(individualService);
+        Assert.notNull(individualUpdateValidator);
 
         this.individualService = individualService;
+        this.individualUpdateValidator = individualUpdateValidator;
     }
 
     @GetMapping("/individual")
@@ -60,7 +62,7 @@ public class IndividualResource extends BaseResource {
 
         Long id = this.individualService.saveIndividual(item);
         return new ResponseEntity<>(new Object() {
-            public final Long expenseId = id;
+            public final Long individualId = id;
         }, HttpStatus.CREATED);
     }
 

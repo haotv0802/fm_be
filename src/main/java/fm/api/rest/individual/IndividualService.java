@@ -31,9 +31,12 @@ public class IndividualService implements IIndividualService {
 
     @Override
     public Long saveIndividual(IndividualPresenter model) {
-        if (individualDao.isIndividualExisting(model.getUserId())) {
-            this.individualDao.updateIndividual(model);
-            return model.getId();
+        IndividualPresenter individual = individualDao.getIndividual(model.getUserId());
+        if (individual != null) {
+            individual.updateIndividual(model);
+
+            this.individualDao.updateIndividual(individual);
+            return individual.getId();
         } else {
             return this.individualDao.addIndividual(model);
         }

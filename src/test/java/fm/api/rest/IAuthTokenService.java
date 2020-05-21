@@ -5,5 +5,5 @@ package fm.api.rest;
  * Date:  08/02/2017  Time: 10:47
  */
 public interface IAuthTokenService {
-  String getAuthToken();
+    String getAuthToken();
 }

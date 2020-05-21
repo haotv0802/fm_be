@@ -16,15 +16,15 @@ import java.io.PrintWriter;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
-@Service("authTokenService")
-public class AuthTokenService implements IAuthTokenService {
+@Service("authToken2Service")
+public class AuthToken2Service implements IAuthTokenService {
 
-    private static final Logger logger = LogManager.getLogger(AuthTokenService.class);
+    private static final Logger logger = LogManager.getLogger(AuthToken2Service.class);
 
     private String authToken;
 
     @Autowired
-    public AuthTokenService(
+    public AuthToken2Service(
             WebApplicationContext wac,
             @Qualifier("springSessionRepositoryFilter") Filter sessionRepositoryFilter,
             @Qualifier("txFilter") Filter txFilter
@@ -40,7 +40,7 @@ public class AuthTokenService implements IAuthTokenService {
                 .alwaysDo(print(printWriter))
                 .build();
 
-        authToken = TestUtils.performLogin(mockMvc, "haho", "hoanhhao");
+        authToken = TestUtils.performLogin(mockMvc, "admin", "admin");
     }
 
     @Override

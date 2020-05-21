@@ -46,9 +46,9 @@ public class IndividualUpdateValidator implements Validator<IndividualPresenter>
 
         Integer userId = individual.getUserId();
 
-        if (individualDao.isIndividualExisting(userId)) {
-            throw new ValidationException("individual.user.id.notnull");
-        }
+//        if (!individualDao.isIndividualExisting(userId)) {
+//            throw new ValidationException("individual.user.id.notnull");
+//        }
 
         // Check if money source is not belong to this user.
         if (!CollectionUtils.isEmpty(individual.getMoneySourcePresenters())) {

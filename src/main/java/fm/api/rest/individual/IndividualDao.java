@@ -9,6 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -63,25 +64,27 @@ public class IndividualDao implements IIndividualDao {
 
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-        IndividualPresenter expensesList = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
-                    IndividualPresenter individualPresenter = new IndividualPresenter();
-                    individualPresenter.setId(rs.getLong("id"));
-                    individualPresenter.setFirstName(rs.getString("first_name"));
-                    individualPresenter.setLastName(rs.getString("last_name"));
-                    individualPresenter.setMiddleName(rs.getString("middle_name"));
-                    individualPresenter.setBirthday(FmDateUtils.toUtilDate(rs.getDate("birthday")));
-                    individualPresenter.setGender(rs.getString("gender"));
-                    individualPresenter.setEmail(rs.getString("email"));
-                    individualPresenter.setPhoneNumber(rs.getString("phone_number"));
-                    individualPresenter.setIncome(rs.getBigDecimal("income"));
+        try {
+            return namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
+                        IndividualPresenter individualPresenter = new IndividualPresenter();
+                        individualPresenter.setId(rs.getLong("id"));
+                        individualPresenter.setFirstName(rs.getString("first_name"));
+                        individualPresenter.setLastName(rs.getString("last_name"));
+                        individualPresenter.setMiddleName(rs.getString("middle_name"));
+                        individualPresenter.setBirthday(FmDateUtils.toUtilDate(rs.getDate("birthday")));
+                        individualPresenter.setGender(rs.getString("gender"));
+                        individualPresenter.setEmail(rs.getString("email"));
+                        individualPresenter.setPhoneNumber(rs.getString("phone_number"));
+                        individualPresenter.setIncome(rs.getBigDecimal("income"));
 
-                    individualPresenter.setMoneySourcePresenters(this.moneySourceDao.getMoneySources(userId));
+                        individualPresenter.setMoneySourcePresenters(this.moneySourceDao.getMoneySources(userId));
 
-                    return individualPresenter;
-                }
-        );
-
-        return expensesList;
+                        return individualPresenter;
+                    }
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 
     @Override
@@ -141,9 +144,8 @@ public class IndividualDao implements IIndividualDao {
                 + "        email = :email,                  "
                 + "        phone_number = :phoneNumber,     "
                 + "        income = :income,                "
-                + "        user_id = :userId)               "
-                + "WHERE id = :id                           "
-                ;
+                + "        user_id = :userId                "
+                + "WHERE id = :id                           ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("firstName", model.getFirstName());
@@ -154,7 +156,8 @@ public class IndividualDao implements IIndividualDao {
         paramsMap.addValue("email", model.getEmail());
         paramsMap.addValue("phoneNumber", model.getPhoneNumber());
         paramsMap.addValue("income", model.getIncome());
-        paramsMap.addValue("userId", model.getId());
+        paramsMap.addValue("userId", model.getUserId());
+        paramsMap.addValue("id", model.getId());
 
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
@@ -163,7 +166,7 @@ public class IndividualDao implements IIndividualDao {
 
     @Override
     public Boolean isIndividualExisting(Integer userId) {
-        final String sql = "SELECT COUNT(*) FROM finance_management.fm_individuals WHERE user_id = :userId";
+        final String sql = "SELECT COUNT(*) FROM fm_individuals WHERE user_id = :userId";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("userId", userId);

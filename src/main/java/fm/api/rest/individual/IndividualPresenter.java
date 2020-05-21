@@ -124,4 +124,17 @@ public class IndividualPresenter {
     public void setUserId(Integer userId) {
         this.userId = userId;
     }
+
+    public void updateIndividual(IndividualPresenter individual) {
+        this.setFirstName(individual.getFirstName());
+        this.setMiddleName(individual.getMiddleName());
+        this.setLastName(individual.getLastName());
+        this.setUserId(individual.getUserId());
+        this.setEmail(individual.getEmail());
+        this.setBirthday(individual.getBirthday());
+        this.setIncome(individual.getIncome());
+        this.setPhoneNumber(individual.getPhoneNumber());
+        this.setMoneySourcePresenters(individual.getMoneySourcePresenters());
+        this.setGender(individual.getGender());
+    }
 }
