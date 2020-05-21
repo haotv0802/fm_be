@@ -67,6 +67,9 @@ public class PaymentMethodsResource extends BaseResource {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @Valid @RequestBody PaymentMethodPresenter paymentMethod
     ) {
+        // validate if name is already existing.
+        paymentMethodUpdateValidator.validate(paymentMethod);
+
         this.paymentMethodsService.updatePaymentMethod(paymentMethod);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
