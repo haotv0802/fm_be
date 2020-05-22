@@ -13,17 +13,22 @@ import org.springframework.util.Assert;
 @Service("moneySourceService")
 public class MoneySourceService implements IMoneySourceService {
 
-  private IMoneySourceDao moneySourceDao;
+    private IMoneySourceDao moneySourceDao;
 
-  @Autowired
-  public MoneySourceService(@Qualifier("moneySourceDao") IMoneySourceDao moneySourceDao) {
-    Assert.notNull(moneySourceDao);
+    @Autowired
+    public MoneySourceService(@Qualifier("moneySourceDao") IMoneySourceDao moneySourceDao) {
+        Assert.notNull(moneySourceDao);
 
-    this.moneySourceDao = moneySourceDao;
-  }
+        this.moneySourceDao = moneySourceDao;
+    }
 
-  @Override
-  public void updateMoneySource(MoneySourcePresenter moneySource) {
-    this.moneySourceDao.updateMoneySource(moneySource);
-  }
+    @Override
+    public void updateMoneySource(MoneySourcePresenter moneySource) {
+        this.moneySourceDao.updateMoneySource(moneySource);
+    }
+
+    @Override
+    public Integer addMoneySource(MoneySourcePresenter moneySource, Integer userId) {
+        return moneySourceDao.addMoneySource(moneySource, userId);
+    }
 }

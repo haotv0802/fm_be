@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,5 +41,17 @@ public class MoneySourceResource extends BaseResource {
         this.moneySourceService.updateMoneySource(moneySource);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/moneysource")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public ResponseEntity addMoneySource(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @RequestBody MoneySourcePresenter moneySource
+    ) {
+        Integer id = this.moneySourceService.addMoneySource(moneySource, userDetails.getUserId());
+        return new ResponseEntity<>(new Object() {
+            public final Integer moneySourceId = id;
+        }, HttpStatus.CREATED);
     }
 }

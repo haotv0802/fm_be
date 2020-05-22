@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -116,5 +118,46 @@ public class MoneySourceDao implements IMoneySourceDao {
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
         namedTemplate.update(sql, paramsMap);
+    }
+
+    @Override
+    public Integer addMoneySource(MoneySourcePresenter moneySource, Integer userId) {
+        final String sql = ""
+                + "INSERT INTO fm_money_source  "
+                + "        (                    "
+                + "        name,                "
+                + "        start_date,          "
+                + "        expiry_date,         "
+                + "        card_number,         "
+                + "        amount,              "
+                + "        card_type_id,        "
+                + "        user_id,             "
+                + "        bank_id)             "
+                + "  VALUES      (              "
+                + "        :name,               "
+                + "        :start_date,         "
+                + "        :expiry_date,        "
+                + "        :card_number,        "
+                + "        :amount,             "
+                + "        :card_type_id,       "
+                + "        :user_id,            "
+                + "        :bank_id)            ";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("name", moneySource.getName());
+        paramsMap.addValue("start_date", FmDateUtils.toSqlDate(moneySource.getStartDate()));
+        paramsMap.addValue("expiry_date", FmDateUtils.toSqlDate(moneySource.getExpiryDate()));
+        paramsMap.addValue("card_number", moneySource.getCardNumber());
+        paramsMap.addValue("amount", moneySource.getCreditLimit());
+        paramsMap.addValue("card_type_id", moneySource.getPaymentMethodId());
+        paramsMap.addValue("user_id", userId);
+        paramsMap.addValue("bank_id", moneySource.getBankId());
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedTemplate.update(sql, paramsMap, keyHolder);
+        final Integer id = keyHolder.getKey().intValue();
+        return id;
     }
 }

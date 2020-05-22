@@ -60,9 +60,9 @@ public class IndividualResource extends BaseResource {
 
         individualUpdateValidator.validate(item);
 
-        Long id = this.individualService.saveIndividual(item);
+        Integer id = this.individualService.saveIndividual(item);
         return new ResponseEntity<>(new Object() {
-            public final Long individualId = id;
+            public final Integer individualId = id;
         }, HttpStatus.CREATED);
     }
 

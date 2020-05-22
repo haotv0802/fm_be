@@ -11,4 +11,6 @@ public interface IMoneySourceDao {
   List<MoneySourcePresenter> getMoneySources(Integer userId);
 
   void updateMoneySource(MoneySourcePresenter moneySource);
+
+  Integer addMoneySource(MoneySourcePresenter moneySource, Integer userId);
 }

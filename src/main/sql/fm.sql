@@ -25,7 +25,7 @@ CREATE TABLE `fm_auth_token`
 DROP TABLE IF EXISTS `fm_user_roles`;
 CREATE TABLE `fm_user_roles`
 (
-    `id`        BIGINT      NOT NULL,
+    `id`        INTEGER     NOT NULL,
     `role_name` VARCHAR(45) NOT NULL,
     `created`   DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
@@ -41,7 +41,7 @@ CREATE TABLE `fm_user_roles`
 DROP TABLE IF EXISTS `fm_users`;
 CREATE TABLE `fm_users`
 (
-    `id`        BIGINT      NOT NULL,
+    `id`        INTEGER     NOT NULL,
     `user_name` VARCHAR(50) NOT NULL,
     `password`  VARCHAR(50) NOT NULL,
     `created`   DATETIME DEFAULT now(),
@@ -58,9 +58,9 @@ CREATE TABLE `fm_users`
 DROP TABLE IF EXISTS `fm_user_role_details`;
 CREATE TABLE `fm_user_role_details`
 (
-    `id`      BIGINT NOT NULL AUTO_INCREMENT,
-    `user_id` BIGINT NOT NULL,
-    `role_id` BIGINT NOT NULL,
+    `id`      INTEGER NOT NULL AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `role_id` INTEGER NOT NULL,
     `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_user_role_unique` (`user_id`, `role_id`),
@@ -98,7 +98,7 @@ CREATE TABLE `fm_banks`
 DROP TABLE IF EXISTS `fm_individuals`;
 CREATE TABLE `fm_individuals`
 (
-    `id`           BIGINT AUTO_INCREMENT,
+    `id`           INTEGER AUTO_INCREMENT,
     `first_name`   VARCHAR(30)  NOT NULL,
     `last_name`    VARCHAR(30)  NOT NULL,
     `middle_name`  VARCHAR(30),
@@ -107,7 +107,7 @@ CREATE TABLE `fm_individuals`
     `email`        VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20),
     `income`       DOUBLE,
-    `user_id`      BIGINT       NOT NULL,
+    `user_id`      INTEGER      NOT NULL,
     `created`      DATETIME DEFAULT now(),
     `updated`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
@@ -186,10 +186,11 @@ CREATE TABLE `fm_money_source`
     `card_number`   VARCHAR(50) NULL, # last 6 digits
     `amount`        DOUBLE      NOT NULL,
     `card_type_id`  INTEGER     NULL,
-    `user_id`       BIGINT      NULL,
+    `user_id`       INTEGER     NULL,
     `is_terminated` BOOLEAN  DEFAULT FALSE,
     `bank_id`       INTEGER     NOT NULL,
     `created`       DATETIME DEFAULT now(),
+    `updated`       DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_money_source_id_unique` (`id`, `card_number`, `user_id`),
     CONSTRAINT `fm_money_source_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
@@ -204,7 +205,7 @@ DROP TABLE IF EXISTS `fm_money_flow`;
 CREATE TABLE `fm_money_flow`
 (
     `id`              BIGINT       NOT NULL AUTO_INCREMENT,
-    `user_id`         BIGINT       NOT NULL,
+    `user_id`         INTEGER      NOT NULL,
     `amount`          DOUBLE       NULL, # if `is_an_event is TRUE, amount can be updated later when event is over
     `date`            DATE         NOT NULL,
     `name`            VARCHAR(45)  NOT NULL,
