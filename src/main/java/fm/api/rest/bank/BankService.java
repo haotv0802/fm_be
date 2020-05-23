@@ -15,22 +15,32 @@ import java.util.List;
 @Service("bankService")
 public class BankService implements IBankService {
 
-  private IBankDao bankDao;
+    private IBankDao bankDao;
 
-  @Autowired
-  public BankService(@Qualifier("bankDao") IBankDao bankDao) {
-    Assert.notNull(bankDao);
+    @Autowired
+    public BankService(@Qualifier("bankDao") IBankDao bankDao) {
+        Assert.notNull(bankDao);
 
-    this.bankDao = bankDao;
-  }
+        this.bankDao = bankDao;
+    }
 
-  @Override
-  public List<BankPresenter> getBanks(Integer userId) {
-    return this.bankDao.getBanksByUserId(userId);
-  }
+    @Override
+    public List<BankPresenter> getBanks(Integer userId) {
+        return this.bankDao.getBanksByUserId(userId);
+    }
 
-  @Override
-  public List<BankPresenter> getAllBanks() {
-    return this.bankDao.getAllBanks();
-  }
+    @Override
+    public List<BankPresenter> getAllBanks() {
+        return this.bankDao.getAllBanks();
+    }
+
+    @Override
+    public Integer addBank(BankPresenter bank) {
+        return bankDao.addBank(bank);
+    }
+
+    @Override
+    public void updateBank(BankPresenter bank) {
+        bankDao.updateBank(bank);
+    }
 }

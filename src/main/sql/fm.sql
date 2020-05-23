@@ -82,11 +82,12 @@ DROP
 CREATE TABLE `fm_banks`
 (
     `id`      INTEGER AUTO_INCREMENT,
-    `name`    VARCHAR(45) NOT NULL,
-    `address` VARCHAR(45) NOT NULL,
+    `name`    VARCHAR(50)  NOT NULL,
+    `address` VARCHAR(100) NOT NULL,
     `website` VARCHAR(45),
     `logo`    VARCHAR(45), -- Logos of Banks
     `created` DATETIME DEFAULT now(),
+    `updated` DATETIME DEFAULT now(),
     INDEX (name),
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB

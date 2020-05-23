@@ -15,4 +15,12 @@ public interface IBankDao {
     BankPresenter getBankById(Integer id);
 
     Boolean isBankExisting(Integer id);
+
+    Boolean isBankExisting(String bankName);
+
+    Boolean isBankExisting(Integer id, String bankName);
+
+    Integer addBank(BankPresenter bank);
+
+    void updateBank(BankPresenter bank);
 }

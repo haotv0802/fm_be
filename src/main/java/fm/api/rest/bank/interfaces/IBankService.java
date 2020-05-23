@@ -11,4 +11,8 @@ public interface IBankService {
   List<BankPresenter> getBanks(Integer userId);
 
   List<BankPresenter> getAllBanks();
+
+  Integer addBank(BankPresenter bank);
+
+  void updateBank(BankPresenter bank);
 }
