@@ -73,7 +73,6 @@ CREATE TABLE `fm_user_role_details`
     AUTO_INCREMENT = 11
     DEFAULT CHARSET = utf8;
 
-
 --
 -- Table structure for table `Banks`
 --
@@ -90,6 +89,49 @@ CREATE TABLE `fm_banks`
     `updated` DATETIME DEFAULT now(),
     INDEX (name),
     PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `fm_bank_interest`
+--
+DROP
+    TABLE IF EXISTS `fm_bank_interest`;
+CREATE TABLE `fm_bank_interest`
+(
+    `id`           INTEGER AUTO_INCREMENT,
+    `start_month`  INTEGER NOT NULL,
+    `end_month`    INTEGER NOT NULL,
+    `start_amount` INTEGER NOT NULL,
+    `end_amount`   INTEGER NOT NULL,
+    `bank_id`      INTEGER NOT NULL,
+    `created`      DATETIME DEFAULT now(),
+    `updated`      DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fm_bank_interest_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+
+--
+-- Table structure for table `fm_bank_interest_change_request`
+--
+DROP
+    TABLE IF EXISTS `fm_bank_interest_change_requests`;
+CREATE TABLE `fm_bank_interest_change_requests`
+(
+    `id`           INTEGER AUTO_INCREMENT,
+    `name`         VARCHAR(50)  NOT NULL,
+    `start_month`  INTEGER      NOT NULL,
+    `end_month`    INTEGER      NOT NULL,
+    `start_amount` INTEGER      NOT NULL,
+    `end_amount`   INTEGER      NOT NULL,
+    `bank_id`      INTEGER      NOT NULL,
+    `description`  VARCHAR(200) NOT NULL,
+    `created`      DATETIME DEFAULT now(),
+    `updated`      DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fm_bank_interest_change_requests_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 

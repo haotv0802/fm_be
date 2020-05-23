@@ -22,29 +22,29 @@ import java.util.List;
 @RestController
 public class UsersResource extends BaseResource {
 
-  private final IUserService userService;
+    private final IUserService userService;
 
-  @Autowired
-  public UsersResource(@Qualifier("userService") IUserService userService) {
-    Assert.notNull(userService);
-    this.userService = userService;
-  }
+    @Autowired
+    public UsersResource(@Qualifier("userService") IUserService userService) {
+        Assert.notNull(userService);
+        this.userService = userService;
+    }
 
-  @GetMapping("/users")
-  @PreAuthorize("hasAuthority('USER')")
-  public List<UserBean> getUsers(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang) {
-    return userService.getUsers();
-  }
+    @GetMapping("/users")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<UserBean> getUsers(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @HeaderLang String lang) {
+        return userService.getUsers();
+    }
 
-  @PatchMapping("/users/usersRolesUpdate")
-  @PreAuthorize("hasAuthority('USER')")
-  public void updateUsersRoles(
-      @AuthenticationPrincipal UserDetailsImpl userDetails,
-      @HeaderLang String lang,
-      @RequestBody List<UserBean> userBeans
-  ) {
-    this.userService.updateUsersRoles(userBeans);
-  }
+    @PatchMapping("/users/usersRolesUpdate")
+    @PreAuthorize("hasAuthority('USER')")
+    public void updateUsersRoles(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @HeaderLang String lang,
+            @RequestBody List<UserBean> userBeans
+    ) {
+        this.userService.updateUsersRoles(userBeans);
+    }
 }

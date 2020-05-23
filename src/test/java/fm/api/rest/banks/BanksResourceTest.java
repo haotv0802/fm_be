@@ -2,7 +2,6 @@ package fm.api.rest.banks;
 
 import fm.api.rest.BaseDocumentation;
 import fm.api.rest.bank.BankPresenter;
-import fm.api.rest.paymentmethods.beans.PaymentMethodPresenter;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
