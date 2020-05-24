@@ -222,21 +222,21 @@ CREATE TABLE `fm_payment_methods`
 DROP TABLE IF EXISTS `fm_money_source`;
 CREATE TABLE `fm_money_source`
 (
-    `id`            BIGINT      NOT NULL AUTO_INCREMENT,
-    `name`          VARCHAR(50) NULL, # HSBC, ANZ 123 or any name you like for such source.
-    `start_date`    DATE        NULL,
-    `expiry_date`   DATE        NULL,
-    `card_number`   VARCHAR(50) NULL, # last 6 digits
-    `amount`        DOUBLE      NOT NULL,
-    `card_type_id`  INTEGER     NULL,
-    `user_id`       INTEGER     NULL,
-    `is_terminated` BOOLEAN  DEFAULT FALSE,
-    `bank_id`       INTEGER     NOT NULL,
-    `created`       DATETIME DEFAULT now(),
-    `updated`       DATETIME DEFAULT now(),
+    `id`                BIGINT      NOT NULL AUTO_INCREMENT,
+    `name`              VARCHAR(50) NULL, # HSBC, ANZ 123 or any name you like for such source.
+    `start_date`        DATE        NULL,
+    `expiry_date`       DATE        NULL,
+    `card_number`       VARCHAR(50) NULL, # last 6 digits
+    `amount`            DOUBLE      NOT NULL,
+    `payment_method_id` INTEGER     NULL,
+    `user_id`           INTEGER     NULL,
+    `is_terminated`     BOOLEAN  DEFAULT FALSE,
+    `bank_id`           INTEGER     NOT NULL,
+    `created`           DATETIME DEFAULT now(),
+    `updated`           DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_money_source_id_unique` (`id`, `card_number`, `user_id`),
-    CONSTRAINT `fm_money_source_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
+    UNIQUE KEY `fm_money_source_id_unique` (`card_number`),
+    CONSTRAINT `fm_money_source_type_id` FOREIGN KEY (`payment_method_id`) REFERENCES `fm_payment_methods` (`id`),
     CONSTRAINT `fm_money_source_individual_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`),
     CONSTRAINT `fm_money_source_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 )

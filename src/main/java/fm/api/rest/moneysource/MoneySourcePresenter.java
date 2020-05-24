@@ -10,32 +10,41 @@ import java.util.Date;
  * Created by haoho on 3/2/20 15:00.
  */
 public class MoneySourcePresenter {
-    private Long id;
+    private Integer id;
     @NotNull(message = "Name cannot be null")
     private String name;
+
     @NotNull(message = "Start date cannot be null")
     private Date startDate;
+
     @NotNull(message = "Expiry date cannot be null")
     private Date expiryDate;
+
     @NotNull(message = "Card number cannot be null")
     private String cardNumber;
+
     @NotNull(message = "payment method cannot be null")
     private Integer paymentMethodId;
+
     @NotNull(message = "Credit limit cannot be null")
     private BigDecimal creditLimit;
+
     @NotNull(message = "Terminated cannot be null")
     private Boolean terminated;
+
     @NotNull(message = "Bank id cannot be null")
     private Integer bankId;
+
     private BankPresenter bank;
+
     @NotNull(message = "User id cannot be null")
     private Integer userId;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

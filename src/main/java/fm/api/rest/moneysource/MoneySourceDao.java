@@ -52,7 +52,7 @@ public class MoneySourceDao implements IMoneySourceDao {
                 + "    expiry_date,       "
                 + "    card_number,       "
                 + "    amount,            "
-                + "    card_type_id,      "
+                + "    payment_method_id, "
                 + "    user_id,           "
                 + "    is_terminated,     "
                 + "    bank_id            "
@@ -68,7 +68,7 @@ public class MoneySourceDao implements IMoneySourceDao {
 
         List<MoneySourcePresenter> moneyPresenters = namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
                     MoneySourcePresenter moneyPresenter = new MoneySourcePresenter();
-                    moneyPresenter.setId(rs.getLong("id"));
+                    moneyPresenter.setId(rs.getInt("id"));
                     moneyPresenter.setName(rs.getString("name"));
                     moneyPresenter.setStartDate(FmDateUtils.toUtilDate(rs.getDate("start_date")));
                     moneyPresenter.setExpiryDate(FmDateUtils.toUtilDate(rs.getDate("expiry_date")));
@@ -77,7 +77,7 @@ public class MoneySourceDao implements IMoneySourceDao {
                     moneyPresenter.setTerminated(rs.getBoolean("is_terminated"));
                     moneyPresenter.setBankId(rs.getInt("bank_id"));
                     moneyPresenter.setUserId(rs.getInt("user_id"));
-                    moneyPresenter.setPaymentMethodId(rs.getInt("card_type_id"));
+                    moneyPresenter.setPaymentMethodId(rs.getInt("payment_method_id"));
 
                     BankPresenter bank = this.bankDao.getBankById(rs.getInt("bank_id"));
                     moneyPresenter.setBank(bank);
@@ -92,18 +92,19 @@ public class MoneySourceDao implements IMoneySourceDao {
     @Override
     public void updateMoneySource(MoneySourcePresenter moneySource) {
         final String sql = ""
-                + "UPDATE                              "
-                + "   fm_money_source                  "
-                + "SET                                 "
-                + "   name = :name,                    "
-                + "   start_date = DATE(:start_date),  "
-                + "   expiry_date = DATE(:expiry_date),"
-                + "   card_number = :card_number,      "
-                + "   amount = :amount,                "
-                + "   is_terminated = :terminated,     "
-                + "   bank_id = :bank_id               "
-                + "WHERE                               "
-                + "   id = :id                         ";
+                + "UPDATE                         "
+                + "   fm_money_source             "
+                + " SET                           "
+                + "   name = :name,               "
+                + "   start_date = :start_date,   "
+                + "   expiry_date = :expiry_date, "
+                + "   card_number = :card_number, "
+                + "   amount = :amount,           "
+                + "   is_terminated = :terminated,"
+                + "   bank_id = :bank_id,         "
+                + "   updated = now()             "
+                + " WHERE                         "
+                + "   id = :id                    ";
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("name", moneySource.getName());
@@ -130,7 +131,7 @@ public class MoneySourceDao implements IMoneySourceDao {
                 + "        expiry_date,         "
                 + "        card_number,         "
                 + "        amount,              "
-                + "        card_type_id,        "
+                + "        payment_method_id,   "
                 + "        user_id,             "
                 + "        bank_id)             "
                 + "  VALUES      (              "
@@ -139,7 +140,7 @@ public class MoneySourceDao implements IMoneySourceDao {
                 + "        :expiry_date,        "
                 + "        :card_number,        "
                 + "        :amount,             "
-                + "        :card_type_id,       "
+                + "        :payment_method_id,  "
                 + "        :user_id,            "
                 + "        :bank_id)            ";
 
@@ -149,7 +150,7 @@ public class MoneySourceDao implements IMoneySourceDao {
         paramsMap.addValue("expiry_date", FmDateUtils.toSqlDate(moneySource.getExpiryDate()));
         paramsMap.addValue("card_number", moneySource.getCardNumber());
         paramsMap.addValue("amount", moneySource.getCreditLimit());
-        paramsMap.addValue("card_type_id", moneySource.getPaymentMethodId());
+        paramsMap.addValue("payment_method_id", moneySource.getPaymentMethodId());
         paramsMap.addValue("user_id", userId);
         paramsMap.addValue("bank_id", moneySource.getBankId());
 
@@ -159,5 +160,32 @@ public class MoneySourceDao implements IMoneySourceDao {
         namedTemplate.update(sql, paramsMap, keyHolder);
         final Integer id = keyHolder.getKey().intValue();
         return id;
+    }
+
+    @Override
+    public Boolean isMoneySourceExisting(String cardNumber) {
+        final String sql =
+                "SELECT  COUNT(*) FROM fm_money_source  WHERE card_number = :cardNumber";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("cardNumber", cardNumber);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+    }
+
+    @Override
+    public Boolean isMoneySourceExisting(Integer id, String cardNumber) {
+        final String sql =
+                "SELECT COUNT(*) FROM fm_money_source WHERE id != :id AND card_number = :cardNumber";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("cardNumber", cardNumber);
+        paramsMap.addValue("id", id);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
     }
 }

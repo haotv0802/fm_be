@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.util.List;
+
 /**
  * Created by haoho on 3/2/20 14:55.
  */
@@ -30,5 +32,10 @@ public class MoneySourceService implements IMoneySourceService {
     @Override
     public Integer addMoneySource(MoneySourcePresenter moneySource, Integer userId) {
         return moneySourceDao.addMoneySource(moneySource, userId);
+    }
+
+    @Override
+    public List<MoneySourcePresenter> getMoneySources(Integer userId) {
+        return moneySourceDao.getMoneySources(userId);
     }
 }
