@@ -111,7 +111,7 @@ public class PromotionsResourceTest extends BaseDocumentation {
 //            .andExpect(status().is(200))
 //        ;
         mockMvc
-            .perform(get("/svc/promotions/list?title=GRAND&content=Giảm ngay&end_date=2021-09-20")
+            .perform(get("/svc/promotions/list?title=G&start_date=2020-03-10&end_date=2020-12-10")
                 .header("Accept-Language", "vi")
                 .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

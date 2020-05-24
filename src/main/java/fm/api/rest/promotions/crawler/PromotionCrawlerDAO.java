@@ -111,19 +111,19 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         paramsMap.addValue("content", promotion.getContent());
         paramsMap.addValue("discount", promotion.getDiscount());
         paramsMap.addValue("installment", promotion.getInstallmentPeriod());
-        if (promotion.getStartDate().equals("") || promotion.getStartDate().equals("T? nay")) {
+        if (promotion.getStart_date().equals("") || promotion.getStart_date().equals("T? nay")) {
             paramsMap.addValue("start_date", Date.valueOf(LocalDate.now()));
         } else {
-            paramsMap.addValue("start_date", Date.valueOf(promotion.getStartDate()));
+            paramsMap.addValue("start_date", Date.valueOf(promotion.getStart_date()));
         }
-        if (promotion.getEndDate().equals("")) {
+        if (promotion.getEnd_date().equals("")) {
             paramsMap.addValue("end_date", Date.valueOf(FmLocalDateUtils.getLastDateOfNextYear()));
         } else {
-            paramsMap.addValue("end_date", Date.valueOf(promotion.getEndDate()));
+            paramsMap.addValue("end_date", Date.valueOf(promotion.getEnd_date()));
         }
         paramsMap.addValue("url", promotion.getUrl());
-        paramsMap.addValue("category_id", promotion.getCategoryId());
-        paramsMap.addValue("bank_id", promotion.getBankId());
+        paramsMap.addValue("category_id", promotion.getCategory_id());
+        paramsMap.addValue("bank_id", promotion.getBank_id());
         paramsMap.addValue("updated", LocalDateTime.now());
         paramsMap.addValue("id", promotion.getId());
 
@@ -230,10 +230,10 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
         presenter.setContent(rs.getString("content"));
         presenter.setDiscount(rs.getString("discount"));
         presenter.setInstallmentPeriod(rs.getString("installment"));
-        presenter.setStartDate(rs.getDate("start_date").toLocalDate());
-        presenter.setEndDate(rs.getDate("end_date").toLocalDate());
-        presenter.setCategoryId(rs.getInt("category_Id"));
-        presenter.setBankId(rs.getInt("bank_id"));
+        presenter.setStart_date(rs.getDate("start_date").toLocalDate());
+        presenter.setEnd_date(rs.getDate("end_date").toLocalDate());
+        presenter.setCategory_id(rs.getInt("category_Id"));
+        presenter.setBank_id(rs.getInt("bank_id"));
         return presenter;
     }
 }

@@ -19,6 +19,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +45,7 @@ public class PromotionResource extends BaseResource {
                            @Qualifier("promotionService") IPromotionService promotionService,
                            ListableBeanFactory beanFactory,
                            ThreadPoolTaskExecutor executor
-                           ) {
+  ) {
     Assert.notNull(bankPromotion);
     Assert.notNull(promotionService);
     Assert.notNull(beanFactory);
@@ -87,11 +88,11 @@ public class PromotionResource extends BaseResource {
   public List<PromotionPresenter> getAllPromotion(@AuthenticationPrincipal UserDetailsImpl userDetails,
                                                   @RequestParam(required = false, defaultValue = "") String title,
                                                   @RequestParam(required = false) String content,
-                                                  @RequestParam(required = false) String start_date,
-                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") String end_date,
-                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Integer bank_id,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate start_date,
+                                                  @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate end_date,
+                                                  @RequestParam(required = false) Integer bank_id,
                                                   @RequestParam(required = false) Integer category_id) {
-    List<PromotionPresenter> listResult =  this.promotionService.getAllPromotions(title, content, start_date, end_date, bank_id, category_id);
+    List<PromotionPresenter> listResult = this.promotionService.getAllPromotions(title, content, start_date, end_date, bank_id, category_id);
     return listResult;
   }
 }

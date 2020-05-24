@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class PromotionDao implements IPromotionDao {
 
 
     @Override
-    public List<PromotionPresenter> getAllPromotions(String title, String content, String start_date, String end_date, Integer bank_id, Integer category_id) {
+    public List<PromotionPresenter> getAllPromotions(String title, String content, LocalDate start_date, LocalDate end_date, Integer bank_id, Integer category_id) {
         final String sql =
                           "  SELECT                              "
                         + "  id,                                 "
@@ -77,10 +78,10 @@ public class PromotionDao implements IPromotionDao {
         presenter.setContent(rs.getString("content"));
         presenter.setDiscount(rs.getString("discount"));
         presenter.setInstallmentPeriod(rs.getString("installment"));
-        presenter.setStartDate(rs.getDate("start_date").toLocalDate());
-        presenter.setEndDate(rs.getDate("end_date").toLocalDate());
-        presenter.setCategoryId(rs.getInt("category_Id"));
-        presenter.setBankId(rs.getInt("bank_id"));
+        presenter.setStart_date(rs.getDate("start_date").toLocalDate());
+        presenter.setEnd_date(rs.getDate("end_date").toLocalDate());
+        presenter.setCategory_id(rs.getInt("category_Id"));
+        presenter.setBank_id(rs.getInt("bank_id"));
         return presenter;
     }
 }
