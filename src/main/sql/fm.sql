@@ -84,7 +84,7 @@ CREATE TABLE `fm_banks`
     `name`    VARCHAR(50)  NOT NULL,
     `address` VARCHAR(100) NOT NULL,
     `website` VARCHAR(45),
-    `logo`    VARCHAR(45), -- Logos of Banks
+    `logo`    BLOB         NULL, -- Logos of Banks
     `created` DATETIME DEFAULT now(),
     `updated` DATETIME DEFAULT now(),
     INDEX (name),
@@ -209,7 +209,7 @@ CREATE TABLE `fm_payment_methods`
 (
     `id`      INTEGER     NOT NULL AUTO_INCREMENT,
     `name`    VARCHAR(50) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
-    `logo`    VARCHAR(50) NULL, # TODO: it should be binary type to store an image.
+    `logo`    BLOB        NULL, # TODO: it should be binary type to store an image.
     `created` DATETIME DEFAULT now(),
     `updated` DATETIME DEFAULT now(),
     UNIQUE KEY `fm_payment_methods_name_unique` (`name`),

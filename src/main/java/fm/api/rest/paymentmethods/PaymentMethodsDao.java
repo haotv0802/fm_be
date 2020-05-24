@@ -6,6 +6,7 @@ import fm.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -13,6 +14,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 
@@ -25,6 +27,9 @@ public class PaymentMethodsDao implements IPaymentMethodsDao {
     private static final Logger logger = LogManager.getLogger(PaymentMethodsDao.class);
 
     private final NamedParameterJdbcTemplate namedTemplate;
+
+    @Value("${logo.base64.for.unknown.image}")
+    private String imageAsBase64;
 
     @Autowired
     public PaymentMethodsDao(NamedParameterJdbcTemplate namedTemplate) {
@@ -51,7 +56,12 @@ public class PaymentMethodsDao implements IPaymentMethodsDao {
             PaymentMethodPresenter paymentMethodPresenter = new PaymentMethodPresenter();
             paymentMethodPresenter.setId(rs.getInt("id"));
             paymentMethodPresenter.setName(rs.getString("name"));
-            paymentMethodPresenter.setLogo(rs.getString("logo"));
+            String logo = rs.getString("logo");
+            if (StringUtils.isEmpty(logo)) {
+                paymentMethodPresenter.setLogo(imageAsBase64);
+            } else {
+                paymentMethodPresenter.setLogo(logo);
+            }
             return paymentMethodPresenter;
         });
     }

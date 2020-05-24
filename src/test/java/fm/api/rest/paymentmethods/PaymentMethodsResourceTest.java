@@ -30,7 +30,7 @@ public class PaymentMethodsResourceTest extends BaseDocumentation {
                 .andReturn();
 
         List<PaymentMethodPresenter> paymentMethodPresenter = objectMapper.readValue(
-                result.getResponse().getContentAsString(), List.class);
+                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, PaymentMethodPresenter.class));
 
         Assert.notNull(paymentMethodPresenter);
         Assert.isTrue(paymentMethodPresenter.size() > 0);
