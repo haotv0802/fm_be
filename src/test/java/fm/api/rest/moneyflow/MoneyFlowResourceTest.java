@@ -170,7 +170,7 @@ public class MoneyFlowResourceTest extends BaseDocumentation {
     }
 
     @Test
-    @Rollback(false)
+//    @Rollback(false)
     public void testUpdateExpense() throws Exception {
         // Firstly, add expense into DB
         Item creation = new Item();
