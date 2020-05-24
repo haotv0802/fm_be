@@ -20,7 +20,7 @@ public class MoneySourcePresenter {
     @NotNull(message = "Card number cannot be null")
     private String cardNumber;
     @NotNull(message = "payment method cannot be null")
-    private String paymentMethodId;
+    private Integer paymentMethodId;
     @NotNull(message = "Credit limit cannot be null")
     private BigDecimal creditLimit;
     @NotNull(message = "Terminated cannot be null")
@@ -103,11 +103,11 @@ public class MoneySourcePresenter {
         this.bank = bank;
     }
 
-    public String getPaymentMethodId() {
+    public Integer getPaymentMethodId() {
         return paymentMethodId;
     }
 
-    public void setPaymentMethodId(String paymentMethodId) {
+    public void setPaymentMethodId(Integer paymentMethodId) {
         this.paymentMethodId = paymentMethodId;
     }
 
