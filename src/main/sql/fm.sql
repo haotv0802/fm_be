@@ -94,6 +94,7 @@ CREATE TABLE `fm_banks`
 
 --
 -- Table structure for table `fm_bank_interest`
+--   storing bank interest crawled from any reliable websites.
 --
 DROP
     TABLE IF EXISTS `fm_bank_interest`;
@@ -105,17 +106,20 @@ CREATE TABLE `fm_bank_interest`
     `start_amount` INTEGER       NOT NULL,
     `end_amount`   INTEGER       NOT NULL,
     `interest`     DECIMAL(3, 2) NOT NULL,
+    `url`          VARCHAR(100)  NOT NULL,
     `bank_id`      INTEGER       NOT NULL,
     `created`      DATETIME DEFAULT now(),
     `updated`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
+    UNIQUE KEY `fm_bank_interest_unique` (`start_month`, `end_month`, `start_amount`, `end_amount`, `interest`, `url`),
     CONSTRAINT `fm_bank_interest_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
-
 --
 -- Table structure for table `fm_bank_interest_change_request`
+-- this table keeps data of change requests from any user. User wants to change bank interest, since he finds it not correct
+--   in the bank interests, so he would like to make change by requesting with new info of bank interests. then Admin will take a look and decide if it is approved or not.
 --
 DROP
     TABLE IF EXISTS `fm_bank_interest_change_requests`;
@@ -128,7 +132,11 @@ CREATE TABLE `fm_bank_interest_change_requests`
     `start_amount` INTEGER      NOT NULL,
     `end_amount`   INTEGER      NOT NULL,
     `bank_id`      INTEGER      NOT NULL,
-    `description`  VARCHAR(200) NOT NULL,
+    `phone_number` VARCHAR(15)  NULL,
+    `email`        VARCHAR(100) NULL,
+    `url`          VARCHAR(200) NULL,
+    `description`  VARCHAR(200) NOT NULL, -- keep reference like phone number, emails, officers contacts to let Admin verifies such information
+    `status`       VARCHAR(10)  NOT NULL, -- SUBMITTED, PENDING, APPROVED, REFUSED.
     `created`      DATETIME DEFAULT now(),
     `updated`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
@@ -288,3 +296,20 @@ CREATE TABLE `fm_error_tracking`
 )
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8;
+
+
+--
+-- Table structure for table `Notifications`
+--   this keeps list of notifications of user wants to subscribe.
+--
+DROP
+    TABLE IF EXISTS `fm_notifications`;
+CREATE TABLE `fm_notifications`
+(
+    `id`      INTEGER AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `created` DATETIME DEFAULT now(),
+    `updated` DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
