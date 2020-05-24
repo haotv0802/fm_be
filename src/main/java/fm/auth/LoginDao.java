@@ -68,10 +68,7 @@ public class LoginDao {
         UserDetailsImpl userDetails = null;
         try {
             userDetails = namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
-
-                //TODO geting lang from authentication object is plain stupid. So, AN by default
                 UserDetailsImpl ud = new UserDetailsImpl(rs.getInt("id"), rs.getString("user_name"), rs.getString("password"), authorities);
-
                 return ud;
             });
         } catch (EmptyResultDataAccessException e) {
@@ -84,15 +81,16 @@ public class LoginDao {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities(String username) {
-        final String sql = "SELECT                                                  "
-                + "	r.ROLE_NAME                                           "
+        final String sql = ""
+                + "SELECT                                                  "
+                + "	r.ROLE_NAME                                            "
                 + "FROM                                                    "
-                + "	(fm_user_roles r                                      "
-                + "	INNER JOIN fm_user_role_details d ON r.id = d.role_id)"
-                + "		INNER JOIN                                          "
-                + "	fm_users u ON u.id = d.user_id                        "
+                + "	(fm_user_roles r                                       "
+                + "	INNER JOIN fm_user_role_details d ON r.id = d.role_id) "
+                + "		INNER JOIN                                         "
+                + "	fm_users u ON u.id = d.user_id                         "
                 + "WHERE                                                   "
-                + "	u.user_name = :username                               ";
+                + "	u.user_name = :username                                ";
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource()
                 .addValue("username", username);
 
@@ -107,24 +105,19 @@ public class LoginDao {
     }
 
     public Integer storeUserDetailsToToken(TokenType tokenType, UserDetails user, Date expDate) {
-//    final String getIdSql = "SELECT v9_auth_token_seq.nextval FROM DUAL";
-
-        final String addTokenSql =
-                "INSERT INTO fm_auth_token"
-                        + "  (TOKEN_TYPE            "
-                        + "  , AUTH_OBJECT          "
-                        + "  , EXP_DATE)            "
-                        + "VALUES                   "
-                        + "  ( ?                    "
-                        + "  , ?                    "
-                        + "  , ?)                   ";
-
-//    final Long id = jdbcTemplate.queryForObject(getIdSql, Long.class);
+        final String addTokenSql = ""
+                + "INSERT INTO fm_auth_token"
+                + "  (TOKEN_TYPE            "
+                + "  , AUTH_OBJECT          "
+                + "  , EXP_DATE)            "
+                + "VALUES                   "
+                + "  ( ?                    "
+                + "  , ?                    "
+                + "  , ?)                   ";
 
         final SqlLobValue sqlLobValue = new SqlLobValue(SerializationUtils.serialize(user));
 
         DaoUtils.debugQuery(logger, addTokenSql, new Object[]{tokenType.value(), "SIPPED_BLOB", expDate});
-//    jdbcTemplate.update(addTokenSql, paramsMap);
         jdbcTemplate.update(
                 addTokenSql
                 , new Object[]{tokenType.value(), sqlLobValue, expDate}
@@ -136,18 +129,6 @@ public class LoginDao {
 
         int id = namedTemplate.queryForObject(sql, new MapSqlParameterSource(), Integer.class);
 
-//    final String sql2 = "SELECT ID, TOKEN_TYPE, AUTH_OBJECT, EXP_DATE FROM AUTH_TOKEN ORDER BY ID DESC LIMIT 1";
-//    namedTemplate.queryForObject(sql2, new MapSqlParameterSource(), new RowMapper<CredentialsResult>() {
-//
-//      @Override
-//      public CredentialsResult mapRow(ResultSet resultSet, int i) throws SQLException {
-//        log.info(resultSet.getString("ID"));
-//        log.info(resultSet.getString("TOKEN_TYPE"));
-//        log.info(resultSet.getString("EXP_DATE"));
-//        log.info(resultSet.getString("AUTH_OBJECT"));
-//        return null;
-//      }
-//    });
         return id;
     }
 
@@ -162,7 +143,4 @@ public class LoginDao {
         });
 
     }
-
 }
-
-
