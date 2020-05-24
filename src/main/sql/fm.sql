@@ -100,11 +100,12 @@ DROP
 CREATE TABLE `fm_bank_interest`
 (
     `id`           INTEGER AUTO_INCREMENT,
-    `start_month`  INTEGER NOT NULL,
-    `end_month`    INTEGER NOT NULL,
-    `start_amount` INTEGER NOT NULL,
-    `end_amount`   INTEGER NOT NULL,
-    `bank_id`      INTEGER NOT NULL,
+    `start_month`  INTEGER       NOT NULL,
+    `end_month`    INTEGER       NOT NULL,
+    `start_amount` INTEGER       NOT NULL,
+    `end_amount`   INTEGER       NOT NULL,
+    `interest`     DECIMAL(3, 2) NOT NULL,
+    `bank_id`      INTEGER       NOT NULL,
     `created`      DATETIME DEFAULT now(),
     `updated`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
