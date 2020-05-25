@@ -67,7 +67,7 @@ public class IndividualDao implements IIndividualDao {
         try {
             return namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
                         IndividualPresenter individualPresenter = new IndividualPresenter();
-                        individualPresenter.setId(rs.getLong("id"));
+                        individualPresenter.setId(rs.getInt("id"));
                         individualPresenter.setFirstName(rs.getString("first_name"));
                         individualPresenter.setLastName(rs.getString("last_name"));
                         individualPresenter.setMiddleName(rs.getString("middle_name"));
@@ -88,7 +88,7 @@ public class IndividualDao implements IIndividualDao {
     }
 
     @Override
-    public Long addIndividual(IndividualPresenter model) {
+    public Integer addIndividual(IndividualPresenter model) {
         final String sql = ""
                 + "INSERT INTO fm_individuals   "
                 + "        (                    "
@@ -127,7 +127,7 @@ public class IndividualDao implements IIndividualDao {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         namedTemplate.update(sql, paramsMap, keyHolder);
-        final Long id = keyHolder.getKey().longValue();
+        final Integer id = keyHolder.getKey().intValue();
         return id;
     }
 

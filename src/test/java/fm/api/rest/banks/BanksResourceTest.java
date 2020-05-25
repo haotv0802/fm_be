@@ -1,10 +1,9 @@
-package fm.api.rest.paymentmethods;
+package fm.api.rest.banks;
 
 import fm.api.rest.BaseDocumentation;
-import fm.api.rest.paymentmethods.beans.PaymentMethodPresenter;
+import fm.api.rest.bank.BankPresenter;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Assert;
 import org.testng.annotations.Test;
@@ -17,37 +16,39 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 6/26/2017.
  */
-public class PaymentMethodsResourceTest extends BaseDocumentation {
+public class BanksResourceTest extends BaseDocumentation {
 
     @Test
-    public void testGetPaymentMethods() throws Exception {
+    public void testGetBanks() throws Exception {
         MvcResult result = mockMvc
-                .perform(get("/svc/paymentMethod/list")
+                .perform(get("/svc/bank")
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                 )
                 .andExpect(status().is(200))
                 .andReturn();
 
-        List<PaymentMethodPresenter> paymentMethodPresenter = objectMapper.readValue(
-                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, PaymentMethodPresenter.class));
 
-        Assert.notNull(paymentMethodPresenter);
-        Assert.isTrue(paymentMethodPresenter.size() > 0);
+        List<BankPresenter> bankPresenter = objectMapper.readValue(
+                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, BankPresenter.class));
+
+        Assert.notNull(bankPresenter);
+        Assert.isTrue(bankPresenter.size() > 0);
     }
 
     @Test
-    public void tetAddPaymentMethod() throws Exception {
-        PaymentMethodPresenter paymentMethod = new PaymentMethodPresenter();
-        paymentMethod.setName("new Name");
-        paymentMethod.setLogo("new Logo");
+    public void testAddBank() throws Exception {
+        BankPresenter bank = new BankPresenter();
+        bank.setName("new Name");
+        bank.setAddress("new add");
+        bank.setLogo("new Logo");
 
         MvcResult result = mockMvc
-                .perform(post("/svc/paymentMethod")
+                .perform(post("/svc/bank")
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(paymentMethod))
+                        .content(objectMapper.writeValueAsString(bank))
                 )
                 .andExpect(status().is(201))
                 .andReturn();
@@ -56,42 +57,43 @@ public class PaymentMethodsResourceTest extends BaseDocumentation {
         Assert.notNull(result.getResponse().getContentAsString());
         JSONObject data = new JSONObject(result.getResponse().getContentAsString());
 
-        Integer paymentMethodId = (Integer) data.get("paymentMethodId");
-        Assert.notNull(paymentMethodId);
-        Assert.isTrue(paymentMethodId > 0);
+        Integer bankId = (Integer) data.get("bankId");
+        Assert.notNull(bankId);
+        Assert.isTrue(bankId > 0);
     }
 
     @Test
-    public void tetAddPaymentMethodExisting() throws Exception {
+    public void tetAddBankMethodExisting() throws Exception {
         // Get item in the list first
         MvcResult result = mockMvc
-                .perform(get("/svc/paymentMethod/list")
+                .perform(get("/svc/bank")
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                 )
                 .andExpect(status().is(200))
                 .andReturn();
 
-        List<PaymentMethodPresenter> paymentMethodPresenter = objectMapper.readValue(
-                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, PaymentMethodPresenter.class));
-        PaymentMethodPresenter payment = paymentMethodPresenter.get(0);
+        List<BankPresenter> paymentMethodPresenter = objectMapper.readValue(
+                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, BankPresenter.class));
+        BankPresenter bank = paymentMethodPresenter.get(0);
+        bank.setAddress("address");
 
         // then use payment got above to perform ADD request
         result = mockMvc
-                .perform(post("/svc/paymentMethod")
+                .perform(post("/svc/bank")
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payment))
+                        .content(objectMapper.writeValueAsString(bank))
                 )
                 .andExpect(status().is(400))
                 .andReturn();
 
-        // result example: {"faultCode":"payment.method.name.existing","faultMessage":"Name of payment method is already existing.","incidentId":"1"}
+        // result example: {"faultCode":"bank.name.existing","faultMessage":"bank.name.existing","incidentId":"1"}
         Assert.notNull(result.getResponse().getContentAsString());
         JSONObject data = new JSONObject(result.getResponse().getContentAsString());
-        Assert.isTrue(data.get("faultCode").equals("payment.method.name.existing"));
-        Assert.isTrue(data.get("faultMessage").equals("Name of payment method is already existing."));
+        Assert.isTrue(data.get("faultCode").equals("bank.name.existing"));
+        Assert.isTrue(data.get("faultMessage").equals("Bank name is existing."));
         Integer incidentId = Integer.parseInt(data.get("incidentId").toString());
         Assert.notNull(incidentId);
         Assert.isTrue(incidentId > 0);
@@ -101,18 +103,17 @@ public class PaymentMethodsResourceTest extends BaseDocumentation {
     public void tetUpdatePaymentMethod() throws Exception {
         // Get item in the list first
         MvcResult result = mockMvc
-                .perform(get("/svc/paymentMethod/list")
+                .perform(get("/svc/bank")
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                 )
                 .andExpect(status().is(200))
                 .andReturn();
 
-        List<PaymentMethodPresenter> paymentMethodPresenter = objectMapper.readValue(
-                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, PaymentMethodPresenter.class));
-        PaymentMethodPresenter payment = paymentMethodPresenter.get(0);
-        payment.setName("name updated");
-        payment.setLogo("logo updated");
+        List<BankPresenter> paymentMethodPresenter = objectMapper.readValue(
+                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, BankPresenter.class));
+        BankPresenter bank = paymentMethodPresenter.get(0);
+        bank.setName("name updated");
 
         // Then update item got above.
         result = mockMvc
@@ -120,7 +121,7 @@ public class PaymentMethodsResourceTest extends BaseDocumentation {
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payment))
+                        .content(objectMapper.writeValueAsString(bank))
                 )
                 .andExpect(status().is(204))
                 .andReturn();
@@ -130,26 +131,26 @@ public class PaymentMethodsResourceTest extends BaseDocumentation {
     public void tetUpdatePaymentMethodExisting() throws Exception {
         // Get item in the list first
         MvcResult result = mockMvc
-                .perform(get("/svc/paymentMethod/list")
+                .perform(get("/svc/bank")
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                 )
                 .andExpect(status().is(200))
                 .andReturn();
 
-        List<PaymentMethodPresenter> paymentMethodPresenter = objectMapper.readValue(
-                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, PaymentMethodPresenter.class));
-        PaymentMethodPresenter payment = paymentMethodPresenter.get(0);
-        PaymentMethodPresenter payment2 = paymentMethodPresenter.get(1);
-        payment.setName(payment2.getName());
+        List<BankPresenter> paymentMethodPresenter = objectMapper.readValue(
+                result.getResponse().getContentAsString(), objectMapper.getTypeFactory().constructCollectionType(List.class, BankPresenter.class));
+        BankPresenter bank = paymentMethodPresenter.get(0);
+        BankPresenter bank2 = paymentMethodPresenter.get(1);
+        bank.setName(bank2.getName());
 
         // Then update item got above.
         result = mockMvc
-                .perform(patch("/svc/paymentMethod")
+                .perform(patch("/svc/bank")
                         .header("Accept-Language", "")
                         .header("X-AUTH-TOKEN", authTokenService.getAuthToken())
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(payment))
+                        .content(objectMapper.writeValueAsString(bank))
                 )
                 .andExpect(status().is(400))
                 .andReturn();
@@ -157,8 +158,8 @@ public class PaymentMethodsResourceTest extends BaseDocumentation {
         // result example: {"faultCode":"payment.method.name.existing","faultMessage":"Name of payment method is already existing.","incidentId":"1"}
         Assert.notNull(result.getResponse().getContentAsString());
         JSONObject data = new JSONObject(result.getResponse().getContentAsString());
-        Assert.isTrue(data.get("faultCode").equals("payment.method.name.existing"));
-        Assert.isTrue(data.get("faultMessage").equals("Name of payment method is already existing."));
+        Assert.isTrue(data.get("faultCode").equals("bank.name.existing"));
+        Assert.isTrue(data.get("faultMessage").equals("Bank name is existing."));
         Integer incidentId = Integer.parseInt(data.get("incidentId").toString());
         Assert.notNull(incidentId);
         Assert.isTrue(incidentId > 0);

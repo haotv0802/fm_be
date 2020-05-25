@@ -8,6 +8,8 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -129,5 +131,81 @@ public class BankDao implements IBankDao {
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
         return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+    }
+
+    @Override
+    public Boolean isBankExisting(Integer id, String name) {
+        final String sql = "SELECT  COUNT(*) FROM fm_banks b  WHERE b.id != :id AND name = :name";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("id", id);
+        paramsMap.addValue("name", name);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+    }
+
+    @Override
+    public Boolean isBankExisting(String name) {
+        final String sql = "SELECT  COUNT(*) FROM fm_banks b  WHERE b.name = :name";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("name", name);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+    }
+
+    @Override
+    public Integer addBank(BankPresenter bank) {
+        final String sql = ""
+                + "INSERT INTO          "
+                + " fm_banks (          "
+                + "    name,            "
+                + "    address,         "
+                + "    website,         "
+                + "    logo)            "
+                + " VALUES (            "
+                + "    :name,           "
+                + "    :address,        "
+                + "    :website,        "
+                + "    :logo)           ";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("name", bank.getName());
+        paramsMap.addValue("logo", bank.getLogo());
+        paramsMap.addValue("address", bank.getAddress());
+        paramsMap.addValue("website", bank.getWebsite());
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        namedTemplate.update(sql, paramsMap, keyHolder);
+        final Integer id = keyHolder.getKey().intValue();
+        return id;
+    }
+
+    @Override
+    public void updateBank(BankPresenter bank) {
+        final String sql = ""
+                + "UPDATE fm_banks          "
+                + "  SET name = :name,      "
+                + "    address = :address,  "
+                + "    website = :website,  "
+                + "    logo = :logo         "
+                + " WHERE id = :id          ";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("name", bank.getName());
+        paramsMap.addValue("logo", bank.getLogo());
+        paramsMap.addValue("address", bank.getLogo());
+        paramsMap.addValue("website", bank.getLogo());
+        paramsMap.addValue("id", bank.getId());
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        namedTemplate.update(sql, paramsMap);
     }
 }

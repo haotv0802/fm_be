@@ -13,7 +13,7 @@ import java.util.List;
  * Created by haoho on 2/28/20 14:16.
  */
 public class IndividualPresenter {
-    private Long id;
+    private Integer id;
     @NotNull(message = "First Name cannot be null")
     private String firstName;
     @NotNull(message = "Middle Name cannot be null")
@@ -37,11 +37,11 @@ public class IndividualPresenter {
     @Valid
     private List<MoneySourcePresenter> moneySourcePresenters;
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 

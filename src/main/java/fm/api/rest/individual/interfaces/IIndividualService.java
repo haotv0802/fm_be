@@ -10,5 +10,5 @@ public interface IIndividualService {
 
   IndividualPresenter getIndividual(int userId);
 
-  Long saveIndividual(IndividualPresenter model);
+  Integer saveIndividual(IndividualPresenter model);
 }

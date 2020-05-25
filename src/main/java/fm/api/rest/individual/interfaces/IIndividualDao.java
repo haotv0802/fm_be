@@ -9,7 +9,7 @@ import fm.api.rest.individual.IndividualPresenter;
 public interface IIndividualDao {
   IndividualPresenter getIndividual(int userId);
 
-  Long addIndividual(IndividualPresenter model);
+  Integer addIndividual(IndividualPresenter model);
 
   void updateIndividual(IndividualPresenter model);
 

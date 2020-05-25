@@ -25,7 +25,7 @@ CREATE TABLE `fm_auth_token`
 DROP TABLE IF EXISTS `fm_user_roles`;
 CREATE TABLE `fm_user_roles`
 (
-    `id`        BIGINT      NOT NULL,
+    `id`        INTEGER     NOT NULL,
     `role_name` VARCHAR(45) NOT NULL,
     `created`   DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
@@ -41,7 +41,7 @@ CREATE TABLE `fm_user_roles`
 DROP TABLE IF EXISTS `fm_users`;
 CREATE TABLE `fm_users`
 (
-    `id`        BIGINT      NOT NULL,
+    `id`        INTEGER     NOT NULL,
     `user_name` VARCHAR(50) NOT NULL,
     `password`  VARCHAR(50) NOT NULL,
     `created`   DATETIME DEFAULT now(),
@@ -58,9 +58,9 @@ CREATE TABLE `fm_users`
 DROP TABLE IF EXISTS `fm_user_role_details`;
 CREATE TABLE `fm_user_role_details`
 (
-    `id`      BIGINT NOT NULL AUTO_INCREMENT,
-    `user_id` BIGINT NOT NULL,
-    `role_id` BIGINT NOT NULL,
+    `id`      INTEGER NOT NULL AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `role_id` INTEGER NOT NULL,
     `created` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_user_role_unique` (`user_id`, `role_id`),
@@ -73,7 +73,6 @@ CREATE TABLE `fm_user_role_details`
     AUTO_INCREMENT = 11
     DEFAULT CHARSET = utf8;
 
-
 --
 -- Table structure for table `Banks`
 --
@@ -82,13 +81,66 @@ DROP
 CREATE TABLE `fm_banks`
 (
     `id`      INTEGER AUTO_INCREMENT,
-    `name`    VARCHAR(45) NOT NULL,
-    `address` VARCHAR(45) NOT NULL,
+    `name`    VARCHAR(50)  NOT NULL,
+    `address` VARCHAR(100) NOT NULL,
     `website` VARCHAR(45),
-    `logo`    VARCHAR(45), -- Logos of Banks
+    `logo`    TEXT         NULL, -- Logos of Banks
     `created` DATETIME DEFAULT now(),
+    `updated` DATETIME DEFAULT now(),
     INDEX (name),
     PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `fm_bank_interest`
+--   storing bank interest crawled from any reliable websites.
+--
+DROP
+    TABLE IF EXISTS `fm_bank_interest`;
+CREATE TABLE `fm_bank_interest`
+(
+    `id`           INTEGER AUTO_INCREMENT,
+    `start_month`  INTEGER       NOT NULL,
+    `end_month`    INTEGER       NOT NULL,
+    `start_amount` INTEGER       NOT NULL,
+    `end_amount`   INTEGER       NOT NULL,
+    `interest`     DECIMAL(3, 2) NOT NULL,
+    `url`          VARCHAR(100)  NOT NULL,
+    `bank_id`      INTEGER       NOT NULL,
+    `created`      DATETIME DEFAULT now(),
+    `updated`      DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `fm_bank_interest_unique` (`start_month`, `end_month`, `start_amount`, `end_amount`, `interest`, `url`),
+    CONSTRAINT `fm_bank_interest_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `fm_bank_interest_change_request`
+-- this table keeps data of change requests from any user. User wants to change bank interest, since he finds it not correct
+--   in the bank interests, so he would like to make change by requesting with new info of bank interests. then Admin will take a look and decide if it is approved or not.
+--
+DROP
+    TABLE IF EXISTS `fm_bank_interest_change_requests`;
+CREATE TABLE `fm_bank_interest_change_requests`
+(
+    `id`           INTEGER AUTO_INCREMENT,
+    `name`         VARCHAR(50)  NOT NULL,
+    `start_month`  INTEGER      NOT NULL,
+    `end_month`    INTEGER      NOT NULL,
+    `start_amount` INTEGER      NOT NULL,
+    `end_amount`   INTEGER      NOT NULL,
+    `bank_id`      INTEGER      NOT NULL,
+    `phone_number` VARCHAR(15)  NULL,
+    `email`        VARCHAR(100) NULL,
+    `url`          VARCHAR(200) NULL,
+    `description`  VARCHAR(200) NOT NULL, -- keep reference like phone number, emails, officers contacts to let Admin verifies such information
+    `status`       VARCHAR(10)  NOT NULL, -- SUBMITTED, PENDING, APPROVED, REFUSED.
+    `created`      DATETIME DEFAULT now(),
+    `updated`      DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fm_bank_interest_change_requests_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
@@ -98,7 +150,7 @@ CREATE TABLE `fm_banks`
 DROP TABLE IF EXISTS `fm_individuals`;
 CREATE TABLE `fm_individuals`
 (
-    `id`           BIGINT AUTO_INCREMENT,
+    `id`           INTEGER AUTO_INCREMENT,
     `first_name`   VARCHAR(30)  NOT NULL,
     `last_name`    VARCHAR(30)  NOT NULL,
     `middle_name`  VARCHAR(30),
@@ -107,7 +159,7 @@ CREATE TABLE `fm_individuals`
     `email`        VARCHAR(100) NOT NULL,
     `phone_number` VARCHAR(20),
     `income`       DOUBLE,
-    `user_id`      BIGINT       NOT NULL,
+    `user_id`      INTEGER      NOT NULL,
     `created`      DATETIME DEFAULT now(),
     `updated`      DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
@@ -166,7 +218,7 @@ CREATE TABLE `fm_payment_methods`
 (
     `id`      INTEGER     NOT NULL AUTO_INCREMENT,
     `name`    VARCHAR(50) NULL, # cash, credit card, debit card, master card, jbc, amex, visa credit
-    `logo`    VARCHAR(50) NULL, # TODO: it should be binary type to store an image.
+    `logo`    TEXT        NULL, # TODO: it should be binary type to store an image.
     `created` DATETIME DEFAULT now(),
     `updated` DATETIME DEFAULT now(),
     UNIQUE KEY `fm_payment_methods_name_unique` (`name`),
@@ -179,20 +231,21 @@ CREATE TABLE `fm_payment_methods`
 DROP TABLE IF EXISTS `fm_money_source`;
 CREATE TABLE `fm_money_source`
 (
-    `id`            BIGINT      NOT NULL AUTO_INCREMENT,
-    `name`          VARCHAR(50) NULL, # HSBC, ANZ 123 or any name you like for such source.
-    `start_date`    DATE        NULL,
-    `expiry_date`   DATE        NULL,
-    `card_number`   VARCHAR(50) NULL, # last 6 digits
-    `amount`        DOUBLE      NOT NULL,
-    `card_type_id`  INTEGER     NULL,
-    `user_id`       BIGINT      NULL,
-    `is_terminated` BOOLEAN  DEFAULT FALSE,
-    `bank_id`       INTEGER     NOT NULL,
-    `created`       DATETIME DEFAULT now(),
+    `id`                BIGINT      NOT NULL AUTO_INCREMENT,
+    `name`              VARCHAR(50) NULL, # HSBC, ANZ 123 or any name you like for such source.
+    `start_date`        DATE        NULL,
+    `expiry_date`       DATE        NULL,
+    `card_number`       VARCHAR(50) NULL, # last 6 digits
+    `amount`            DOUBLE      NOT NULL,
+    `payment_method_id` INTEGER     NULL,
+    `user_id`           INTEGER     NULL,
+    `is_terminated`     BOOLEAN  DEFAULT FALSE,
+    `bank_id`           INTEGER     NOT NULL,
+    `created`           DATETIME DEFAULT now(),
+    `updated`           DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_money_source_id_unique` (`id`, `card_number`, `user_id`),
-    CONSTRAINT `fm_money_source_type_id` FOREIGN KEY (`card_type_id`) REFERENCES `fm_payment_methods` (`id`),
+    UNIQUE KEY `fm_money_source_id_unique` (`card_number`),
+    CONSTRAINT `fm_money_source_type_id` FOREIGN KEY (`payment_method_id`) REFERENCES `fm_payment_methods` (`id`),
     CONSTRAINT `fm_money_source_individual_id` FOREIGN KEY (`user_id`) REFERENCES `fm_users` (`id`),
     CONSTRAINT `fm_money_source_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
 )
@@ -204,7 +257,7 @@ DROP TABLE IF EXISTS `fm_money_flow`;
 CREATE TABLE `fm_money_flow`
 (
     `id`              BIGINT       NOT NULL AUTO_INCREMENT,
-    `user_id`         BIGINT       NOT NULL,
+    `user_id`         INTEGER      NOT NULL,
     `amount`          DOUBLE       NULL, # if `is_an_event is TRUE, amount can be updated later when event is over
     `date`            DATE         NOT NULL,
     `name`            VARCHAR(45)  NOT NULL,
@@ -243,3 +296,20 @@ CREATE TABLE `fm_error_tracking`
 )
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8;
+
+
+--
+-- Table structure for table `Notifications`
+--   this keeps list of notifications of user wants to subscribe.
+--
+DROP
+    TABLE IF EXISTS `fm_notifications`;
+CREATE TABLE `fm_notifications`
+(
+    `id`      INTEGER AUTO_INCREMENT,
+    `user_id` INTEGER NOT NULL,
+    `created` DATETIME DEFAULT now(),
+    `updated` DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;

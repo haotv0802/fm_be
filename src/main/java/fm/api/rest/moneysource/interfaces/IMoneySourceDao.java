@@ -8,7 +8,13 @@ import java.util.List;
  * Created by haoho on 3/2/20 14:56.
  */
 public interface IMoneySourceDao {
-  List<MoneySourcePresenter> getMoneySources(Integer userId);
+    List<MoneySourcePresenter> getMoneySources(Integer userId);
 
-  void updateMoneySource(MoneySourcePresenter moneySource);
+    void updateMoneySource(MoneySourcePresenter moneySource);
+
+    Integer addMoneySource(MoneySourcePresenter moneySource, Integer userId);
+
+    Boolean isMoneySourceExisting(String cardNumber);
+
+    Boolean isMoneySourceExisting(Integer id, String cardNumber);
 }

@@ -39,12 +39,12 @@ INSERT INTO fm_banks(`id`, `name`, `address`, `website`) VALUES (5, 'Shinhan Ban
 INSERT INTO fm_individuals (`id`, `first_name`, `last_name`, `middle_name`, `birthday`, `gender`, `email`, `phone_number`, `income`, `user_id`)
 VALUES (1, 'Hao', 'Ho', 'Anh', '1988-04-19', 'Male', 'hoanhhao@gmail.com', '0906729775', '1000000000', 2);
 
-INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`, `bank_id`)
+INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `payment_method_id`, `user_id`, `bank_id`)
 VALUES (1, 'HSBC 2017', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2, 1);
-INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`, `bank_id`)
-VALUES (2, 'VIB', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2, 2);
-INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `card_type_id`, `user_id`, `bank_id`)
-VALUES (3, 'Citi Bank', '2017-03-08', '2021-03-07', 57500000, '**49 5256', 2, 2, 3);
+INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `payment_method_id`, `user_id`, `bank_id`)
+VALUES (2, 'VIB', '2017-03-08', '2021-03-07', 57500000, '**49 5255', 2, 2, 2);
+INSERT INTO fm_money_source (`id`, `name`, `start_date`, `expiry_date`, `amount`, `card_number`, `payment_method_id`, `user_id`, `bank_id`)
+VALUES (3, 'Citi Bank', '2017-03-08', '2021-03-07', 57500000, '**49 5254', 2, 2, 3);
 
 INSERT INTO fm_money_flow (`user_id`, `amount`, `name`, `date`, `is_deleted`, `money_source_id`)
 VALUES
