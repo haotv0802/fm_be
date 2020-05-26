@@ -100,16 +100,20 @@ DROP
     TABLE IF EXISTS `fm_bank_interest`;
 CREATE TABLE `fm_bank_interest`
 (
-    `id`           INTEGER AUTO_INCREMENT,
-    `start_month`  INTEGER       NOT NULL,
-    `end_month`    INTEGER       NOT NULL,
-    `start_amount` INTEGER       NOT NULL,
-    `end_amount`   INTEGER       NOT NULL,
-    `interest`     DECIMAL(3, 2) NOT NULL,
-    `url`          VARCHAR(100)  NOT NULL,
-    `bank_id`      INTEGER       NOT NULL,
-    `created`      DATETIME DEFAULT now(),
-    `updated`      DATETIME DEFAULT now(),
+    `id`            BIGINT AUTO_INCREMENT,
+    `start_month`   INTEGER       NOT NULL,
+    `end_month`     INTEGER       NOT NULL,
+    `start_amount`  INTEGER       NOT NULL,
+    `end_amount`    INTEGER       NOT NULL,
+    `interest`      DECIMAL(3, 2) NOT NULL,
+    `url`           VARCHAR(100)  NOT NULL,
+    `bank_id`       INTEGER       NOT NULL,
+    `interest_type` VARCHAR(50)   NULL, -- SAVING, LOAN, .... https://thebank.vn/blog/17518-lai-suat-la-gi-7-loai-lai-suat-pho-bien-tren-thi-truong-hien-nay.html
+    `loan_type`     VARCHAR(50)   NULL, -- If it is Loan Interest, it's mandatory to put type for it.
+    -- Example: Mortgage loan, housing-construction loan, study-oversea loan, etc...
+    -- by default it's should be OTHERS or NULL, since NULL is allowed, so we considered NULL "OTHERS" in JAVA.
+    `created`       DATETIME DEFAULT now(),
+    `updated`       DATETIME DEFAULT now(),
     PRIMARY KEY (`id`),
     UNIQUE KEY `fm_bank_interest_unique` (`start_month`, `end_month`, `start_amount`, `end_amount`, `interest`, `url`),
     CONSTRAINT `fm_bank_interest_bank_id` FOREIGN KEY (`bank_id`) REFERENCES `fm_banks` (`id`)
@@ -120,6 +124,7 @@ CREATE TABLE `fm_bank_interest`
 -- Table structure for table `fm_bank_interest_change_request`
 -- this table keeps data of change requests from any user. User wants to change bank interest, since he finds it not correct
 --   in the bank interests, so he would like to make change by requesting with new info of bank interests. then Admin will take a look and decide if it is approved or not.
+--  200525: as discussed, we decide to keep official bank interest on the page, and let  "hint" button to display bank requests approved by Admin.
 --
 DROP
     TABLE IF EXISTS `fm_bank_interest_change_requests`;
