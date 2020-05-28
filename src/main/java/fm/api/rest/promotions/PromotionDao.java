@@ -44,9 +44,11 @@ public class PromotionDao implements IPromotionDao {
                         + "  end_date,                           "
                         + "  category_id,                        "
                         + "  bank_id,                            "
-                        + "  category_id                         "
+                        + "  category_id,                        "
+                        + "  url                                 "
                         + "FROM fm_promotions                    "
-                        + "WHERE title LIKE :title               "
+                        + "WHERE "
+                        + (title !=null || !StringUtils.isEmpty(title) ? "title LIKE :title" : "title LIKE '% %' ")
                         + (content != null || !StringUtils.isEmpty(content) ? " AND content LIKE :content " : "")
                         + (start_date != null || !StringUtils.isEmpty(start_date) ? " AND  start_date >= :start_date " : "")
                         + (end_date != null || !StringUtils.isEmpty(end_date) ? " AND end_date <=:end_date " : "")
@@ -82,6 +84,7 @@ public class PromotionDao implements IPromotionDao {
         presenter.setEnd_date(rs.getDate("end_date").toLocalDate());
         presenter.setCategory_id(rs.getInt("category_Id"));
         presenter.setBank_id(rs.getInt("bank_id"));
+        presenter.setUrl(rs.getString("url"));
         return presenter;
     }
 }
