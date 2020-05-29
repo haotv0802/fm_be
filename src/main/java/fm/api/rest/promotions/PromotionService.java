@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -28,7 +29,7 @@ public class PromotionService implements IPromotionService {
   }
 
   @Override
-  public List<PromotionPresenter> getAllPromotions(String title, String content, String start_date, String end_date, Integer bank_id, Integer category_id) {
+  public List<PromotionPresenter> getAllPromotions(String title, String content, LocalDate start_date, LocalDate end_date, Integer bank_id, Integer category_id) {
     return this.promotionDao.getAllPromotions(title, content, start_date, end_date, bank_id, category_id);
   }
 }

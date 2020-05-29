@@ -42,6 +42,7 @@
                 <type>pom</type>
             </dependency>
 
+
             <!-- Log4j2 has a master project BOM (Bill of Materials) which keeps all submodules-->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>

@@ -13,6 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class PromotionDao implements IPromotionDao {
 
 
     @Override
-    public List<PromotionPresenter> getAllPromotions(String title, String content, String start_date, String end_date, Integer bank_id, Integer category_id) {
+    public List<PromotionPresenter> getAllPromotions(String title, String content, LocalDate start_date, LocalDate end_date, Integer bank_id, Integer category_id) {
         final String sql =
                           "  SELECT                              "
                         + "  id,                                 "
@@ -43,24 +44,21 @@ public class PromotionDao implements IPromotionDao {
                         + "  end_date,                           "
                         + "  category_id,                        "
                         + "  bank_id,                            "
-                        + "  category_id                         "
+                        + "  category_id,                        "
+                        + "  url                                 "
                         + "FROM fm_promotions                    "
-                        + "WHERE title LIKE :title               "
-                        + (content != null || !StringUtils.isEmpty(content) ? "AND content LIKE :content" : "")
-                        + (start_date != null || !StringUtils.isEmpty(start_date) ? "AND  start_date >= :start_date" : "")
-                        + (end_date != null || !StringUtils.isEmpty(end_date) ? "AND end_date <=:end_date" : "")
+                        + "WHERE "
+                        + (title !=null || !StringUtils.isEmpty(title) ? "title LIKE :title" : "title LIKE '% %' ")
+                        + (content != null || !StringUtils.isEmpty(content) ? " AND content LIKE :content " : "")
+                        + (start_date != null || !StringUtils.isEmpty(start_date) ? " AND  start_date >= :start_date " : "")
+                        + (end_date != null || !StringUtils.isEmpty(end_date) ? " AND end_date <=:end_date " : "")
                         + (bank_id != null ? " AND bank_id = :bank_id" : "")
                         + (category_id != null ? " AND category_id = :category_id" : "");
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("title", "%" + title + "%");
         paramsMap.addValue("content", "%" + content + "%");
-        if (!StringUtils.isEmpty(start_date)) {
-            paramsMap.addValue("start_date", start_date.replaceAll("/", "-"));
-        }
-        if (!StringUtils.isEmpty(end_date)) {
-            paramsMap.addValue("end_date", end_date.replaceAll("/", "-"));
-
-        }
+        paramsMap.addValue("start_date", start_date);
+        paramsMap.addValue("end_date", end_date);
         paramsMap.addValue("bank_id", bank_id);
         paramsMap.addValue("category_id", category_id);
 
@@ -82,10 +80,11 @@ public class PromotionDao implements IPromotionDao {
         presenter.setContent(rs.getString("content"));
         presenter.setDiscount(rs.getString("discount"));
         presenter.setInstallmentPeriod(rs.getString("installment"));
-        presenter.setStartDate(rs.getDate("start_date").toLocalDate());
-        presenter.setEndDate(rs.getDate("end_date").toLocalDate());
-        presenter.setCategoryId(rs.getInt("category_Id"));
-        presenter.setBankId(rs.getInt("bank_id"));
+        presenter.setStart_date(rs.getDate("start_date").toLocalDate());
+        presenter.setEnd_date(rs.getDate("end_date").toLocalDate());
+        presenter.setCategory_id(rs.getInt("category_Id"));
+        presenter.setBank_id(rs.getInt("bank_id"));
+        presenter.setUrl(rs.getString("url"));
         return presenter;
     }
 }

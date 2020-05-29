@@ -5,8 +5,6 @@ import fm.api.rest.promotions.crawler.interfaces.IBankPromotion;
 import fm.api.rest.promotions.crawler.interfaces.IBankPromotionCrawler;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerDAO;
 import fm.api.rest.promotions.crawler.interfaces.IPromotionCrawlerService;
-import fm.utils.FmDateUtils;
-import fm.utils.FmLocalDateUtils;
 import io.jsonwebtoken.lang.Assert;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,11 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -90,12 +85,12 @@ public class BankPromotionService implements IBankPromotion {
                     promotion.setContent(model.getContent());
                     promotion.setDiscount(model.getDiscount());
                     promotion.setInstallmentPeriod(model.getInstallmentPeriod());
-                    promotion.setEndDate(model.getEndDate());
-                    promotion.setStartDate(model.getStartDate());
+                    promotion.setEnd_date(model.getEndDate());
+                    promotion.setStart_date(model.getStartDate());
                     promotion.setTitle(model.getTitle());
                     promotion.setUrl(model.getUrl());
-                    promotion.setBankId(model.getBankId());
-                    promotion.setCategoryId(model.getCategoryId());
+                    promotion.setBank_id(model.getBankId());
+                    promotion.setCategory_id(model.getCategoryId());
 
                     promotionCrawlerDAO.updatePromotion(promotion);
                 }
