@@ -302,11 +302,10 @@ CREATE TABLE `fm_error_tracking`
     ENGINE = InnoDB
     DEFAULT CHARSET = utf8;
 
-
 --
 -- Table structure for table `Notifications`
 --   this keeps list of notifications of user wants to subscribe.
---
+--   PENDING ..... I'M THINKING..... JUST WORK WITH SUBSCRIPTIONS first.
 DROP
     TABLE IF EXISTS `fm_notifications`;
 CREATE TABLE `fm_notifications`
@@ -316,5 +315,47 @@ CREATE TABLE `fm_notifications`
     `created` DATETIME DEFAULT now(),
     `updated` DATETIME DEFAULT now(),
     PRIMARY KEY (`id`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+--
+-- Table structure for table `Subscriptions`
+--   this keeps list of subscriptions of user wants to subscribe.
+--    In FE side, user or anonymous user can be able to see list of subscriptions on the page and choose which one they want to subscribe
+DROP
+    TABLE IF EXISTS `fm_subscriptions`;
+CREATE TABLE `fm_subscriptions`
+(
+    `id`                BIGINT AUTO_INCREMENT,
+    `user_id`           INTEGER      NULL,     -- If user_id is not null, this mean user is existing in our app, otherwise, user is outside wants to subscribe our info.
+    `email`             VARCHAR(100) NOT NULL,
+    `type`              VARCHAR(100) NOT NULL, -- BANK INTEREST, BANK PROMOTIONS, etc...
+    `status`            VARCHAR(10)  NOT NULL, -- SUBMITTED, VERIFIED, STOPPED.
+    `verification_code` VARCHAR(100) NOT NULL,
+    `created`           DATETIME DEFAULT now(),
+    `updated`           DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`),
+    INDEX (email),
+    INDEX (type, status),
+    UNIQUE KEY `fm_money_source_id_unique` (`email`, `type`, `verification_code`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
+-- Table structure for table `Email history`
+--   this keeps emails sent to users from our system.
+--
+DROP
+    TABLE IF EXISTS `fm_email_history`;
+CREATE TABLE `fm_email_history`
+(
+    `id`      BIGINT AUTO_INCREMENT,
+    `from`    VARCHAR(100) NOT NULL,
+    `to`      VARCHAR(100) NOT NULL,
+    `title`   VARCHAR(100) NOT NULL,
+    `content` VARCHAR(100) NOT NULL,
+    `status`  VARCHAR(10)  NOT NULL, -- SENT, ERROR
+    `created` DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `fm_email_history_unique` (`from`, `to`, `title`, `content`, `status`, `created`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;

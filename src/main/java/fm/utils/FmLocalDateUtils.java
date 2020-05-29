@@ -23,14 +23,14 @@ public class FmLocalDateUtils {
         if (dateTime == null) {
             return "";
         }
-        return dateFormatter.format(dateTime);
+        return dateTimeFormatter.format(dateTime);
     }
 
     public static String format(LocalDate date) {
         if (date == null) {
             return "";
         }
-        return dateTimeFormatter.format(date);
+        return dateFormatter.format(date);
     }
 
     public static String formatWithPattern(LocalDate date, String pattern) {

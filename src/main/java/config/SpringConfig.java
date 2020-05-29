@@ -313,6 +313,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
                     .authorizeRequests()
                     //allow anonymous POSTs to login
                     .antMatchers(HttpMethod.POST, "/svc/login").permitAll()
+                    .antMatchers(HttpMethod.GET, "/svc/subscription/anonymous/confirmation").permitAll()
                     .antMatchers(HttpMethod.GET, "/svc/messages").permitAll()
                     //all other request need to be authenticated
                     .antMatchers("/svc/**").authenticated()

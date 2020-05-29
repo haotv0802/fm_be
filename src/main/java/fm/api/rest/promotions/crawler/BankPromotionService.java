@@ -74,6 +74,8 @@ public class BankPromotionService implements IBankPromotion {
 
     @Override
     public void saveCrawledData(Map<Integer, List<PromotionCrawlerModel>> data) {
+        // List of updated data to be sent to Subscribers.
+
         for (Integer category : data.keySet()) {
             for (PromotionCrawlerModel model : data.get(category)) {
                 logger.info("saving promotion {}", model.toString());
