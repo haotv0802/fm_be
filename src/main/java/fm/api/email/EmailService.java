@@ -131,9 +131,9 @@ public class EmailService implements IEmailService {
         transport.close();
     }
 
-    public static void main(String[] args) throws MessagingException, InterruptedException {
-        EmailService emailService = new EmailService();
-        emailService.sendEmail("hao234", "hao234");
-        emailService.sendEmail("haotv0802@gmail.com", "to Hao TV", "content for Hao TV");
-    }
+//    public static void main(String[] args) throws MessagingException, InterruptedException {
+//        EmailService emailService = new EmailService();
+//        emailService.sendEmail("hao234", "hao234");
+//        emailService.sendEmail("haotv0802@gmail.com", "to Hao TV", "content for Hao TV");
+//    }
 }

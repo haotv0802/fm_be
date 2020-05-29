@@ -172,7 +172,7 @@ public class PromotionCrawlerDAO implements IPromotionCrawlerDAO {
 
         Map<String, Integer> categoriesAndIdlist = new HashMap<>();
         for (Map row : results) {
-            categoriesAndIdlist.put((String) row.get("name"), Math.toIntExact((Long) row.get("id")));
+            categoriesAndIdlist.put((String) row.get("name"), (Integer) row.get("id"));
         }
         return categoriesAndIdlist;
     }
