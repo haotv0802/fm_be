@@ -36,11 +36,14 @@ import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
 import org.springframework.data.web.SortHandlerMethodArgumentResolver;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -59,6 +62,7 @@ import org.springframework.session.web.http.HeaderHttpSessionStrategy;
 import org.springframework.session.web.http.HttpSessionStrategy;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -81,6 +85,7 @@ import java.util.concurrent.TimeUnit;
 @EnableAspectJAutoProxy(proxyTargetClass = true) // like <aop:aspectj-autoproxy /> in XML configuration
 @PropertySource("classpath:config/application.properties")
 // in order to do this: env.getProperty("database.url"). Also, private Environment env can be used any where with @Autowired
+@EnableScheduling
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
     private static final Logger logger = LogManager.getLogger(SpringConfig.class);
@@ -103,6 +108,19 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
         jsonConverter.setObjectMapper(objectMapper);
         return jsonConverter;
+    }
+
+    private ClientHttpRequestFactory getClientHttpRequestFactory() {
+        int timeout = 5000;
+        HttpComponentsClientHttpRequestFactory clientHttpRequestFactory = new HttpComponentsClientHttpRequestFactory();
+        clientHttpRequestFactory.setConnectTimeout(timeout);
+        return clientHttpRequestFactory;
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        RestTemplate restTemplate = new RestTemplate(getClientHttpRequestFactory());
+        return restTemplate;
     }
 
     @Override
