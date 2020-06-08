@@ -10,5 +10,9 @@ import java.util.List;
 public interface IPriceHuntingDao {
     void addPrice(Price price);
 
+    void updatePrice(Price price);
+
+    Price getPriceByURL(String url);
+
     List<Price> getPrices();
 }

@@ -62,6 +62,68 @@ public class PriceHuntingDao implements IPriceHuntingDao {
     }
 
     @Override
+    public void updatePrice(Price price) {
+        final String sql = ""
+                + "UPDATE                                   "
+                + "  fm_sites_prices                        "
+                + "   SET email = :email,                   "
+                + "        url = :url,                      "
+                + "        price = :price,                  "
+                + "        expected_price = :expected_price,"
+                + "        status = :status                 "
+                + "        WHERE id = :id                 "
+                ;
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("email", price.getEmail());
+        paramsMap.addValue("url", price.getUrl());
+        paramsMap.addValue("price", price.getPrice());
+        paramsMap.addValue("expected_price", price.getExpectedPrice());
+        paramsMap.addValue("status", "RUNNING");
+        paramsMap.addValue("id", price.getId());
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        namedTemplate.update(sql, paramsMap);
+    }
+
+    @Override
+    public Price getPriceByURL(String url) {
+        final String sql = ""
+                + " SELECT              "
+                + "     id,             "
+                + "     email,          "
+                + "     url,            "
+                + "     price,          "
+                + "     expected_price  "
+                + "    FROM             "
+                + "     fm_sites_prices "
+                + "    WHERE            "
+                + "    url = :url       ";
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("url", url);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        try {
+            return namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
+                        Price price = new Price();
+                        price.setId(rs.getLong("id"));
+                        price.setEmail(rs.getString("email"));
+                        price.setUrl(rs.getString("url"));
+                        price.setPrice(rs.getBigDecimal("price"));
+                        price.setExpectedPrice(rs.getBigDecimal("expected_price"));
+
+                        return price;
+                    }
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
+
+    @Override
     public List<Price> getPrices() {
         final String sql = ""
                 + " SELECT              "

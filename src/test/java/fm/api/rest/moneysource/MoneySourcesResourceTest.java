@@ -6,7 +6,6 @@ import fm.api.rest.paymentmethods.beans.PaymentMethodPresenter;
 import fm.utils.FmDateUtils;
 import org.json.JSONObject;
 import org.springframework.http.MediaType;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.util.Assert;
 import org.testng.annotations.Test;
