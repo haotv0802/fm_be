@@ -78,7 +78,7 @@ INSERT INTO fm_promotion_categories (name) VALUES ('Education');
 INSERT INTO fm_promotion_categories (name) VALUES('Electronics');
 INSERT INTO fm_promotion_categories (name) VALUES ('Other');
 
-INSERT INTO fm_subscriptions (`user_id`, `email`, `type`, `status`) VALUES (null, 'hoanhhao@gmail.com', 'PROMOTIONS', 'VERIFIED'), (null, 'haotv0802@gmail.com', 'PROMOTIONS', 'SUBMITTED');
+INSERT INTO fm_subscriptions (`user_id`, `email`, `type`, `status`, `verification_code`) VALUES (null, 'hoanhhao@gmail.com', 'PROMOTIONS', 'VERIFIED', 'verification_code'), (null, 'haotv0802@gmail.com', 'PROMOTIONS', 'SUBMITTED', 'verification_code');
 
 
 LOCK TABLES `fm_promotions` WRITE;

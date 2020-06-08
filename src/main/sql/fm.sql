@@ -342,6 +342,29 @@ CREATE TABLE `fm_subscriptions`
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
 
+--
+-- Table structure for table `fm_sites_prices`
+--
+--
+DROP
+    TABLE IF EXISTS `fm_sites_prices`;
+CREATE TABLE `fm_sites_prices`
+(
+    `id`             BIGINT AUTO_INCREMENT,
+    `email`          VARCHAR(100)  NOT NULL,
+    `url`            VARCHAR(100)  NOT NULL,
+    `price`          DECIMAL(3, 2) NOT NULL,
+    `expected_price` DECIMAL(3, 2) NULL,     -- If null, crawled price is lower than price, notify to the user. If not null, notify only when crawled price is lower than expected price
+    `status`         VARCHAR(10)   NOT NULL, -- RUNNING, STOPPED.
+    `created`        DATETIME DEFAULT now(),
+    `updated`        DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`),
+    INDEX (email),
+    INDEX (url),
+    UNIQUE KEY `fm_sites_prices_email_url` (`email`, `url`, `price`)
+) ENGINE = InnoDB
+  DEFAULT CHARSET = utf8;
+
 -- Table structure for table `Email history`
 --   this keeps emails sent to users from our system.
 --
