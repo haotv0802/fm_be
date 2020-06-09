@@ -79,7 +79,12 @@ INSERT INTO fm_promotion_categories (name) VALUES('Electronics');
 INSERT INTO fm_promotion_categories (name) VALUES ('Other');
 
 INSERT INTO fm_subscriptions (`user_id`, `email`, `type`, `status`, `verification_code`) VALUES (null, 'hoanhhao@gmail.com', 'PROMOTIONS', 'VERIFIED', 'verification_code'), (null, 'haotv0802@gmail.com', 'PROMOTIONS', 'SUBMITTED', 'verification_code');
-
+LOCK TABLES `fm_sites_prices` WRITE;
+/*!40000 ALTER TABLE `fm_sites_prices` DISABLE KEYS */;
+INSERT INTO `fm_sites_prices` VALUES (1,'hoanhhao@gmail.com','Thùng 20 chai nước gạo WOONGJIN  (500ml x20 Chai)','https://tiki.vn/thung-20-chai-nuoc-gao-woongjin-500ml-x20-chai-p20720569.html',456000.00000,NULL,'RUNNING','2020-06-09 21:28:18','2020-06-09 21:28:18'),(2,'hoanhhao@gmail.com','Nước Tẩy Trang Làm Sạch Sâu & Kiểm Soát Bã Nhờn Cho Da Dầu Nhạy Cảm La Roche-Posay Micellar Water Ultra Oily Skin 400ml','https://tiki.vn/nuoc-tay-trang-lam-sach-sau-kiem-soat-ba-nhon-cho-da-dau-nhay-cam-la-roche-posay-micellar-water-ultra-oily-skin-400ml-p2616909.html',358000.00000,NULL,'RUNNING','2020-06-09 21:28:21','2020-06-09 21:28:21'),(3,'hoanhhao@gmail.com','Bộ 3 Hộp Silcot Bông Trang Điểm (bông tẩy trang) Nhật Bản Cao Cấp (66 Miếng/Hộp)','https://tiki.vn/bo-3-hop-silcot-bong-trang-diem-bong-tay-trang-nhat-ban-cao-cap-66-mieng-hop-p2738497.html',105000.00000,NULL,'RUNNING','2020-06-09 21:28:23','2020-06-09 21:28:23'),(4,'hoanhhao@gmail.com','Kem dưỡng ẩm Eucerin Aqua porin Active 50ml','https://tiki.vn/kem-duong-am-eucerin-aqua-porin-active-50ml-p7157689.html',470000.00000,NULL,'RUNNING','2020-06-09 21:28:24','2020-06-09 21:28:24'),(5,'hoanhhao@gmail.com','Kem chống nắng dạng sữa lỏng nhẹ không nhờn rít La Roche-Posay Anthelios Shaka Fluid SPF 50+ 50ml','https://tiki.vn/kem-chong-nang-dang-sua-long-nhe-khong-nhon-rit-la-roche-posay-anthelios-shaka-fluid-spf-50-50ml-p470571.html',369000.00000,NULL,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25');
+/*!40000 ALTER TABLE `fm_sites_prices` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 LOCK TABLES `fm_promotions` WRITE;
 /*!40000 ALTER TABLE `fm_promotions` DISABLE KEYS */;
