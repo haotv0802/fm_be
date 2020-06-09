@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 public class Price {
     private Long id;
     private String email;
+    private String title;
     private String url;
     private BigDecimal price;
     private BigDecimal expectedPrice;
@@ -50,5 +51,13 @@ public class Price {
 
     public void setExpectedPrice(BigDecimal expectedPrice) {
         this.expectedPrice = expectedPrice;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

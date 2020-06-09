@@ -36,6 +36,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                 + "INSERT INTO             "
                 + "   fm_sites_prices (    "
                 + "        email,          "
+                + "        title,          "
                 + "        url,            "
                 + "        price,          "
                 + "        expected_price, "
@@ -43,6 +44,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                 + "        )               "
                 + "  VALUES      (         "
                 + "        :email,         "
+                + "        :title,         "
                 + "        :url,           "
                 + "        :price,         "
                 + "        :expected_price,"
@@ -53,6 +55,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
         paramsMap.addValue("email", price.getEmail());
         paramsMap.addValue("url", price.getUrl());
         paramsMap.addValue("price", price.getPrice());
+        paramsMap.addValue("title", price.getTitle());
         paramsMap.addValue("expected_price", price.getExpectedPrice());
         paramsMap.addValue("status", "RUNNING");
 
@@ -68,6 +71,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                 + "  fm_sites_prices                        "
                 + "   SET email = :email,                   "
                 + "        url = :url,                      "
+                + "        title = :title,                  "
                 + "        price = :price,                  "
                 + "        expected_price = :expected_price,"
                 + "        status = :status,                "
@@ -78,6 +82,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("email", price.getEmail());
         paramsMap.addValue("url", price.getUrl());
+        paramsMap.addValue("title", price.getTitle());
         paramsMap.addValue("price", price.getPrice());
         paramsMap.addValue("expected_price", price.getExpectedPrice());
         paramsMap.addValue("status", "RUNNING");
@@ -95,6 +100,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                 + "     id,             "
                 + "     email,          "
                 + "     url,            "
+                + "     title,          "
                 + "     price,          "
                 + "     expected_price  "
                 + "    FROM             "
@@ -113,6 +119,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                         price.setId(rs.getLong("id"));
                         price.setEmail(rs.getString("email"));
                         price.setUrl(rs.getString("url"));
+                        price.setTitle(rs.getString("title"));
                         price.setPrice(rs.getBigDecimal("price"));
                         price.setExpectedPrice(rs.getBigDecimal("expected_price"));
 
@@ -131,6 +138,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                 + "     id,             "
                 + "     email,          "
                 + "     url,            "
+                + "     title,          "
                 + "     price,          "
                 + "     expected_price  "
                 + "    FROM             "
@@ -149,6 +157,7 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                         price.setId(rs.getLong("id"));
                         price.setEmail(rs.getString("email"));
                         price.setUrl(rs.getString("url"));
+                        price.setTitle(rs.getString("title"));
                         price.setPrice(rs.getBigDecimal("price"));
                         price.setExpectedPrice(rs.getBigDecimal("expected_price"));
 

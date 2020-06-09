@@ -47,8 +47,7 @@ public class PriceHuntingService implements IPriceHuntingService {
 
     @Override
     public void savePrice(Price price) {
-        BigDecimal priceCrawled = getPriceFromURL(price.getUrl());
-        price.setPrice(priceCrawled);
+        addInfoToPrice(price);
 
         Price existingPrice = priceHuntingDao.getPriceByURL(price.getUrl());
         if (existingPrice != null) {
@@ -72,15 +71,14 @@ public class PriceHuntingService implements IPriceHuntingService {
         for (Price price : prices) {
             BigDecimal priceValue = getPriceFromURL(price.getUrl());
             BigDecimal priceCompare = price.getExpectedPrice() != null ? price.getExpectedPrice() : price.getPrice();
-            if (priceValue.compareTo(priceCompare) == -1) { // -1 means current value is lower than crawled value.
+            if (priceValue.compareTo(priceCompare) == 0) { // -1 means current value is lower than crawled value.
                 // notify
-                emailService.sendEmail(String.format("Price of URL %s changed", price.getUrl()),
-                        String.format("%s \n Price: %s changed to: %s", price.getUrl(), df2.format(priceCompare), df2.format(priceValue)));
+                emailService.sendEmail(String.format("Price changed [%s]", price.getTitle()),
+                        String.format("%s \n\r Price: %s changed to: %s", price.getUrl(), df2.format(priceCompare), df2.format(priceValue)));
             }
         }
     }
 
-    // https://tiki.vn/thung-20-chai-nuoc-gao-woongjin-500ml-x20-chai-p20720569.html
     private BigDecimal getPriceFromURL(String url) {
         try {
             Document page = Jsoup.connect(url).timeout(4 * 1000).get();
@@ -112,5 +110,44 @@ public class PriceHuntingService implements IPriceHuntingService {
             logger.info("error on link: {}", url, e);
         }
         return null;
+    }
+
+    private void addInfoToPrice(Price price) {
+        try {
+            Document page = Jsoup.connect(price.getUrl()).timeout(4 * 1000).get();
+
+
+            Elements scripts = page.getElementsByTag("script");
+            Element correctScript = null;
+
+            for (Element script : scripts) {
+                if (script.html().contains("_NEXT_")) {
+                    correctScript = script; // find out script contains price.
+                }
+            }
+
+            String text = correctScript.html();
+            text = text.substring("_NEXT_DATA_=".length() + 3);
+
+            JSONObject json = new JSONObject(text);
+            String priceAsString = json.getJSONObject("props").
+                    getJSONObject("initialState").
+                    getJSONObject("mobile").
+                    getJSONObject("product").
+                    getJSONObject("productDetail").
+                    get("price").toString();
+
+            String title = json.getJSONObject("props").
+                    getJSONObject("initialState").
+                    getJSONObject("mobile").
+                    getJSONObject("product").
+                    getJSONObject("productDetail").
+                    get("name").toString();
+
+            price.setPrice(new BigDecimal(priceAsString));
+            price.setTitle(title);
+        } catch (IOException e) {
+            logger.info("error on link: {}", price.getUrl(), e);
+        }
     }
 }
