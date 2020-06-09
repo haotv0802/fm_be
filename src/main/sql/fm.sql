@@ -352,7 +352,7 @@ CREATE TABLE `fm_sites_prices`
 (
     `id`             BIGINT AUTO_INCREMENT,
     `email`          VARCHAR(100)   NOT NULL,
-    `url`            VARCHAR(100)   NOT NULL,
+    `url`            VARCHAR(500)   NOT NULL,
     `price`          DECIMAL(20, 5) NOT NULL,
     `expected_price` DECIMAL(20, 5) NULL,     -- If null, crawled price is lower than price, notify to the user. If not null, notify only when crawled price is lower than expected price
     `status`         VARCHAR(10)    NOT NULL, -- RUNNING, STOPPED.

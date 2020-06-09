@@ -18,6 +18,7 @@ import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.List;
 
 /**
@@ -31,6 +32,8 @@ public class PriceHuntingService implements IPriceHuntingService {
     private final IPriceHuntingDao priceHuntingDao;
 
     private final IEmailService emailService;
+
+    private final DecimalFormat df2 = new DecimalFormat("#.##");
 
     @Autowired
     public PriceHuntingService(@Qualifier("priceHuntingDao") IPriceHuntingDao priceHuntingDao,
@@ -68,9 +71,11 @@ public class PriceHuntingService implements IPriceHuntingService {
         List<Price> prices = this.priceHuntingDao.getPrices();
         for (Price price : prices) {
             BigDecimal priceValue = getPriceFromURL(price.getUrl());
-            if (priceValue.compareTo(price.getPrice()) == 0) { // -1 means current value is lower than crawled value.
+            BigDecimal priceCompare = price.getExpectedPrice() != null ? price.getExpectedPrice() : price.getPrice();
+            if (priceValue.compareTo(priceCompare) == -1) { // -1 means current value is lower than crawled value.
                 // notify
-                emailService.sendEmail(String.format("Price of URL %s changed", price.getUrl()), price.getUrl() + " " + priceValue);
+                emailService.sendEmail(String.format("Price of URL %s changed", price.getUrl()),
+                        String.format("%s \n Price: %s changed to: %s", price.getUrl(), df2.format(priceCompare), df2.format(priceValue)));
             }
         }
     }
@@ -96,11 +101,11 @@ public class PriceHuntingService implements IPriceHuntingService {
 
             JSONObject json = new JSONObject(text);
             String priceAsString = json.getJSONObject("props").
-                     getJSONObject("initialState").
-                     getJSONObject("mobile").
-                     getJSONObject("product").
-                     getJSONObject("productDetail").
-                     get("price").toString();
+                    getJSONObject("initialState").
+                    getJSONObject("mobile").
+                    getJSONObject("product").
+                    getJSONObject("productDetail").
+                    get("price").toString();
 
             return new BigDecimal(priceAsString);
         } catch (IOException e) {

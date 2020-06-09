@@ -70,8 +70,9 @@ public class PriceHuntingDao implements IPriceHuntingDao {
                 + "        url = :url,                      "
                 + "        price = :price,                  "
                 + "        expected_price = :expected_price,"
-                + "        status = :status                 "
-                + "        WHERE id = :id                 "
+                + "        status = :status,                "
+                + "        updated = now()                  "
+                + "        WHERE id = :id                   "
                 ;
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
