@@ -50,6 +50,9 @@ public class PriceHuntingService implements IPriceHuntingService {
     @Override
     public void savePrice(Price price) {
         addInfoToPrice(price);
+        if (price.getPrice() == null) {
+            return; // notify to front-end user that "there's problem getting price on this URL"
+        }
 
         Price existingPrice = priceHuntingDao.getPriceByURL(price.getUrl());
         if (existingPrice != null) {
@@ -157,7 +160,11 @@ public class PriceHuntingService implements IPriceHuntingService {
 
             price.setPrice(new BigDecimal(priceAsString));
             price.setTitle(title);
+        } catch (SocketTimeoutException e) { // sometimes, connection to the page is down.
+            logger.info("timeout reading on link: {}", price.getUrl(), e);
         } catch (IOException e) {
+            logger.info("error on link: {}", price.getUrl(), e);
+        } catch (JSONException e) { // sometimes, jsoup gets document, but hardly reads content.
             logger.info("error on link: {}", price.getUrl(), e);
         }
     }
