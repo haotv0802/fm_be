@@ -41,6 +41,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -81,6 +82,7 @@ import java.util.concurrent.TimeUnit;
 @EnableAspectJAutoProxy(proxyTargetClass = true) // like <aop:aspectj-autoproxy /> in XML configuration
 @PropertySource("classpath:config/application.properties")
 // in order to do this: env.getProperty("database.url"). Also, private Environment env can be used any where with @Autowired
+@EnableScheduling // Enable @Scheduled
 public class SpringConfig extends WebMvcConfigurerAdapter {
 
     private static final Logger logger = LogManager.getLogger(SpringConfig.class);

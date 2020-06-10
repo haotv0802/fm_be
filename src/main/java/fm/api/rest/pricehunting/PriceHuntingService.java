@@ -3,9 +3,9 @@ package fm.api.rest.pricehunting;
 import fm.api.rest.email.IEmailService;
 import fm.api.rest.pricehunting.interfaces.IPriceHuntingDao;
 import fm.api.rest.pricehunting.interfaces.IPriceHuntingService;
-import fm.api.rest.promotions.crawler.SCBCrawler;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -13,11 +13,13 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.SocketTimeoutException;
 import java.text.DecimalFormat;
 import java.util.List;
 
@@ -27,7 +29,7 @@ import java.util.List;
 @Service("priceHuntingService")
 public class PriceHuntingService implements IPriceHuntingService {
 
-    private static final Logger logger = LogManager.getLogger(SCBCrawler.class);
+    private static final Logger logger = LogManager.getLogger(PriceHuntingService.class);
 
     private final IPriceHuntingDao priceHuntingDao;
 
@@ -65,13 +67,18 @@ public class PriceHuntingService implements IPriceHuntingService {
         return this.priceHuntingDao.getPrices();
     }
 
+    @Scheduled(fixedDelay = 10000, initialDelay = 1000)
     @Override
     public void checkPriceAndNotify() {
         List<Price> prices = this.priceHuntingDao.getPrices();
         for (Price price : prices) {
             BigDecimal priceValue = getPriceFromURL(price.getUrl());
             BigDecimal priceCompare = price.getExpectedPrice() != null ? price.getExpectedPrice() : price.getPrice();
-            if (priceValue.compareTo(priceCompare) == 0) { // -1 means current value is lower than crawled value.
+            if (priceValue == null) {
+                continue;
+            }
+            if (priceValue.compareTo(priceCompare) == -1) { // -1 means current value is lower than crawled value.
+                logger.info("Notify to email " + price.getEmail());
                 // notify
                 emailService.sendEmail(String.format("Price changed [%s]", price.getTitle()),
                         String.format("%s \n\r Price: %s changed to: %s", price.getUrl(), df2.format(priceCompare), df2.format(priceValue)));
@@ -106,7 +113,11 @@ public class PriceHuntingService implements IPriceHuntingService {
                     get("price").toString();
 
             return new BigDecimal(priceAsString);
+        } catch (SocketTimeoutException e) { // sometimes, connection to the page is down.
+            logger.info("timeout reading on link: {}", url, e);
         } catch (IOException e) {
+            logger.info("error on link: {}", url, e);
+        } catch (JSONException e) { // sometimes, jsoup gets document, but hardly reads content.
             logger.info("error on link: {}", url, e);
         }
         return null;
