@@ -2,7 +2,10 @@ package fm.api.rest.email;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -24,6 +27,15 @@ public class EmailService implements IEmailService {
     static int count = 1;
     private static final Logger logger = LogManager.getLogger(EmailService.class);
 
+    private final IEmailHistoryDao emailHistoryDao;
+
+    @Autowired
+    public EmailService(@Qualifier("emailHistoryDao") IEmailHistoryDao emailHistoryDao) {
+        Assert.notNull(emailHistoryDao);
+
+        this.emailHistoryDao = emailHistoryDao;
+    }
+
     @Override
     public void sendEmail(String title, String content) {
         sendEmail("emailtest180115@gmail.com", "wfuynbpmxjylscgo", "hoanhhao@gmail.com", title, content);
@@ -36,6 +48,13 @@ public class EmailService implements IEmailService {
 
     @Override
     public void sendEmail(String from, String fromPass, String to, String title, String content) {
+        Email email = new Email(); // tracking in history
+        email.setTo(from);
+        email.setFrom(to);
+        email.setContent(content);
+        email.setTitle(title);
+
+
         try {
             // Step1
             logger.info("\n 1st ===> setup Mail Server Properties..");
@@ -65,12 +84,18 @@ public class EmailService implements IEmailService {
             count++;
             transport.sendMessage(generateMailMessage, generateMailMessage.getAllRecipients());
             transport.close();
+            email.setStatus("SENT");
         } catch (AddressException ex) {
             logger.error(ex.getMessage(), ex);
+            email.setStatus("ERROR");
         } catch (MessagingException ex) {
             logger.error(ex.getMessage(), ex);
+            email.setStatus("ERROR");
         } catch (InterruptedException ex) {
             logger.error(ex.getMessage(), ex);
+            email.setStatus("ERROR");
+        } finally {
+            emailHistoryDao.addSentEmail(email); // TODO check if the same email is sent in short period of time.
         }
     }
 

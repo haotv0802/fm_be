@@ -373,14 +373,13 @@ DROP
     TABLE IF EXISTS `fm_email_history`;
 CREATE TABLE `fm_email_history`
 (
-    `id`      BIGINT AUTO_INCREMENT,
-    `from`    VARCHAR(100) NOT NULL,
-    `to`      VARCHAR(100) NOT NULL,
-    `title`   VARCHAR(100) NOT NULL,
-    `content` VARCHAR(100) NOT NULL,
-    `status`  VARCHAR(10)  NOT NULL, -- SENT, ERROR
-    `created` DATETIME DEFAULT now(),
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `fm_email_history_unique` (`from`, `to`, `title`, `content`, `status`, `created`)
+    `id`         BIGINT AUTO_INCREMENT,
+    `from_email` VARCHAR(100) NOT NULL,
+    `to_email`   VARCHAR(100) NOT NULL,
+    `title`      VARCHAR(500) NOT NULL,
+    `content`    VARCHAR(500) NOT NULL,
+    `status`     VARCHAR(10)  NOT NULL, -- SENT, ERROR
+    `created`    DATETIME DEFAULT now(),
+    PRIMARY KEY (`id`)
 ) ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
