@@ -1,7 +1,7 @@
 package fm.api.rest.email;
 
-import fm.api.rest.bank.BankPresenter;
 import fm.common.dao.DaoUtils;
+import fm.utils.FmLocalDateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,11 @@ public class EmailHistoryDao implements IEmailHistoryDao {
                 + " from_email = :from      "
                 + " AND to_email = :to      "
                 + " AND title = :title      "
-                + " AND content = :content  ";
+                + " AND content = :content  "
+                + " AND content = :content  "
+                + " ORDER BY created DESC   "
+                + " LIMIT 1                 "
+                ;
 
         final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
         paramsMap.addValue("from", from);
@@ -88,10 +92,12 @@ public class EmailHistoryDao implements IEmailHistoryDao {
 
         return namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
                     Email email = new Email();
-            email.setTitle(rs.getString("from_email"));
-            email.setFrom(rs.getString("to_email"));
-            email.setTo(rs.getString("address"));
-            email.setContent(rs.getString("website"));
+                    email.setTitle(rs.getString("title"));
+                    email.setFrom(rs.getString("from_email"));
+                    email.setTo(rs.getString("to_email"));
+                    email.setStatus(rs.getString("status"));
+                    email.setContent(rs.getString("content"));
+                    email.setCreated(FmLocalDateUtils.toLocalDateTime(rs.getTimestamp("created")));
                     return email;
                 }
         );

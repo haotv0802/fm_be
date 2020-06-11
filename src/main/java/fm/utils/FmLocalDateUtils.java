@@ -5,6 +5,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.util.StringUtils;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -75,5 +76,19 @@ public class FmLocalDateUtils {
 
     public static LocalDate getLastDateOfNextYear() {
         return LocalDate.of(LocalDate.now().getYear() + 1, 12, 31);
+    }
+
+    /**
+     * Notes: Timestamp stores Date & Time
+     *
+     * @param dateTime
+     * @return
+     */
+    public static LocalDateTime toLocalDateTime(Timestamp dateTime) {
+        return dateTime != null ? dateTime.toLocalDateTime() : null;
+    }
+
+    public static LocalDate toLocalDate(java.sql.Date date) {
+        return date != null ? date.toLocalDate() : null;
     }
 }

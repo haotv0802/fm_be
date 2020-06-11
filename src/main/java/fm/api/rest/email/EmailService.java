@@ -14,6 +14,8 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Properties;
 
 /**
@@ -49,11 +51,18 @@ public class EmailService implements IEmailService {
     @Override
     public void sendEmail(String from, String fromPass, String to, String title, String content) {
         Email email = new Email(); // tracking in history
-        email.setTo(from);
-        email.setFrom(to);
+        email.setTo(to);
+        email.setFrom(from);
         email.setContent(content);
         email.setTitle(title);
-
+        Email existingEmail = emailHistoryDao.getEmail(email.getFrom(), email.getTo(), email.getTitle(), email.getContent());
+        if (existingEmail != null) {
+//            long between = ChronoUnit.DAYS.between(existingEmail.getCreated(), LocalDateTime.now());
+            long between = ChronoUnit.HOURS.between(existingEmail.getCreated(), LocalDateTime.now());
+            if (between <1) {
+                return;
+            }
+        }
 
         try {
             // Step1
@@ -95,7 +104,7 @@ public class EmailService implements IEmailService {
             logger.error(ex.getMessage(), ex);
             email.setStatus("ERROR");
         } finally {
-            emailHistoryDao.addSentEmail(email); // TODO check if the same email is sent in short period of time.
+            emailHistoryDao.addSentEmail(email);
         }
     }
 
