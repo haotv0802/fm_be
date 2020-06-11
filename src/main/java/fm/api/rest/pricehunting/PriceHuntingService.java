@@ -120,7 +120,8 @@ public class PriceHuntingService implements IPriceHuntingService {
             logger.info("timeout reading on link: {}", url, e);
         } catch (IOException e) {
             logger.info("error on link: {}", url, e);
-        } catch (JSONException e) { // sometimes, jsoup gets document, but hardly reads content.
+        } catch (JSONException e) { // sometimes, jsoup gets document, but hardly reads content.\
+                                    // ex: JSONObject["price"] not found. if this kind of problem happens, notify to admin to correct it. Since, this function will be for preimum user.
             logger.info("error on link: {}", url, e);
         }
         return null;
@@ -165,6 +166,7 @@ public class PriceHuntingService implements IPriceHuntingService {
         } catch (IOException e) {
             logger.info("error on link: {}", price.getUrl(), e);
         } catch (JSONException e) { // sometimes, jsoup gets document, but hardly reads content.
+                                    // ex: JSONObject["price"] not found. if this kind of problem happens, notify to admin to correct it. Since, this function will be for preimum user.
             logger.info("error on link: {}", price.getUrl(), e);
         }
     }

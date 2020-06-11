@@ -30,7 +30,6 @@ public class PriceHuntingResourceTest extends BaseDocumentation {
         price.setUrl("https://tiki.vn/thung-20-chai-nuoc-gao-woongjin-500ml-x20-chai-p20720569.html");
         prices.add(price);
 
-        price = new Price();
         price.setEmail("hoanhhao@gmail.com");
         price.setUrl("https://tiki.vn/nuoc-tay-trang-lam-sach-sau-kiem-soat-ba-nhon-cho-da-dau-nhay-cam-la-roche-posay-micellar-water-ultra-oily-skin-400ml-p2616909.html");
         prices.add(price);
@@ -48,6 +47,31 @@ public class PriceHuntingResourceTest extends BaseDocumentation {
         price = new Price();
         price.setEmail("hoanhhao@gmail.com");
         price.setUrl("https://tiki.vn/kem-chong-nang-dang-sua-long-nhe-khong-nhon-rit-la-roche-posay-anthelios-shaka-fluid-spf-50-50ml-p470571.html");
+        prices.add(price);
+
+        price = new Price();
+        price.setEmail("hoanhhao@gmail.com");
+        price.setUrl("https://tiki.vn/nuoc-gao-woongjin-1-5l-x1-chai-p1590797.html");
+        prices.add(price);
+
+        price.setEmail("hoanhhao@gmail.com");
+        price.setUrl("https://tiki.vn/sua-dau-den-oc-cho-hanh-nhan-sahmyook-foods-20-goi-hop-p609585.html");
+        prices.add(price);
+
+        price.setEmail("hoanhhao@gmail.com");
+        price.setUrl("https://tiki.vn/thung-20-chai-nuoc-nha-dam-woongjin-dr-aloe-41-500ml-x20-chai-p34918068.html");
+        prices.add(price);
+
+        price.setEmail("hoanhhao@gmail.com");
+        price.setUrl("https://tiki.vn/mi-hoang-gia-thit-bo-co-goi-sot-120g-vifon-thung-18-goi-p37888730.html");
+        prices.add(price);
+
+        price.setEmail("hoanhhao@gmail.com");
+        price.setUrl("https://tiki.vn/mi-hoang-gia-thit-bam-co-goi-sot-120g-vifon-thung-18-goi-p37889176.html");
+        prices.add(price);
+
+        price.setEmail("hoanhhao@gmail.com");
+        price.setUrl("https://tiki.vn/loc-24-chai-sua-nutriboost-huong-dao-297ml-chai-p3553943.html");
         prices.add(price);
 
         for (Price price1 : prices) {

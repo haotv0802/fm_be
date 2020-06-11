@@ -79,12 +79,21 @@ INSERT INTO fm_promotion_categories (name) VALUES('Electronics');
 INSERT INTO fm_promotion_categories (name) VALUES ('Other');
 
 INSERT INTO fm_subscriptions (`user_id`, `email`, `type`, `status`, `verification_code`) VALUES (null, 'hoanhhao@gmail.com', 'PROMOTIONS', 'VERIFIED', 'verification_code'), (null, 'haotv0802@gmail.com', 'PROMOTIONS', 'SUBMITTED', 'verification_code');
-LOCK TABLES `fm_sites_prices` WRITE;
-/*!40000 ALTER TABLE `fm_sites_prices` DISABLE KEYS */;
-INSERT INTO `fm_sites_prices` VALUES (1,'hoanhhao@gmail.com','Thùng 20 chai nước gạo WOONGJIN  (500ml x20 Chai)','https://tiki.vn/thung-20-chai-nuoc-gao-woongjin-500ml-x20-chai-p20720569.html',456000.00000,NULL,'RUNNING','2020-06-09 21:28:18','2020-06-09 21:28:18'),(2,'hoanhhao@gmail.com','Nước Tẩy Trang Làm Sạch Sâu & Kiểm Soát Bã Nhờn Cho Da Dầu Nhạy Cảm La Roche-Posay Micellar Water Ultra Oily Skin 400ml','https://tiki.vn/nuoc-tay-trang-lam-sach-sau-kiem-soat-ba-nhon-cho-da-dau-nhay-cam-la-roche-posay-micellar-water-ultra-oily-skin-400ml-p2616909.html',358000.00000,NULL,'RUNNING','2020-06-09 21:28:21','2020-06-09 21:28:21'),(3,'hoanhhao@gmail.com','Bộ 3 Hộp Silcot Bông Trang Điểm (bông tẩy trang) Nhật Bản Cao Cấp (66 Miếng/Hộp)','https://tiki.vn/bo-3-hop-silcot-bong-trang-diem-bong-tay-trang-nhat-ban-cao-cap-66-mieng-hop-p2738497.html',105000.00000,NULL,'RUNNING','2020-06-09 21:28:23','2020-06-09 21:28:23'),(4,'hoanhhao@gmail.com','Kem dưỡng ẩm Eucerin Aqua porin Active 50ml','https://tiki.vn/kem-duong-am-eucerin-aqua-porin-active-50ml-p7157689.html',470000.00000,NULL,'RUNNING','2020-06-09 21:28:24','2020-06-09 21:28:24'),(5,'hoanhhao@gmail.com','Kem chống nắng dạng sữa lỏng nhẹ không nhờn rít La Roche-Posay Anthelios Shaka Fluid SPF 50+ 50ml','https://tiki.vn/kem-chong-nang-dang-sua-long-nhe-khong-nhon-rit-la-roche-posay-anthelios-shaka-fluid-spf-50-50ml-p470571.html',369000.00000,NULL,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25');
-/*!40000 ALTER TABLE `fm_sites_prices` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+INSERT INTO `fm_sites_prices` VALUES
+            (1,'hoanhhao@gmail.com','Thùng 20 chai nước gạo WOONGJIN  (500ml x20 Chai)','https://tiki.vn/thung-20-chai-nuoc-gao-woongjin-500ml-x20-chai-p20720569.html',456000.00000,450000,'RUNNING','2020-06-09 21:28:18','2020-06-09 21:28:18'),
+            (2,'hoanhhao@gmail.com','Nước Tẩy Trang Làm Sạch Sâu & Kiểm Soát Bã Nhờn Cho Da Dầu Nhạy Cảm La Roche-Posay Micellar Water Ultra Oily Skin 400ml','https://tiki.vn/nuoc-tay-trang-lam-sach-sau-kiem-soat-ba-nhon-cho-da-dau-nhay-cam-la-roche-posay-micellar-water-ultra-oily-skin-400ml-p2616909.html',358000.00000,350000,'RUNNING','2020-06-09 21:28:21','2020-06-09 21:28:21'),
+            (3,'hoanhhao@gmail.com','Bộ 3 Hộp Silcot Bông Trang Điểm (bông tẩy trang) Nhật Bản Cao Cấp (66 Miếng/Hộp)','https://tiki.vn/bo-3-hop-silcot-bong-trang-diem-bong-tay-trang-nhat-ban-cao-cap-66-mieng-hop-p2738497.html',105000.00000,100000,'RUNNING','2020-06-09 21:28:23','2020-06-09 21:28:23'),
+            (4,'hoanhhao@gmail.com','Kem dưỡng ẩm Eucerin Aqua porin Active 50ml','https://tiki.vn/kem-duong-am-eucerin-aqua-porin-active-50ml-p7157689.html',470000.00000,450000,'RUNNING','2020-06-09 21:28:24','2020-06-09 21:28:24'),
+            (5,'hoanhhao@gmail.com','Kem chống nắng dạng sữa lỏng nhẹ không nhờn rít La Roche-Posay Anthelios Shaka Fluid SPF 50+ 50ml','https://tiki.vn/kem-chong-nang-dang-sua-long-nhe-khong-nhon-rit-la-roche-posay-anthelios-shaka-fluid-spf-50-50ml-p470571.html',369000.00000,350000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (6,'hoanhhao@gmail.com','Nước gạo WOONGJIN 1.5L x1 Chai','https://tiki.vn/nuoc-gao-woongjin-1-5l-x1-chai-p1590797.html', 55000.00000,45000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (7,'hoanhhao@gmail.com','Sữa Đậu Đen, Óc Chó, Hạnh Nhân Sahmyook Foods (20 Gói / Hộp)','https://tiki.vn/sua-dau-den-oc-cho-hanh-nhan-sahmyook-foods-20-goi-hop-p609585.html',274000.00000,240000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (8,'hoanhhao@gmail.com','Thùng 20 chai Nước nha đam Woongjin Dr. Aloe 41% (500ml x20 Chai)','https://tiki.vn/thung-20-chai-nuoc-nha-dam-woongjin-dr-aloe-41-500ml-x20-chai-p34918068.html',451000.00000,430000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (9,'hoanhhao@gmail.com','Mì Hoàng Gia Thịt Bò Có Gói Thịt Thật 120g Vifon [Thùng 18 Gói]','https://tiki.vn/mi-hoang-gia-thit-bo-co-goi-sot-120g-vifon-thung-18-goi-p37888730.html',249000.00000,240000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (10,'hoanhhao@gmail.com','Mì Hoàng Gia Thịt Bằm Có Gói Thịt Thật 120g Vifon [Thùng 18 Gói]','https://tiki.vn/mi-hoang-gia-thit-bam-co-goi-sot-120g-vifon-thung-18-goi-p37889176.html',249000.00000,240000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (11,'hoanhhao@gmail.com','Lốc 24 Chai Sữa Nutriboost Hương Đào (297ml / Chai)','https://tiki.vn/loc-24-chai-sua-nutriboost-huong-dao-297ml-chai-p3553943.html',232000.00000,230000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25')
+;
+                                     ;
 
 LOCK TABLES `fm_promotions` WRITE;
 /*!40000 ALTER TABLE `fm_promotions` DISABLE KEYS */;
