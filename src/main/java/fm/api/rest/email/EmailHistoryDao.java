@@ -5,6 +5,7 @@ import fm.utils.FmLocalDateUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -90,16 +91,20 @@ public class EmailHistoryDao implements IEmailHistoryDao {
 
         DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
 
-        return namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
-                    Email email = new Email();
-                    email.setTitle(rs.getString("title"));
-                    email.setFrom(rs.getString("from_email"));
-                    email.setTo(rs.getString("to_email"));
-                    email.setStatus(rs.getString("status"));
-                    email.setContent(rs.getString("content"));
-                    email.setCreated(FmLocalDateUtils.toLocalDateTime(rs.getTimestamp("created")));
-                    return email;
-                }
-        );
+        try {
+            return namedTemplate.queryForObject(sql, paramsMap, (rs, rowNum) -> {
+                        Email email = new Email();
+                        email.setTitle(rs.getString("title"));
+                        email.setFrom(rs.getString("from_email"));
+                        email.setTo(rs.getString("to_email"));
+                        email.setStatus(rs.getString("status"));
+                        email.setContent(rs.getString("content"));
+                        email.setCreated(FmLocalDateUtils.toLocalDateTime(rs.getTimestamp("created")));
+                        return email;
+                    }
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
     }
 }

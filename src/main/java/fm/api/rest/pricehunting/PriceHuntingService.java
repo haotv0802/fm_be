@@ -80,7 +80,7 @@ public class PriceHuntingService implements IPriceHuntingService {
             if (priceValue == null) {
                 continue;
             }
-            if (priceValue.compareTo(priceCompare) == 0) { // -1 means current value is lower than crawled value.
+            if (priceValue.compareTo(priceCompare) == -1) { // -1 means current value is lower than crawled value.
                 logger.info("Notify to email " + price.getEmail());
                 // notify
                 emailService.sendEmail(String.format("Price changed [%s]", price.getTitle()),

@@ -88,6 +88,7 @@ public class PriceHuntingResourceTest extends BaseDocumentation {
     }
 
     @Test
+    @Rollback(false)
     public void testCheckAndNotify() throws Exception {
         MvcResult result = mockMvc
                 .perform(get("/svc/price/check")
