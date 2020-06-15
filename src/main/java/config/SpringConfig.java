@@ -79,9 +79,11 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Configuration //Marks this class as configuration
-@ComponentScan({"fm"}) // Specifies which package to scan // xml config: <context:component-scan base-package="fm"/>
+@ComponentScan({"fm"})
+// Specifies which package to scan // xml config: <context:component-scan base-package="fm"/>
 @EnableWebMvc // Enables Spring's annotations
-@EnableAspectJAutoProxy(proxyTargetClass = true) // like <aop:aspectj-autoproxy /> in XML configuration
+@EnableAspectJAutoProxy(proxyTargetClass = true)
+// like <aop:aspectj-autoproxy /> in XML configuration
 @PropertySource("classpath:config/application.properties")
 // in order to do this: env.getProperty("database.url"). Also, private Environment env can be used any where with @Autowired
 @EnableScheduling // Enable @Scheduled
@@ -142,7 +144,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
     @Bean
     public TaskScheduler taskScheduler() {
-        return new ConcurrentTaskScheduler(); //single threaded by default
+        return new ConcurrentTaskScheduler(); //single threaded by default // for @Scheduled
     }
 
     @Override
@@ -154,7 +156,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     public void addInterceptors(InterceptorRegistry registry) {
         super.addInterceptors(registry);
     }
-
 
     @Bean(name = "multipartResolver")
     public CommonsMultipartResolver createMultipartResolver() {
@@ -246,7 +247,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
     @Configuration
     @EnableWebSecurity
-    @EnableGlobalMethodSecurity(prePostEnabled = true) // ENABLE @PreAuthorize & @PostAuthorize annotations
+    @EnableGlobalMethodSecurity(prePostEnabled = true)
+    // ENABLE @PreAuthorize & @PostAuthorize annotations
     // <security:global-method-security pre-post-annotations="enabled" />
     protected static class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
