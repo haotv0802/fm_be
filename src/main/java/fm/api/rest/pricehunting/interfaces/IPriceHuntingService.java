@@ -9,5 +9,7 @@ public interface IPriceHuntingService {
 
     List<Price> getPrices();
 
+    List<Price> getPrices(String email);
+
     void checkPriceAndNotify();
 }

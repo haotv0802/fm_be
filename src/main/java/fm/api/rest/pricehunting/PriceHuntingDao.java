@@ -168,4 +168,45 @@ public class PriceHuntingDao implements IPriceHuntingDao {
             return null;
         }
     }
+
+    @Override
+    public List<Price> getPrices(String email) {
+        final String sql = ""
+                + " SELECT              "
+                + "     id,             "
+                + "     email,          "
+                + "     url,            "
+                + "     title,          "
+                + "     price,          "
+                + "     expected_price  "
+                + "    FROM             "
+                + "     fm_sites_prices "
+                + "    WHERE            "
+                + "    status = :status "
+                + "  AND email = :email "
+                ;
+
+        final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+        paramsMap.addValue("status", "RUNNING");
+        paramsMap.addValue("email", email);
+
+        DaoUtils.debugQuery(logger, sql, paramsMap.getValues());
+
+        try {
+            return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+                        Price price = new Price();
+                        price.setId(rs.getLong("id"));
+                        price.setEmail(rs.getString("email"));
+                        price.setUrl(rs.getString("url"));
+                        price.setTitle(rs.getString("title"));
+                        price.setPrice(rs.getBigDecimal("price"));
+                        price.setExpectedPrice(rs.getBigDecimal("expected_price"));
+
+                        return price;
+                    }
+            );
+        } catch (EmptyResultDataAccessException ex) {
+            return null;
+        }
+    }
 }

@@ -70,6 +70,11 @@ public class PriceHuntingService implements IPriceHuntingService {
         return this.priceHuntingDao.getPrices();
     }
 
+    @Override
+    public List<Price> getPrices(String email) {
+        return this.priceHuntingDao.getPrices(email);
+    }
+
     @Scheduled(fixedDelay = 10000, initialDelay = 1000)
     @Override
     public void checkPriceAndNotify() {
