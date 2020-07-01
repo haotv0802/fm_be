@@ -48,6 +48,7 @@ public class GlobalExceptionHandler {
         return username;
     }
 
+
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST) //400
     @ResponseBody
