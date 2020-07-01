@@ -15,4 +15,6 @@ public interface IPriceHuntingDao {
     Price getPriceByURL(String url);
 
     List<Price> getPrices();
+
+    List<Price> getPrices(String email);
 }

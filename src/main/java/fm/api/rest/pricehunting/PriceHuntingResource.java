@@ -1,6 +1,8 @@
 package fm.api.rest.pricehunting;
 
 import fm.api.rest.BaseResource;
+import fm.api.rest.individual.IndividualPresenter;
+import fm.api.rest.individual.interfaces.IIndividualService;
 import fm.api.rest.pricehunting.interfaces.IPriceHuntingService;
 import fm.auth.UserDetailsImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Created by HaoHo on 6/8/2020
  */
@@ -20,10 +24,15 @@ public class PriceHuntingResource extends BaseResource {
 
     private final IPriceHuntingService priceHuntingService;
 
-    @Autowired
-    public PriceHuntingResource(@Qualifier("priceHuntingService") IPriceHuntingService priceHuntingService) {
-        Assert.notNull(priceHuntingService);
+    private final IIndividualService individualService;
 
+    @Autowired
+    public PriceHuntingResource(@Qualifier("priceHuntingService") IPriceHuntingService priceHuntingService,
+                                @Qualifier("individualService") IIndividualService individualService) {
+        Assert.notNull(priceHuntingService);
+        Assert.notNull(individualService);
+
+        this.individualService = individualService;
         this.priceHuntingService = priceHuntingService;
     }
 
@@ -36,6 +45,16 @@ public class PriceHuntingResource extends BaseResource {
         this.priceHuntingService.savePrice(price);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/price/list")
+    @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+    public List<Price> getPrices(
+            @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
+        IndividualPresenter individualPresenter = this.individualService.getIndividual(userDetails.getUserId());
+
+        return this.priceHuntingService.getPrices(individualPresenter.getEmail());
     }
 
     @GetMapping("/price/check")
