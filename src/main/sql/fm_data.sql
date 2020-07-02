@@ -93,7 +93,8 @@ INSERT INTO `fm_sites_prices` VALUES
             (10,'hoanhhao@gmail.com','Mì Hoàng Gia Thịt Bằm Có Gói Thịt Thật 120g Vifon [Thùng 18 Gói]','https://tiki.vn/mi-hoang-gia-thit-bam-co-goi-sot-120g-vifon-thung-18-goi-p37889176.html',249000.00000,240000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
             (11,'hoanhhao@gmail.com','Lốc 24 Chai Sữa Nutriboost Hương Đào (297ml / Chai)','https://tiki.vn/loc-24-chai-sua-nutriboost-huong-dao-297ml-chai-p3553943.html',232000.00000,230000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
             (12,'hoanhhao@gmail.com','Sữa Tắm Gội Coast Classic Scent Dành Cho Nam 946ml','https://tiki.vn/sua-tam-goi-coast-classic-scent-danh-cho-nam-946ml-p19646731.html?src=search&2hi=1&keyword=d%E1%BA%A7u%20g%E1%BB%99i%20coast&_lc=Vk4wMzkwMjIwMTM%3D',143500.00000,130000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
-            (13,'hoanhhao@gmail.com','LỐC 20 CỤC XÀ BÔNG CỤC IRISH SPRING ORIGINAL USA MỸ','https://tiki.vn/loc-20-cuc-xa-bong-cuc-irish-spring-original-usa-my-p38148030.html',320000.00000,300000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25')
+            (13,'hoanhhao@gmail.com','LỐC 20 CỤC XÀ BÔNG CỤC IRISH SPRING ORIGINAL USA MỸ','https://tiki.vn/loc-20-cuc-xa-bong-cuc-irish-spring-original-usa-my-p38148030.html',320000.00000,300000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (14,'hoanhhao@gmail.com','Tinh Chất Khoáng Cô Đặc Vichy Minéral 89 (50ml)','https://tiki.vn/tinh-chat-khoang-co-dac-vichy-mineral-89-50ml-p25705568.html',679000.00000,650.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25')
 
 ;
                                      ;

@@ -1,5 +1,6 @@
 package fm.api.rest.pricehunting;
 
+import com.hazelcast.com.eclipsesource.json.JsonObject;
 import fm.api.rest.email.IEmailService;
 import fm.api.rest.pricehunting.interfaces.IPriceHuntingDao;
 import fm.api.rest.pricehunting.interfaces.IPriceHuntingService;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -95,8 +97,9 @@ public class PriceHuntingService implements IPriceHuntingService {
     }
 
     private BigDecimal getPriceFromURL(String url) {
+        String text;
         try {
-            Document page = Jsoup.connect(url).timeout(4 * 1000).get();
+            Document page = Jsoup.connect(url).timeout(10 * 1000).get();
 
             Elements body = page.getElementsByClass("body");
 
@@ -109,23 +112,34 @@ public class PriceHuntingService implements IPriceHuntingService {
                 }
             }
 
-            String text = correctScript.html();
+            text = correctScript.html();
             text = text.substring("_NEXT_DATA_=".length() + 3);
 
             JSONObject json = new JSONObject(text);
-            String priceAsString = json.getJSONObject("props").
-                    getJSONObject("initialState").
-                    getJSONObject("mobile").
-                    getJSONObject("product").
-                    getJSONObject("productDetail").
-                    get("price").toString();
+            JSONObject product = json.getJSONObject("props").getJSONObject("initialState").getJSONObject("desktop").getJSONObject("product");
+            String priceAsString;
+            if (product.getJSONObject("data").isEmpty()) {
+                priceAsString = json.getJSONObject("props").
+                        getJSONObject("initialState").
+                        getJSONObject("mobile").
+                        getJSONObject("product").
+                        getJSONObject("productDetail").
+                        get("price").toString();
+            } else {
+                priceAsString = json.getJSONObject("props").
+                        getJSONObject("initialState").
+                        getJSONObject("desktop").
+                        getJSONObject("product").
+                        getJSONObject("data").
+                        get("price").toString();
+            }
 
             return new BigDecimal(priceAsString);
         } catch (SocketTimeoutException e) { // sometimes, connection to the page is down.
             logger.info("timeout reading on link: {}", url, e);
         } catch (IOException e) {
             logger.info("error on link: {}", url, e);
-        } catch (JSONException e) { // sometimes, jsoup gets document, but hardly reads content.\
+        } catch (JSONException e) { // sometimes, jsoup gets document, but hardly reads content.
                                     // ex: JSONObject["price"] not found. if this kind of problem happens, notify to admin to correct it. Since, this function will be for preimum user.
             logger.info("error on link: {}", url, e);
         }
