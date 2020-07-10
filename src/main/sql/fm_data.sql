@@ -98,9 +98,10 @@ INSERT INTO `fm_sites_prices` VALUES
             (15,'hoanhhao@gmail.com','Bánh Xốp Loacker Quadratini Matcha Green Tea 110g - Tặng 1 Headphone F122993
 ','https://tiki.vn/banh-xop-loacker-quadratini-matcha-green-tea-110g-tang-1-headphone-f122993-p49708164.html',82000.00000,80000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
             (16,'hoanhhao@gmail.com','Bánh Xốp Quadratini Socola Đắng Loacker (125g)','https://tiki.vn/banh-xop-quadratini-socola-dang-loacker-125g-p972058.html',82000.00000,80000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
-            (17,'hoanhhao@gmail.com','Bánh Xốp Quadratini Socola Loacker (125g)','https://tiki.vn/banh-xop-quadratini-socola-loacker-125g-p972052.html',82000.00000,80000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25')
+            (17,'hoanhhao@gmail.com','Bánh Xốp Quadratini Socola Loacker (125g)','https://tiki.vn/banh-xop-quadratini-socola-loacker-125g-p972052.html',82000.00000,80000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25'),
+            (18,'hoanhhao@gmail.com','Thùng 30 Gói Bún Vifon Riêu Cua (80g / Gói)','https://tiki.vn/thung-30-goi-bun-vifon-rieu-cua-80g-goi-p3243043.html',229000.00000,220000.00000,'RUNNING','2020-06-09 21:28:25','2020-06-09 21:28:25')
+
 ;
-                                     ;
 
 LOCK TABLES `fm_promotions` WRITE;
 /*!40000 ALTER TABLE `fm_promotions` DISABLE KEYS */;
