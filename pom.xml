@@ -16,7 +16,7 @@
         <spring-data.version>Hopper-SR2</spring-data.version>
         <log4j2.version>2.6.2</log4j2.version>
         <mockito.version>1.10.19</mockito.version>
-        <jaxon.version>2.7.7</jaxon.version>
+        <jaxon.version>2.13.4.1</jaxon.version>
         <jetty.version>8.1.16.v20140903</jetty.version>
         <skipTests>true</skipTests>
         <snippetsDirectory>${project.build.directory}/generated-snippets</snippetsDirectory>
